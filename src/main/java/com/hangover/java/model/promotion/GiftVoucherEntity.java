@@ -3,7 +3,7 @@ package com.hangover.java.model.promotion;
 import com.hangover.java.model.BaseEntity;
 import com.hangover.java.model.UserEntity;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -51,6 +51,7 @@ public class GiftVoucherEntity extends BaseEntity{
         this.value = value;
     }
 
+    @Column(name = "valid_till")
     public Date getValidTill() {
         return validTill;
     }
@@ -59,6 +60,7 @@ public class GiftVoucherEntity extends BaseEntity{
         this.validTill = validTill;
     }
 
+    @Enumerated
     public VoucherStatus getStatus() {
         return status;
     }
@@ -67,6 +69,8 @@ public class GiftVoucherEntity extends BaseEntity{
         this.status = status;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "used_by",nullable = false)
     public UserEntity getUsedBy() {
         return usedBy;
     }
@@ -75,6 +79,7 @@ public class GiftVoucherEntity extends BaseEntity{
         this.usedBy = usedBy;
     }
 
+    @Column(name = "used_at")
     public Date getUsedAt() {
         return usedAt;
     }

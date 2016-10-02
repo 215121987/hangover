@@ -59,6 +59,7 @@ public class CouponEntity extends BaseEntity{
         this.rule = rule;
     }
 
+    @Column(name = "start_date")
     public Date getStartDate() {
         return startDate;
     }
@@ -67,6 +68,7 @@ public class CouponEntity extends BaseEntity{
         this.startDate = startDate;
     }
 
+    @Column(name = "end_date")
     public Date getEndDate() {
         return endDate;
     }

@@ -73,6 +73,7 @@ public class HangoverInterceptor implements HandlerInterceptor, Constants {
                     cartDTO.setDescription(itemDetail.getItem().getDescription());
                     cartDTO.setPrice(itemDetail.getSellingPrice());
                     cartDTO.setSize(itemDetail.getItemSize());
+                    cartDTO.setImageURL(itemDetail.getItem().getImageURL().get(0));
                     cartDTOs.add(cartDTO);
                 }
             }

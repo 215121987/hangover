@@ -467,3 +467,73 @@ ul li .custom-select-box .zelect, ul li input[type=text], ul li  input[type=numb
 .priceRangeInfo input[]{
     line-height: 20px;
 }
+
+.search-form #search_result{
+    border: 1px solid #e8e8e8;
+    z-index: 1;
+    position: absolute;
+    width: 547px;
+    background-color: #ffffff;
+    max-height: 400px;
+    overflow-y: scroll;
+    display: none;
+}
+
+.search-form #search_result ul{
+    display: block;
+    margin: 0;
+}
+
+.search-form #search_result ul li{
+    display: block;
+    border-bottom: 2px solid #e8e8e8;
+    min-height: 70px;
+}
+
+.search-form #search_result ul li .item_wrapper{
+    padding: 5px;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail{
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .item_name{
+    display: block;
+    float: left;
+    padding: 5px;
+    width: 160px;
+    text-align: left;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .item_size{
+    float: left;
+    padding: 5px;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .item_qty{
+    margin-left:5px;
+    float: left;
+    padding: 5px;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .item_qty input{
+    width: 30px;
+    margin: 0;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .add_to_cart{
+    margin-left:5px;
+    float: left;
+    padding: 5px;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .added_to_cart{
+    display: none;
+}
+
+.search-form #search_result ul li .item_wrapper .item_detail .added{
+    background-color: #009587;
+    color: #FFFFFF;
+}

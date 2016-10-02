@@ -19,6 +19,7 @@ public class CartDTO {
     private Double price;
     private String size;
     private boolean taxable;
+    private String imageURL;
 
 
     public Long getId() {
@@ -105,6 +106,15 @@ public class CartDTO {
 
     public void setTaxable(boolean taxable) {
         this.taxable = taxable;
+    }
+
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     @Override

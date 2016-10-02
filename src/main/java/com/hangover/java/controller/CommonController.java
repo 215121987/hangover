@@ -242,6 +242,7 @@ public class CommonController extends BaseController {
                 item.put("price", cartDTO.getPrice());
                 item.put("name", cartDTO.getName());
                 item.put("size", cartDTO.getSize());
+                item.put("imageURL", cartDTO.getImageURL());
                 item.put("description", cartDTO.getDescription());
                 cartItem.put("item", item);
                 array.put(cartItem);
@@ -296,6 +297,7 @@ public class CommonController extends BaseController {
                     cartDTO.setDescription(itemDetail.getItem().getDescription());
                     cartDTO.setPrice(itemDetail.getSellingPrice());
                     cartDTO.setSize(itemDetail.getItemSize());
+                    cartDTO.setImageURL(itemDetail.getItem().getImageURL().get(0));
                     cartDTOs.add(cartDTO);
                 }
             }
@@ -338,6 +340,7 @@ public class CommonController extends BaseController {
                     cartDTO.setDescription(itemDetail.getItem().getDescription());
                     cartDTO.setSize(itemDetail.getItemSize());
                     cartDTO.setPrice(itemDetail.getSellingPrice());
+                    cartDTO.setImageURL(itemDetail.getItem().getImageURL().get(0));
                 }
                 cartDTOs.remove(cartDTO);
                 for(CartDTO cDTO : cartDTOs){
@@ -527,18 +530,28 @@ public class CommonController extends BaseController {
     }
 
 
-
     @RequestMapping(value = "/search")
     public String search(HttpServletRequest request, HttpServletResponse response,
-                                        @QueryParam("query") String query) throws JSONException, IOException {
-        Cookie cookie = HangoverUtil.getCookie(request.getCookies(), SUPPLIER_ZIP_CODE);
-        if(null!=cookie && StringUtil.isNotNullOrEmpty(cookie.getValue())){
+                         @QueryParam("query") String query,
+                         @QueryParam("view") String view) throws JSONException, IOException {
+        Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
+        String RETURN_PATH = "shop/shop";
+        if (null != cookie && StringUtil.isNotNullOrEmpty(cookie.getValue())) {
             List<ItemEntity> itemList = shoppingBL.search(cookie.getValue(), query);
-            JSONObject object = new JSONObject();
+            /*JSONObject object = new JSONObject();
             object.put("items", getItemsAsJSONArray(itemList));
-            responseAsJSON(response, object);
+            responseAsJSON(response, object);*/
+            request.setAttribute("items", itemList);
         }
-        return null;
+        if (isAjaxRequest(request))
+            RETURN_PATH = view;
+        else {
+
+            request.setAttribute("categories", shoppingBL.getChildCategories());
+            Long categoryId = 1L;
+            request.setAttribute("brands", shoppingBL.getBrands(categoryId, 1));
+        }
+        return RETURN_PATH;
     }
 
 

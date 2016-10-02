@@ -14,10 +14,6 @@
                                 <img width="300" height="300" src="" class="attachment-shop_catalog wp-post-image" alt="${item.name}"/>
                             </c:otherwise>
                         </c:choose>
-                        <c:if test="${}">
-
-                        </c:if>
-
                         <span class="btn cherry-quick-view" data-product="${item.id}">Quick view</span>
                     </div>
                     <h3>${item.name}</h3>
@@ -56,11 +52,11 @@
                         </div>
                     </form>
                 </div>
-
+                                                      <%--
+                       data-item_id="${item.id}" data-product_sku="" data-quantity="1" data-item_detail_id ="${item.itemDetailList[0].id}"--%>
                     <%-- <a href='<c:url value="/comm/shop/${item.id}.html" />' class='btn'>Details</a>--%>
                 <div class="product-list-buttons">
                     <a href='<c:url value="/comm/cart.html" />' rel="nofollow"
-                       data-item_id="${item.id}" data-product_sku="" data-quantity="1" data-item_detail_id ="${item.itemDetailList[0].id}"
                        class="button add_to_cart_button product_type_simple">Add to cart</a>
                         <%--<a href="/woocommerce_53953/shop/?orderby=popularity&amp;action=yith-woocompare-add-product&amp;id=1938&amp;_wpnonce=2a4f8c3f4d"
                             class="compare" data-product_id="${item.id}">Compare

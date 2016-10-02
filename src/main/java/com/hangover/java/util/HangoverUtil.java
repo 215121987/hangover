@@ -179,6 +179,7 @@ public class HangoverUtil implements Constants{
             cartDTO.setQuantity(shoppingCartItem.getQuantity());
             cartDTO.setName(shoppingCartItem.getItem().getName());
             cartDTO.setDescription(shoppingCartItem.getItem().getDescription());
+            cartDTO.setImageURL(shoppingCartItem.getItem().getImageURL().get(0));
             cartDTOs.add(cartDTO);
         }
         return cartDTOs;

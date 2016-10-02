@@ -208,22 +208,24 @@ public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constan
         hql.append(" where ");
         hql.append(" it.supplierStore.zipCode=");
         hql.append(zipCode);
-        hql.append(" and it.itemStatus = '");
+        /*hql.append(" and it.status = '");
         hql.append(ItemStatus.AVAILABLE);
-        hql.append("'");
-        hql.append(" and it.name like '");
+        hql.append("'");*/
+        hql.append(" and (it.name like '");
         hql.append(queryStr);
         hql.append("%'");
         hql.append(" or it.brand.name like '");
         hql.append(queryStr);
         hql.append("%'");
-        hql.append(" or it.category.id in (:categories) ");
-        hql.append(" Order by ide.sellingPrice asc");
-
+        List<Long> categories = getChildCategoryByName(queryStr);
+        if(null!= categories && categories.size()>0){
+            hql.append(" or it.category.id in ( ");
+            hql.append(StringUtils.join(categories,","));
+            hql.append(")");
+        }
+        hql.append(" ) Order by ide.sellingPrice asc");
         logger.info(hql.toString());
         Query query = getCurrentSession().createQuery(hql.toString());
-        List<Long> categories = getChildCategoryByName(queryStr);
-        query.setParameterList("categories", categories);
         query.setFirstResult(startIndex);
         query.setMaxResults(maxResult);
         logger.info(query.toString());
@@ -234,11 +236,11 @@ public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constan
     public List<Long> getChildCategoryByName(String categoryName) {
         Criteria criteria = getCurrentSession().createCriteria(CategoryEntity.class)
                 .add(Restrictions.ilike("name", categoryName, MatchMode.START))
-                .setProjection(Projections.projectionList().add(Projections.property("id")))
-                .setResultTransformer(Transformers.aliasToBean(Long.class));
+                .setProjection(Projections.projectionList().add(Projections.property("id")));
         List<Long> categoryIdList = criteria.list();
         if(null!= categoryIdList && categoryIdList.size()>0){
-            String sqlQuery = "select  id,  name, description, parent_category_id, level from (select * from category order by parent_category_id, id) base, (select @pv\\:='" + StringUtils.join(categoryIdList,",") + "%') tmp where   find_in_set(parent_category_id, @pv) > 0 and  @pv\\:=concat(@pv, ',', id)";
+            //String sqlQuery = "select  id,  name, description, parent_category_id, level from (select * from category order by parent_category_id, id) base, (select @pv\\:='" + StringUtils.join(categoryIdList,",") + "%') tmp where   find_in_set(parent_category_id, @pv) > 0 and  @pv\\:=concat(@pv, ',', id)";
+            String sqlQuery = "select  id from (select * from category order by parent_category_id, id) base, (select @pv\\:='" + StringUtils.join(categoryIdList,",") + "') tmp where   find_in_set(parent_category_id, @pv) > 0 and  @pv\\:=concat(@pv, ',', id)";
             SQLQuery query = getCurrentSession().createSQLQuery(sqlQuery);
             List<Long> categories = query.list();
             if(null!= categories)

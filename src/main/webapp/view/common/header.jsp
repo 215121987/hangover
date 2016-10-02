@@ -17,13 +17,17 @@
                                 </div>
                                 <div class="search-wrapper">
                                     <div class="search-form search-form__h clearfix">
-                                        <form id="search-header" class="navbar-form" method="get"
+                                        <form id="search-header" class="navbar-form" method="get" autocomplete="off"
                                               action="<c:url value="/comm/search.html"/>"
                                               accept-charset="utf-8">
-                                            <input type="text" name="s" placeholder="" class="search-form_it">
+                                            <input type="text" name="query" placeholder="" view="shop/searchItem" data_url="search_item" class="search-form_it">
                                             <input type="submit" value="" id="search-form_is"
                                                    class="search-form_is btn btn-primary">
                                         </form>
+                                        <div id="search_result" >
+                                            <ul>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="menu-wrapper" style="list-style: none;float: right;">

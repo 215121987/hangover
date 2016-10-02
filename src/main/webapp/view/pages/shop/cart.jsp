@@ -33,7 +33,7 @@
                                 <div class="cart-main clearfix">
                                     <div class="cart-img-container">
                                         <a href='<c:url value="/comm/shop/${cartItem.itemId}.html" />'>
-                                            <img alt="" class="thumb loaded" src="${cartItem.imageURL[0]}">
+                                            <img alt="" class="thumb loaded" src="${cartItem.imageURL}">
                                         </a>
                                     </div>
                                     <div class="cart-right-main">

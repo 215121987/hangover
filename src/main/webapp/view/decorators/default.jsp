@@ -283,7 +283,7 @@
         "add_supplier": '<c:url value="/SupplierDTO/form.html" />',"add_store":'<c:url value="/SupplierStoreDTO/form.html" />',
         "delete_store":'<c:url value="/delete/SupplierStoreEntity/_id.html" />',
         "supplier_store":'<c:url value="/SupplierStoreEntity.html" />', "add_staff": '<c:url value="/SupplierStaffDTO/form.html" />',
-        "cart_url":'<c:url value="/comm/cart.html" />'};
+        "cart_url":'<c:url value="/comm/cart.html" />', "search_item" :'<c:url value="/comm/search.html"/>'};
     /* ]]> */
 </script>
 </body>

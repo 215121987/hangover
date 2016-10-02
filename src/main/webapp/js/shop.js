@@ -64,11 +64,11 @@ var updateItemPane = function(){
 
             });
             pageNumber=pageNumber+1;
+            oTop = $('ul.products li:last').offset().top;
         }else{
             noMoreItem = true;
             $("ul.products").after($(responseAsHTML).find("div")[0].outerHTML);
         }
-        oTop = $('ul.products li:last').offset().top;
         inProgress = false;
     });
 };

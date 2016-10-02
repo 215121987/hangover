@@ -474,8 +474,8 @@ headerSearch = function(url, c){
 
     $.get(url,c, function (response) {
         $("#search_result ul").html("");
-        $("#search_result no-more-item").remove();
-        $("#search_result").show();
+        $("#search_result").find(".no-more-item").remove();
+        $("#search_result").slideDown(800);
         var responseAsHTML = $('<div>').html(response);
         if($(responseAsHTML).find("li").length>0){
             $(responseAsHTML).find("li").each(function(){

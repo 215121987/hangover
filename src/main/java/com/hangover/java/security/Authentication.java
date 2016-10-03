@@ -105,15 +105,17 @@ public class Authentication extends SavedRequestAwareAuthenticationSuccessHandle
     private void updateUserCart(HttpServletRequest request, HttpServletResponse response){
         List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
         List<ShoppingDTO> shoppingDTOs = HangoverUtil.getShoppingDTOFromCart(cartDTOs);
-        if(null!=cartDTOs && cartDTOs.size()>0){
-            /*String cartHash = HangoverUtil.getCartHash(cartDTOs);
-            response.addCookie(HangoverUtil.getCartHashCookie(cartHash));*/
-        }
+        /*if(null!=cartDTOs && cartDTOs.size()>0){
+            String cartHash = HangoverUtil.getCartHash(cartDTOs);
+            response.addCookie(HangoverUtil.getCartHashCookie(cartHash));
+        }*/
         List<ShoppingCartItemEntity>  shoppingCartItems =  shoppingBL.updateCart(shoppingDTOs, user.getId(), null);
-        cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
-        request.getSession().setAttribute(SESSION_CART, cartDTOs);
-        String cartHash = HangoverUtil.getCartHash(cartDTOs);
-        response.addCookie(HangoverUtil.getCartHashCookie(cartHash));
+        if(null!= shoppingCartItems && shoppingCartItems.size()>0){
+            cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
+            request.getSession().setAttribute(SESSION_CART, cartDTOs);
+            String cartHash = HangoverUtil.getCartHash(cartDTOs);
+            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
+        }
     }
 
     private void updateUserWishList(HttpServletRequest request){

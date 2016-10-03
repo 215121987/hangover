@@ -10,6 +10,7 @@ import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.exception.NoRecordFoundException;
 import com.hangover.java.model.*;
 import com.hangover.java.util.*;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -278,7 +279,7 @@ public class CommonController extends BaseController {
 
     private void processRequestCart(HttpServletRequest request){
         Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH);
-        if(null==request.getUserPrincipal() && null!=cookie){
+        if(null==request.getUserPrincipal() && null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
             String cartHash = cookie.getValue();
             cartHash = HangoverUtil.base64Decode(cartHash);
             List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
@@ -355,7 +356,7 @@ public class CommonController extends BaseController {
             request.getSession().setAttribute(SESSION_CART, cartDTOs);
             request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
-            response.addCookie(HangoverUtil.getCartHashCookie(cartHash));
+            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
             if (isAjaxRequest(request)) {
                 JSONObject cartItem = getCartItemAsJson(cartDTOs);
                 cartItem.put("cart_hash", cartHash);
@@ -389,13 +390,13 @@ public class CommonController extends BaseController {
         CartDTO cartDTO = new CartDTO();
         cartDTO.setItemId(itemId);
         cartDTO.setItemDetailId(itemDetailId);
-        cartDTO.setUserId(getCurrentUsers().getId());
+        /*cartDTO.setUserId(getCurrentUsers().getId());*/
         if(cartDTOs.contains(cartDTO)){
             cartDTOs.remove(cartDTO);
             request.getSession().setAttribute(SESSION_CART, cartDTOs);
             request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
-            response.addCookie(HangoverUtil.getCartHashCookie(cartHash));
+            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
             if(isUserLoggedIn(request)){
                 ShoppingDTO shoppingDTO = new ShoppingDTO();
                 shoppingDTO.setUserId(getCurrentUsers().getId());

@@ -45,7 +45,7 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
     
     
     public List<ShoppingCartItemEntity> updateCart(List<ShoppingDTO> shoppingDTOs,Long userId, StatusDTO statusDTO){
-        List<ShoppingCartItemEntity> shoppingCartItems = null;
+        List<ShoppingCartItemEntity> shoppingCartItems;
         ShoppingCartEntity shoppingCart = shoppingDao.getCart(userId);
         if(null!=shoppingDTOs && shoppingDTOs.size()>0){
             if(null == shoppingCart){
@@ -65,7 +65,7 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
             shoppingDao.save(shoppingCart);
         }
         shoppingCartItems =  null!=shoppingCart?shoppingCart.getShoppingCartItems():null;
-        logger.info("Shoping cart item " +shoppingCartItems+ "for user "+ userId + "");
+        logger.info("Shopping cart item " +shoppingCartItems+ "for user "+ userId + "");
         return shoppingCartItems;
     }
 
@@ -75,11 +75,13 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
         ShoppingCartItemEntity shoppingCartItem = shoppingDao.getCartItem(shoppingDTO.getUserId(),
                 shoppingDTO.getItemId(), shoppingDTO.getItemDetailId());
         if(null!= shoppingCartItem){
-            if(null!=shoppingDTO.getId() && !shoppingDTO.getId().equals(shoppingCartItem.getId())){
-                shoppingDao.delete(ShoppingCartItemEntity.class, shoppingDTO.getId());
-                shoppingCartItem.setQuantity(shoppingCartItem.getQuantity()+shoppingDTO.getQuantity());
-            }else{
+            if(null!=shoppingDTO.getId()){
+                if(!shoppingDTO.getId().equals(shoppingCartItem.getId())){
+                    shoppingDao.delete(ShoppingCartItemEntity.class, shoppingDTO.getId());
+                }
                 shoppingCartItem.setQuantity(shoppingDTO.getQuantity());
+            }else{
+                shoppingCartItem.setQuantity(shoppingCartItem.getQuantity()+shoppingDTO.getQuantity());
             }
             shoppingDao.save(shoppingCartItem);
             shoppingCartItems= shoppingDao.getCartItems(shoppingDTO.getUserId());

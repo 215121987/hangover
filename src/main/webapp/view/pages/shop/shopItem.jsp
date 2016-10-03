@@ -48,7 +48,7 @@
                                 <span class="standard-price">${item.itemDetailList[0].sellingPrice}</span>
                             </div>--%>
                         <div class="">
-                            <span class="offer">Offer (50%)</span>
+                            <%--<span class="offer">Offer (50%)</span>--%>
                         </div>
                     </form>
                 </div>

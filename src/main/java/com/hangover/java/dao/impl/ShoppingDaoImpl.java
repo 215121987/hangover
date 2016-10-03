@@ -48,12 +48,17 @@ public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constan
 
     @Override
     public boolean deleteItemFromCart(Long userId, Long itemId, Long itemDetailId) {
-        String hql = "delete from ShoppingCartItemEntity sci where sci.shoppingCart.user.id =:userId and sci.item.id=:itemId and sci.itemDetail.id=:itemDetailId";
+        //TODO: This  query has to take it in proper way. its just a temporary solution.
+        /*String hql = "delete from ShoppingCartItemEntity sci where sci.shoppingCart.user.id =:userId and sci.item.id=:itemId and sci.itemDetail.id=:itemDetailId";*/
+        String hql = "From ShoppingCartItemEntity sci where sci.shoppingCart.user.id=:userId and sci.item.id=:itemId and sci.itemDetail.id=:itemDetailId";
         Query query = getCurrentSession().createQuery(hql);
         query.setParameter("userId", userId);
         query.setParameter("itemId", itemId);
         query.setParameter("itemDetailId", itemDetailId);
-        return query.executeUpdate() > 0;
+        ShoppingCartItemEntity shoppingCartItem = (ShoppingCartItemEntity) query.uniqueResult();
+        getCurrentSession().delete(shoppingCartItem);
+        logger.info(query.toString());
+        return true;//query.executeUpdate() > 0;
     }
 
     @Override

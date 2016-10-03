@@ -653,7 +653,7 @@ body #motopress-main.main-holder .cart-holder h3 .cart-items {
     text-align:center;
     padding-left:5px;
     padding-right:5px;
-    display:none;
+    /*display:none;*/
 }
 body #motopress-main.main-holder .cart-holder h3:before {
     font-family:FontAwesome;
@@ -4794,6 +4794,8 @@ body #motopress-main.main-holder header.header .cart-wrapper .cart-holder h3.car
 body #motopress-main.main-holder header.header .cart-wrapper .cart-holder .widget_shopping_cart_content {
     right:0;
     margin:16px 0 0 0;
+    overflow-y: scroll;
+    max-height: 300px;
 }
 @media (max-width: 979px) {
     body #motopress-main.main-holder header.header .cart-wrapper .cart-holder .widget_shopping_cart_content {

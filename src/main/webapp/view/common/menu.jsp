@@ -90,7 +90,7 @@
         </div>
         <div class="cart-wrapper">
             <div id="woocommerce_widget_cart-3" class="visible-all-devices cart-holder"><h3>Cart<span
-                    class="cart-items">1</span></h3>
+                    class="cart-items">0</span></h3>
 
                 <div class="widget_shopping_cart_content"></div>
             </div>

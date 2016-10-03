@@ -160,9 +160,10 @@ public class HangoverUtil implements Constants{
     }
 
 
-    public static Cookie getCartHashCookie(String cartHash) {
+    public static Cookie getCartHashCookie(String contextPath, String cartHash) {
         Cookie cartHashCookie = new Cookie(COOKIES_CART_HASH, cartHash);
         cartHashCookie.setMaxAge(60 * 60 * 24 * 5);
+        cartHashCookie.setPath(contextPath);
         return cartHashCookie;
     }
 

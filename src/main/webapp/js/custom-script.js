@@ -16,6 +16,7 @@
                 $(this).removeClass('cart-opened').next().slideUp(300);
             } else {
                 $(this).addClass('cart-opened').next().slideDown(300);
+                $("div.widget_shopping_cart_content").animate({ scrollTop: $("div.widget_shopping_cart_content ul").outerHeight()}, 800);
             }
         });
         //Popup rating content

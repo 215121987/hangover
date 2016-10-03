@@ -57,8 +57,8 @@
     <%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.easing.1.3.js" />'></script>--%>
     <%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.elastislide.js" />'></script>--%>
     <%--<script type='text/javascript' src='<c:url value="/js/lib/jquery-ui.min.js" />'></script>--%>
-    <script type='text/javascript'
-            src='//maps.googleapis.com/maps/api/js?v=3.exp&#038;sensor=false&#038;ver=4.2.7'></script>
+    <%--<script type='text/javascript'
+            src='//maps.googleapis.com/maps/api/js?v=3.exp&#038;sensor=false&#038;ver=4.2.7'></script>--%>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,visualization&sensor=false"></script>
     <script type='text/javascript' src='<c:url value="/js/lib/jquery-migrate-1.2.1.min.js" />'></script>
     <%--<script type='text/javascript' src='<c:url value="/js/lib/swfobject.js" />'></script>--%>

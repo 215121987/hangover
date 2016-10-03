@@ -1,6 +1,6 @@
 <%@ include file="/view/common/taglib.jsp" %>
 <section  class="cart-content col-lg-12  clearfix">
-    <c:forEach items="${addresses}" var="address" varStatus="cnt">
+    <c:forEach items="${addressList}" var="address" varStatus="cnt">
         <div class="address_block col-md-5">
             <div class="cpl-md-1">
                 <input type="radio" name="addressId" value="${address.id}" update_url=''
@@ -50,7 +50,7 @@
            var addr = a.cookie('customer_address');
           if(null!= addr && undefined!= addr){
               addr  = JSON.parse(addr);
-              $('form#address_form input').each(function(){
+              $('form#address_form input').not("input[type=submit]").each(function(){
                   $(this).val(addr[$(this).attr("name")]);
               });
           }

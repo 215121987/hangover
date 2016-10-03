@@ -11,10 +11,10 @@
 
                     <p><span class="or">OR</span><span class="get-started"> Get started with options below</span></p>
                     <ul>
-                        <li><a href="/women">WOMEN</a></li>
-                        <li><a href="/men">MEN</a></li>
-                        <li><a href="/kids">KIDS</a></li>
-                        <li class="border-none"><a href="/brands">BRANDS</a></li>
+                        <li><a href="#">Whiskey</a></li>
+                        <li><a href="#">Wine</a></li>
+                        <li><a href="#">Vodka</a></li>
+                        <li class="border-none"><a href="#">Beer</a></li>
                     </ul>
                     <p></p>
                 </div>

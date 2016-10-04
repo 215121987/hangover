@@ -237,7 +237,6 @@ public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constan
         return query.list();
     }
 
-
     public List<Long> getChildCategoryByName(String categoryName) {
         Criteria criteria = getCurrentSession().createCriteria(CategoryEntity.class)
                 .add(Restrictions.ilike("name", categoryName, MatchMode.START))
@@ -254,6 +253,14 @@ public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constan
             categoryIdList = new ArrayList<Long>();
         }
         return categoryIdList;
+    }
+
+
+    @Override
+    public OrderEntity getOrder(String orderNumber) {
+        Criteria criteria = getCurrentSession().createCriteria(OrderEntity.class)
+                .add(Restrictions.eq("orderNumber", orderNumber));
+        return (OrderEntity)criteria.uniqueResult();
     }
 
 }

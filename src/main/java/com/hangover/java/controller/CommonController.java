@@ -557,8 +557,7 @@ public class CommonController extends BaseController {
 
 
     @RequestMapping(value = "/order/place")
-    public String placeOrder(HttpServletRequest request, HttpServletResponse response,
-                         @QueryParam("query") String query) throws JSONException, IOException {
+    public String placeOrder(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
 
         return null;
     }

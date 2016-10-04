@@ -28,4 +28,8 @@ public class AsyncTask {
     public NotificationTask getOTPNotificationTask(Map<String,String> map){
         return new NotificationTask(map, MessageType.OTP);
     }
+
+    public NotificationTask getOrderPaymentNotificationTask(Map<String,String> map){
+        return new NotificationTask(map, MessageType.ORDER_PAYMENT);
+    }
 }

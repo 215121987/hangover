@@ -4,7 +4,9 @@ import com.hangover.java.bl.CommonBL;
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.BaseEntity;
+import com.hangover.java.model.ShoppingCartEntity;
 import com.hangover.java.model.UserEntity;
+import com.hangover.java.model.type.OrderFrom;
 import com.hangover.java.model.type.Status;
 import com.hangover.java.task.HangoverBeans;
 import com.hangover.java.util.*;
@@ -128,6 +130,4 @@ public class CommonBLImpl extends BaseBL implements CommonBL, Constants {
     public void initializeAssociatedEntity(UserEntity userEntity) {
        userEntity.getRoleName();
     }
-
-
 }

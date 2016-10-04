@@ -9,6 +9,6 @@ package com.hangover.java.model.type;
  */
 public enum MessageType {
 
-    RESET_PASSWORD, REGISTRATION_NOTIFICATION, OTP
+    RESET_PASSWORD, REGISTRATION_NOTIFICATION, OTP, ORDER_PAYMENT
 
 }

@@ -25,13 +25,6 @@
         <jackson-version>2.4.3</jackson-version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>Internal company repository</id>
-            <url>file://${basedir}/lib</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>asm</groupId>
@@ -539,15 +532,6 @@
             <artifactId>javax.ws.rs-api</artifactId>
             <version>2.0-m10</version>
         </dependency>-->
-
-        <!--DXF reader-->
-        <dependency>
-            <groupId>org.kabeja</groupId>
-            <artifactId>kabeja</artifactId>
-            <version>0.8</version>
-            <!--<scope>system</scope>
-            <systemPath>${basedir}/kabeja.jar</systemPath>-->
-        </dependency>
 
         <!--json-->
         <dependency>

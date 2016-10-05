@@ -15,8 +15,9 @@ import java.util.Map;
  */
 public class NotificationTask implements Runnable {
 
-    private MessageType messageType = null;
+    private NotificationType notificationType = null;
     private Message message;
+    private String to;
     private Map<String,String> map;
 
     private MessageSender smsSender;
@@ -27,32 +28,33 @@ public class NotificationTask implements Runnable {
 
     private SMSFactory smsFactory;
 
-    public NotificationTask(String username, MessageType messageType) {
-        this.message = new Message();
-        this.message.setTo(username);
-        this.messageType = messageType;
+    public NotificationTask(String username, NotificationType type) {
+        this.to = username;
+        this.notificationType = type;
     }
 
-    public NotificationTask(String[] usernames, MessageType messageType) {
+    public NotificationTask(String[] usernames, NotificationType type) {
+        this.to = usernames[0];
         this.message = new Message();
         this.message.setTo(usernames);
-        this.messageType = messageType;
+        this.notificationType = type;
     }
 
-    public NotificationTask(Map<String,String> map, MessageType messageType) {
-        this.message = new Message();
-        this.message.setTo(map.get("username"));
-        this.messageType = messageType;
+    public NotificationTask(Map<String,String> map, NotificationType type) {
+        this.to = map.get("username");
+        this.notificationType = type;
         this.map = map;
     }
 
-    public NotificationTask(Message mai1, MessageType messageType) {
-        this.message = mai1;
-        this.messageType = messageType;
+    public NotificationTask(Message message, NotificationType type) {
+        this.to = message.getTo()[0];
+        this.message = message;
+        this.notificationType = type;
     }
 
-    public NotificationTask(Message mai1) {
-        this.message = mai1;
+    public NotificationTask(Message message) {
+        this.to = message.getTo()[0];
+        this.message = message;
     }
 
     private void prepareTask() {
@@ -69,20 +71,52 @@ public class NotificationTask implements Runnable {
     }
 
     private void execute() {
-        if (isEmail())
-            this.emailSender.send(prepareMail());
-        else if (isMobile())
-            this.smsSender.send(prepareSMS());
+        Message email = null;
+        Message sms = null;
+        switch (this.notificationType){
+            case ORDER:
+                sms = this.smsFactory.getOrderCompleteMessage(this.map);
+                email = this.emailFactory.getOrderCompleteMessage(this.map);
+                break;
+            case ORDER_DISPATCHED:break;
+            case ORDER_DELIVERED:break;
+            case RESET_PASSWORD:
+                sms = this.smsFactory.getResetPasswordMessage(this.to);
+                email = this.emailFactory.getResetPasswordMessage(this.to);
+                break;
+            case REGISTRATION:
+                sms = this.smsFactory.getRegistrationMessage(this.map);
+                email = this.emailFactory.getRegistrationMessage(this.map);
+                break;
+            case OTP:
+                if(isEmail())
+                    this.emailFactory.getOTPMessage(this.map);
+                else if(isMobile())
+                    sms= this.smsFactory.getOTPMessage(this.map);
+                break;
+            default:
+                if(isEmail())
+                    email = this.message;
+                else if(isMobile())
+                    sms = this.message;
+                break;
+        }
+        if(null!= email)
+            this.emailSender.send(email);
+        if(null!=sms)
+            this.smsSender.send(sms);
     }
 
     private Message prepareSMS() {
-        Message resultMessage = null;
-        switch (messageType) {
-            case REGISTRATION_NOTIFICATION:  resultMessage = this.smsFactory.getRegistrationMessage(this.map);
+        Message resultMessage;
+        switch (notificationType) {
+            case REGISTRATION:  resultMessage = this.smsFactory.getRegistrationMessage(this.map);
                 break;
-            case RESET_PASSWORD: resultMessage = this.smsFactory.getResetPasswordMessage(this.message.getTo()[0]);
+            case RESET_PASSWORD: resultMessage = this.smsFactory.getResetPasswordMessage(this.to);
                 break;
             case OTP:resultMessage = this.smsFactory.getOTPMessage(this.map);
+                break;
+            case ORDER:resultMessage = this.smsFactory.getOrderCompleteMessage(this.map);
                 break;
             default:
                 resultMessage = this.message;
@@ -91,16 +125,17 @@ public class NotificationTask implements Runnable {
     }
 
     private Message prepareMail() {
-        Message resultMessage = null;
-        switch (messageType) {
-            case REGISTRATION_NOTIFICATION: resultMessage = this.emailFactory.getRegistrationMessage(this.map);
+        Message resultMessage;
+        switch (notificationType) {
+            case REGISTRATION: resultMessage = this.emailFactory.getRegistrationMessage(this.map);
                 break;
             case RESET_PASSWORD:
-                resultMessage = this.emailFactory.getResetPasswordMessage(this.message.getTo()[0]);
+                resultMessage = this.emailFactory.getResetPasswordMessage(this.to);
                 break;
             case OTP:
                 resultMessage = this.emailFactory.getOTPMessage(this.map);
                 break;
+            case ORDER:this.emailFactory.getOrderCompleteMessage(this.map);
             default:
                 resultMessage = this.message;
         }
@@ -108,11 +143,10 @@ public class NotificationTask implements Runnable {
     }
 
     public boolean isEmail() {
-        return ValidatorUtil.isValidEmail(this.message.getTo()[0]);
+        return ValidatorUtil.isValidEmail(this.to);
     }
 
     public boolean isMobile() {
-        return ValidatorUtil.isValidMobile(this.message.getTo()[0]);
+        return ValidatorUtil.isValidMobile(this.to);
     }
-
 }

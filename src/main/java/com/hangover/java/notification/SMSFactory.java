@@ -1,7 +1,9 @@
 package com.hangover.java.notification;
 
+import com.hangover.java.dao.ShoppingDao;
 import com.hangover.java.dao.UserDao;
 import com.hangover.java.model.OTPEntity;
+import com.hangover.java.model.OrderEntity;
 import com.hangover.java.model.UserEntity;
 import com.hangover.java.model.master.SMSTemplateEntity;
 import com.hangover.java.model.type.MessageType;
@@ -9,6 +11,7 @@ import com.hangover.java.model.type.PasswordType;
 import com.hangover.java.security.PasswordEncoder;
 import com.hangover.java.util.CommonUtil;
 import com.hangover.java.util.HangoverUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +35,9 @@ public class SMSFactory {
     private UserDao userDao;
 
     @Autowired
+    private ShoppingDao shoppingDao;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -39,8 +45,8 @@ public class SMSFactory {
 
     public Message getResetPasswordMessage(String username){
         Message message = new Message();
-        message.setTo(username);
         UserEntity user = userDao.getUserByUsername(username);
+        message.setTo(user.getMobile());
         String temPassword ="Welcome123";
         user.setPassword(passwordEncoder.encode(temPassword));
         user.setPasswordType(PasswordType.TEMPORARY);
@@ -54,8 +60,8 @@ public class SMSFactory {
 
     public Message getRegistrationMessage(Map<String,String> map){
         Message message = new Message();
-        message.setTo(map.get("username"));
         UserEntity user = userDao.getUserByUsername(map.get("username"));
+        message.setTo(user.getMobile());
         SMSTemplateEntity smsTemplate = userDao.getMasterData(SMSTemplateEntity.class, "type", MessageType.REGISTRATION_NOTIFICATION);
         String sms = smsTemplate.getMessage();
         sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, user.getName());
@@ -67,8 +73,8 @@ public class SMSFactory {
 
     public Message getOTPMessage(Map<String,String> map){
         Message message = new Message();
-        message.setTo(map.get("username"));
         UserEntity user = userDao.getUserByUsername(map.get("username"));
+        message.setTo(user.getMobile());
         String otp = HangoverUtil.getAlphaNumeric(4);
         OTPEntity otpEntity = new OTPEntity();
         otpEntity.setUser(user);
@@ -79,6 +85,26 @@ public class SMSFactory {
         SMSTemplateEntity smsTemplate = userDao.getMasterData(SMSTemplateEntity.class, "type", MessageType.OTP);
         String sms = smsTemplate.getMessage();
         sms = sms.replace(SMS_DYNAMIC_TEXT, otp);
+        message.setContent(sms);
+        return message;
+    }
+    
+    public Message getOrderCompleteMessage(Map<String,String> map){
+        Message message = new Message();
+        UserEntity user = userDao.getUserByUsername(map.get("username"));
+        message.setTo(user.getMobile());
+        OrderEntity order = shoppingDao.getOrder(map.get("orderNumber"));
+        MessageType type;
+        switch (order.getState()){
+            case PAYMENT_SUCCESS: type = MessageType.ORDER_PAYMENT_SUCCESS;
+                break;
+            default: type = MessageType.ORDER_PAYMENT_FAILED;
+                break;
+        }
+        SMSTemplateEntity smsTemplate = userDao.getMasterData(SMSTemplateEntity.class, "type", type);
+        String sms = smsTemplate.getMessage();
+        sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, user.getName());
+        sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, map.get("orderNumber"));
         message.setContent(sms);
         return message;
     }

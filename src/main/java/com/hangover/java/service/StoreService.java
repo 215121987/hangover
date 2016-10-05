@@ -106,7 +106,7 @@ public class StoreService extends BaseService {
         placeOrderDTO.setCartHash(cartHas);
         placeOrderDTO.setAddressId(addressId);
         placeOrderDTO.setOrderFrom(OrderFrom.APP);
-        OrderEntity order = shoppingBL.placeOrder(placeOrderDTO, statusDTO);
+        PlaceOrderDTO order = shoppingBL.placeOrder(placeOrderDTO, statusDTO);
         OrderWSO orderWSO = new OrderWSO();
         orderWSO.setOrderNumber(order.getOrderNumber());
         return sendResponse(orderWSO);

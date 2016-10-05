@@ -1,13 +1,17 @@
 package com.hangover.java.notification;
 
+import com.hangover.java.dao.ShoppingDao;
 import com.hangover.java.dao.UserDao;
 import com.hangover.java.model.OTPEntity;
+import com.hangover.java.model.OrderEntity;
 import com.hangover.java.model.UserEntity;
+import com.hangover.java.model.type.MessageType;
 import com.hangover.java.model.type.PasswordType;
 import com.hangover.java.security.PasswordEncoder;
 import com.hangover.java.util.CommonUtil;
 import com.hangover.java.util.Constants;
 import com.hangover.java.util.HangoverUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +31,9 @@ public class EmailFactory {
     
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private ShoppingDao shoppingDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -77,6 +84,29 @@ public class EmailFactory {
         otpEntity.setSendTo(map.get("username"));
         otpEntity.setRequestedFrom(map.get("requestedFrom"));
         userDao.save(otpEntity);
+        return message;
+    }
+
+    public Message getOrderCompleteMessage(Map<String,String> map){
+        Message message = null;
+        UserEntity user = userDao.getUserByUsername(map.get("username"));
+
+        if(null!= user && StringUtils.isNotEmpty(user.getEmail()) && user.isEmailVerified()){
+            message = new Message();
+            message.setTo(user.getEmail());
+            message.setTemplateName(Constants.ORDER_CONFIRMATION_TEMPLATE);
+            message.putContext("name", user.getName());
+            OrderEntity order = shoppingDao.getOrder(map.get("orderNumber"));
+            switch (order.getState()){
+                case PAYMENT_SUCCESS:
+                    message.setSubject(commonUtil.getText("email.notification.subject.order.success"));
+                    break;
+                default:
+                    message.setSubject(commonUtil.getText("email.notification.subject.order.failure"));
+                    break;
+            }
+            message.putContext("status", order.getState());
+        }
         return message;
     }
     

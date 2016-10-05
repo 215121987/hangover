@@ -15,9 +15,10 @@ public interface Constants {
 
 
     static final String TEMPLATE_BASE_LOCATION = "template";
-    static final String FORGOT_PASSWORD_TEMPLATE = "forgotPassword.vm";
-    static final String NOTIFICATION_MAIL_TEMPLATE = "notificationMail.vm";
+    static final String FORGOT_PASSWORD_TEMPLATE = TEMPLATE_BASE_LOCATION+"/forgotPassword.vm";
+    static final String NOTIFICATION_MAIL_TEMPLATE = TEMPLATE_BASE_LOCATION+"/notificationMail.vm";
     static final String OTP_TEMPLATE = TEMPLATE_BASE_LOCATION+"/otp.vm";
+    static final String ORDER_CONFIRMATION_TEMPLATE = TEMPLATE_BASE_LOCATION+"/orderConfirmation.vm";
 
     public static final String RESPONSE_STATUS = "status";
 

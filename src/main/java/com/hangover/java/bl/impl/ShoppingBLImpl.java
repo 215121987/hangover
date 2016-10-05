@@ -312,12 +312,15 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
     }
 
     @Override
-    public OrderEntity placeOrder(PlaceOrderDTO placeOrder, StatusDTO status) {
+    public PlaceOrderDTO placeOrder(PlaceOrderDTO placeOrder, StatusDTO status) {
         List<ShoppingCartItemEntity> cartItems = shoppingDao.getCartItems(placeOrder.getUserId());
-        OrderEntity order = null;
         if(null!= cartItems  && cartItems.size()>0){
             CartSummaryDTO cartSummary = prepareSummary(cartItems);
-            order = new OrderEntity();
+            if(!placeOrder.getAmount().equals(cartSummary.getNetAmount())){
+                status.setMessage(commonUtil.getText("error.mismatch.amount", status.getLocale()));
+                saveErrorMessage(status, HttpStatus.CONFLICT.ordinal());
+            }
+            OrderEntity order = new OrderEntity();
             order.setOrderNumber(HangoverUtil.generateOrderNumber(placeOrder.getUserId(), cartItems.get(0).getShoppingCart().getId()));
             order.setCustomer(UserEntity.getUser(placeOrder.getUserId()));
             order.setAddress(AddressEntity.getAddress(placeOrder.getAddressId()));
@@ -332,9 +335,10 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
                 order.addOrderItem(orderItem);
             }
             shoppingDao.save(order);
+            placeOrder.setOrderNumber(order.getOrderNumber());
             saveSuccessMessage(status,"");
         }
-        return order;
+        return placeOrder;
     }
 
 }

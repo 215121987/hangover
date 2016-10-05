@@ -15,6 +15,9 @@ public class PlaceOrderDTO {
     private String cartHash;
     private Long addressId;
     private OrderFrom orderFrom;
+    private String[] couponCode;
+    private Double amount;
+    private String orderNumber;
 
     public Long getUserId() {
         return userId;
@@ -46,5 +49,29 @@ public class PlaceOrderDTO {
 
     public void setOrderFrom(OrderFrom orderFrom) {
         this.orderFrom = orderFrom;
+    }
+
+    public String[] getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String [] couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

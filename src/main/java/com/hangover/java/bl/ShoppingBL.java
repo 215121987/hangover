@@ -52,7 +52,7 @@ public interface ShoppingBL {
 
     List<ItemEntity> search(String zipCode, String query);
 
-    OrderEntity placeOrder(PlaceOrderDTO placeOrderDTO, StatusDTO statusDTO);
+    PlaceOrderDTO placeOrder(PlaceOrderDTO placeOrderDTO, StatusDTO statusDTO);
     
     
 }

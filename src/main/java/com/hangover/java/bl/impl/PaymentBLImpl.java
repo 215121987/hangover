@@ -66,7 +66,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
         payment.setAmount(amount);
         logger.info("Payment:- transaction id:-"+ transactionId+" , order id:-"+orderId+", status:-"+ status);
         if("SUCCESS".equals(status)){
-            order.setState(OrderState.PAYMENT_DONE);
+            order.setState(OrderState.PAYMENT_SUCCESS);
             payment.setStatus(PaymentStatus.SUCCESS);
         }else if("FAILED".equals(status)){
             order.setState(OrderState.PAYMENT_FAILED);
@@ -82,6 +82,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
         map.put("orderNumber", orderId);
         map.put("transactionId", transactionId);
         map.put("amount", amount+"");
+        map.put("status", status);
         this.taskExecutor.execute(this.asyncTask.getOrderPaymentNotificationTask(map));
     }
     

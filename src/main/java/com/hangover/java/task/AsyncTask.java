@@ -18,18 +18,18 @@ public class AsyncTask {
 
 
     public NotificationTask getPasswordNotificationTask(String username){
-       return new NotificationTask(username, MessageType.RESET_PASSWORD);
+       return new NotificationTask(username, NotificationType.RESET_PASSWORD);
     }
 
     public NotificationTask getRegisterNotificationTask(Map<String,String> map){
-        return new NotificationTask(map, MessageType.REGISTRATION_NOTIFICATION);
+        return new NotificationTask(map, NotificationType.REGISTRATION);
     }
 
     public NotificationTask getOTPNotificationTask(Map<String,String> map){
-        return new NotificationTask(map, MessageType.OTP);
+        return new NotificationTask(map, NotificationType.OTP);
     }
 
     public NotificationTask getOrderPaymentNotificationTask(Map<String,String> map){
-        return new NotificationTask(map, MessageType.ORDER_PAYMENT);
+        return new NotificationTask(map, NotificationType.ORDER);
     }
 }

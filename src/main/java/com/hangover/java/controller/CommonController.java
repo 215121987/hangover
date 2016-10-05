@@ -3,12 +3,10 @@ package com.hangover.java.controller;
 import com.hangover.java.bl.CommonBL;
 import com.hangover.java.bl.ShoppingBL;
 import com.hangover.java.bl.UserBL;
-import com.hangover.java.dto.CartDTO;
-import com.hangover.java.dto.CartSummaryDTO;
-import com.hangover.java.dto.ShoppingDTO;
-import com.hangover.java.dto.StatusDTO;
+import com.hangover.java.dto.*;
 import com.hangover.java.exception.NoRecordFoundException;
 import com.hangover.java.model.*;
+import com.hangover.java.model.type.OrderFrom;
 import com.hangover.java.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
@@ -557,8 +555,25 @@ public class CommonController extends BaseController {
 
 
     @RequestMapping(value = "/order/place")
-    public String placeOrder(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
-
+    public String placeOrder(HttpServletRequest request, HttpServletResponse response,
+                             @QueryParam("amount")Double amount) throws JSONException, IOException {
+        StatusDTO statusDTO = new StatusDTO();
+        PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
+        placeOrderDTO.setOrderFrom(OrderFrom.WEB);
+        placeOrderDTO.setUserId(getCurrentUsers().getId());
+        placeOrderDTO.setCartHash(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH).getValue());
+        placeOrderDTO.setAddressId((Long) request.getSession().getAttribute(SESSION_DELIVERY_ADDRESS_ID));
+        placeOrderDTO.setAmount(amount);
+        placeOrderDTO = shoppingBL.placeOrder(placeOrderDTO, statusDTO);
+        responseAsJSON(response, getPlaceOrderJSON(placeOrderDTO));
         return null;
+    }
+
+    private JSONObject getPlaceOrderJSON(PlaceOrderDTO placeOrderDTO) throws JSONException {
+        JSONObject mainObject = new JSONObject();
+        mainObject.put("orderNumber", placeOrderDTO.getOrderNumber());
+        mainObject.put("amount", placeOrderDTO.getAmount());
+        mainObject.put("cart_hash", placeOrderDTO.getCartHash());
+        return mainObject;
     }
 }

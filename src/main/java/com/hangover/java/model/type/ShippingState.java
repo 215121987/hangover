@@ -9,6 +9,6 @@ package com.hangover.java.model.type;
  */
 public enum ShippingState {
 
-    PACKED, PICKED, DELIVER
+   INVOICE_GENERATED,  PACKED, DISPATCHED, DELIVERED
 
 }

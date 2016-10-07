@@ -30,7 +30,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Repository("shoppingDao")
-public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constants {
+public class ShoppingDaoImpl extends CommonDaoImpl implements ShoppingDao, Constants {
 
     private Logger logger = LoggerFactory.getLogger(ShoppingDaoImpl.class);
 
@@ -253,14 +253,6 @@ public class ShoppingDaoImpl extends BaseDaoImpl implements ShoppingDao, Constan
             categoryIdList = new ArrayList<Long>();
         }
         return categoryIdList;
-    }
-
-
-    @Override
-    public OrderEntity getOrder(String orderNumber) {
-        Criteria criteria = getCurrentSession().createCriteria(OrderEntity.class)
-                .add(Restrictions.eq("orderNumber", orderNumber));
-        return (OrderEntity)criteria.uniqueResult();
     }
 
 }

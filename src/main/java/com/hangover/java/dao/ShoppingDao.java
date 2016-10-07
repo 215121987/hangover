@@ -41,5 +41,4 @@ public interface ShoppingDao extends CommonDao{
 
     List<ItemEntity> search(String zipCode, String queryStr, int startIndex, int maxResult);
     
-    OrderEntity getOrder(String orderNumber);
 }

@@ -192,7 +192,7 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
         loginStatus.setUser(user);
         List<SupplierStaffEntity> supplierStaff = commonDao.gets(SupplierStaffEntity.class,"user", user.getId());
         if(null!=supplierStaff && supplierStaff.size()>0){
-            loginStatus.setSupplierStore(supplierStaff.get(0).getStore());
+            loginStatus.setStore(supplierStaff.get(0).getStore());
         }
         userDao.save(loginStatus);
         return new LoginStatusDTO(loginStatus);

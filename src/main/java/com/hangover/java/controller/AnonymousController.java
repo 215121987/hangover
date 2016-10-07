@@ -187,15 +187,21 @@ public class AnonymousController extends BaseController{
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String performRegister(HttpServletRequest request, HttpServletResponse response,
-                                  UserDTO user) throws JSONException, IOException {
+                                  UserEntity user) throws JSONException, IOException {
         StatusDTO status = new StatusDTO();
-        //userBL.save(user, status);
+        userBL.save(user, status);
         saveStatus(request, status);
-        if(isAjaxRequest(request)){
-           responseAsJSON(response, getStatusAsJSON(status));
-            return null;
+        String RETURN_PATH = "";
+        if(status.getCode()==HttpStatus.OK.value()){
+            RETURN_PATH = performLogin(request,response, user.getMobile(),user.getConfirmPassword(),false);
+        }else{
+            RETURN_PATH = "register";
+            if(isAjaxRequest(request)){
+                responseAsJSON(response, getStatusAsJSON(status));
+                return null;
+            }
         }
-        return "register";
+        return RETURN_PATH;
     }
 
 

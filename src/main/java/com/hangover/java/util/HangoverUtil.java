@@ -68,6 +68,11 @@ public class HangoverUtil implements Constants{
                 role.setId(getRoleId(name));
                 userEntity.addRole(role);
             }
+        }else{
+            Role role = new Role();
+            role.setName(Role.ROLE_CUSTOMER);
+            role.setId(getRoleId(Role.ROLE_CUSTOMER));
+            userEntity.addRole(role);
         }
     }
 

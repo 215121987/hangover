@@ -15,8 +15,8 @@
                             <input class="input-text" type="tel" name="mobile" maxlength="10" id="mobile" required/>
                         </p>
                         <p class="form-row form-row-wide">
-                            <label for="email">Email<span class="required">*</span></label>
-                            <input class="input-text" type="text" name="email" id="email" required/>
+                            <label for="email">Email<%--<span class="">*</span>--%></label>
+                            <input class="input-text" type="email" name="email" id="email"/>
                         </p>
 
                         <p class="form-row form-row-wide">

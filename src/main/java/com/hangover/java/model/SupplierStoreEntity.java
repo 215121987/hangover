@@ -99,7 +99,7 @@ public class SupplierStoreEntity extends BaseEntity{
     }
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", nullable = false)
     public SupplierEntity getSupplier() {
         return supplier;

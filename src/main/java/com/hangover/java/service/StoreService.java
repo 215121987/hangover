@@ -2,6 +2,7 @@ package com.hangover.java.service;
 
 import com.hangover.java.bl.CommonBL;
 import com.hangover.java.bl.ShoppingBL;
+import com.hangover.java.bl.StoreBL;
 import com.hangover.java.dto.PlaceOrderDTO;
 import com.hangover.java.dto.ShoppingDTO;
 import com.hangover.java.dto.StatusDTO;
@@ -57,6 +58,9 @@ public class StoreService extends BaseService {
         this.shoppingBL = shoppingBL;
     }
 
+    @Autowired
+    private StoreBL storeBL;
+
     @GET
     @Path("/item")
     public Response getShop(@Context UriInfo uriInfo) {
@@ -95,23 +99,6 @@ public class StoreService extends BaseService {
         return sendResponse(cartWSO);
     }
 
-    @POST
-    @Path("/order")
-    public Response placeOrder(@FormParam("cartHash")String cartHas, @FormParam("amount")Double amount,
-                               @FormParam("addressId")Long addressId) {
-        Long userId= 1L;
-        StatusDTO statusDTO = new StatusDTO();
-        PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
-        placeOrderDTO.setUserId(userId);
-        placeOrderDTO.setCartHash(cartHas);
-        placeOrderDTO.setAddressId(addressId);
-        placeOrderDTO.setOrderFrom(OrderFrom.APP);
-        PlaceOrderDTO order = shoppingBL.placeOrder(placeOrderDTO, statusDTO);
-        OrderWSO orderWSO = new OrderWSO();
-        orderWSO.setOrderNumber(order.getOrderNumber());
-        return sendResponse(orderWSO);
-    }
-    
     @GET
     @Path("/service/{zipCode}")
     public Response checkService(@PathParam("zipCode")String zipCode){
@@ -125,4 +112,38 @@ public class StoreService extends BaseService {
         }
         return sendResponse(statusDTO);
     }
+
+    @POST
+    @Path("/order/place")
+    public Response placeOrder(@FormParam("cartHash")String cartHas, @FormParam("amount")Double amount,
+                               @FormParam("addressId")Long addressId) {
+        Long userId= 1L;
+        StatusDTO statusDTO = new StatusDTO();
+        PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
+        placeOrderDTO.setUserId(userId);
+        placeOrderDTO.setCartHash(cartHas);
+        placeOrderDTO.setAddressId(addressId);
+        placeOrderDTO.setOrderFrom(OrderFrom.APP);
+        PlaceOrderDTO order = shoppingBL.placeOrder(placeOrderDTO, statusDTO);
+        /*OrderWSO orderWSO = new OrderWSO();
+        orderWSO.setOrderNumber(order.getOrderNumber());*/
+        return sendResponse(order);
+    }
+
+
+    @GET
+    @Path("/order")
+    public Response getStoreOrder(){
+        Long userId= 1L;
+        List<OrderEntity> orders = storeBL.getStoreOrder(userId);
+        return sendResponse(orders);
+    }
+
+    @GET
+    @Path("/order/{id}")
+    public Response getOrder(@PathParam("id") Long id){
+        OrderEntity order = commonBL.getOrder(id);
+        return sendResponse(order);
+    }
+    
 }

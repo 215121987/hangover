@@ -14,7 +14,7 @@ import java.util.List;
 public interface StoreBL {
 
 
-    List<OrderEntity> getOrder(Long storeId);
+    List<OrderEntity> getStoreOrder(Long staffId);
 
 
 

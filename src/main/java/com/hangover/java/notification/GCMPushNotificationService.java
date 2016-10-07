@@ -1,5 +1,6 @@
 package com.hangover.java.notification;
 
+import com.google.android.gcm.server.*;
 import com.hangover.java.exception.HangoverException;
 import com.hangover.java.util.CommonUtil;
 import org.apache.http.HttpResponse;
@@ -12,11 +13,13 @@ import org.apache.http.util.EntityUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -26,6 +29,7 @@ import java.util.Map;
  * Time: 10:15 AM
  * To change this template use File | Settings | File Templates.
  */
+@Component
 public class GCMPushNotificationService implements PushNotificationService{
 
     private static Logger logger = LoggerFactory.getLogger(GCMPushNotificationService.class);
@@ -43,10 +47,34 @@ public class GCMPushNotificationService implements PushNotificationService{
 
     @Override
     public void transactional(Message message) {
-        JSONObject jsonObject = new JSONObject();
-        makeGCMRequest(jsonObject);
+        /*JSONObject jsonObject = new JSONObject();
+        makeGCMRequest(jsonObject);*/
+        sendPush(message);
     }
 
+
+    private Boolean sendPush(Message message){
+        Sender sender = new Sender(CommonUtil.getProperty("GCM_API_KEY"), Endpoint.GCM); // Here you will write APP key given by Android end
+        com.google.android.gcm.server.Message msg = new com.google.android.gcm.server.Message.Builder().addData("message", message.getContent()).build();
+        Boolean response=null;
+        try{
+            MulticastResult results = sender.send(msg, Arrays.asList(message.getTo()), 5); // Where appId is given by Android end
+            for (Result r : results.getResults()) {
+                if (r.getMessageId() != null) {
+                    response = true;
+                } else{
+                    response= false;
+                    String error = r.getErrorCodeName();
+                    if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
+                    }
+                }
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return response;
+    }
 
     private void makeGCMRequest(JSONObject body){
         final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -57,8 +85,8 @@ public class GCMPushNotificationService implements PushNotificationService{
             StringEntity params = new StringEntity(body.toString());
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
-            String mresult = EntityUtils.toString(response.getEntity());
-            System.out.println("result........" +mresult);
+            String result = EntityUtils.toString(response.getEntity());
+            System.out.println("result........" +result);
         } catch (ClientProtocolException e) {
             logger.error("GCM Client error:- "+e.getMessage());
             throw new HangoverException(e);
@@ -73,7 +101,7 @@ public class GCMPushNotificationService implements PushNotificationService{
                     if(null != httpClient)
                         httpClient.close();
                 } catch (IOException e) {
-                    logger.error("Unale to close GCM client connection:- " + e.getMessage());
+                    logger.error("Unable to close GCM client connection:- " + e.getMessage());
                 }
         }
     }

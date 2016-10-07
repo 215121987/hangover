@@ -1,5 +1,6 @@
 package com.hangover.java.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hangover.java.model.type.OrderFrom;
 import com.hangover.java.model.type.OrderState;
 
@@ -27,6 +28,7 @@ public class OrderEntity extends BaseEntity{
     private OrderFrom orderFrom;
     private AddressEntity address;
     Set<OrderItemEntity> orderItem;
+    SupplierStoreEntity store;
     private OrderState state = OrderState.ORDER_CREATED;
 
     @Column(name = "order_number", nullable = false, unique = true, updatable = false)
@@ -67,7 +69,7 @@ public class OrderEntity extends BaseEntity{
     }
 
     @ManyToOne
-    @JoinColumn(name = "shipping_address_id")
+    @JoinColumn(name = "shipping_address_id", nullable = false)
     public AddressEntity getAddress() {
         return address;
     }
@@ -89,6 +91,17 @@ public class OrderEntity extends BaseEntity{
         if(null == getOrderItem())
             setOrderItem(new HashSet<OrderItemEntity>());
         getOrderItem().add(orderItem);
+    }
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", nullable = true)
+    public SupplierStoreEntity getStore() {
+        return store;
+    }
+
+    public void setStore(SupplierStoreEntity store) {
+        this.store = store;
     }
 
     @Enumerated

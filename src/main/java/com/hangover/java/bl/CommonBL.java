@@ -2,6 +2,7 @@ package com.hangover.java.bl;
 
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.BaseEntity;
+import com.hangover.java.model.OrderEntity;
 import com.hangover.java.model.UserEntity;
 
 import java.util.List;
@@ -35,4 +36,6 @@ public interface CommonBL {
     void softDelete(Class clazz, Long id);
 
     void initializeAssociatedEntity(UserEntity baseEntity);
+    
+    OrderEntity getOrder(Long orderId);
 }

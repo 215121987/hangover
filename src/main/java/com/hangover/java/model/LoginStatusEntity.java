@@ -23,7 +23,7 @@ public class LoginStatusEntity extends BaseEntity{
     private String deviceId;
     private String token;
     private UserEntity user;
-    private SupplierStoreEntity supplierStore;
+    private SupplierStoreEntity store;
     private LoginStatus loginStatus = LoginStatus.LOGIN;
 
 
@@ -56,13 +56,13 @@ public class LoginStatusEntity extends BaseEntity{
     }
 
     @ManyToOne
-    @JoinColumn(name = "supplier_store_id",nullable = true, updatable = false)
-    public SupplierStoreEntity getSupplierStore() {
-        return supplierStore;
+    @JoinColumn(name = "store_id",nullable = true, updatable = false)
+    public SupplierStoreEntity getStore() {
+        return store;
     }
 
-    public void setSupplierStore(SupplierStoreEntity supplierStore) {
-        this.supplierStore = supplierStore;
+    public void setStore(SupplierStoreEntity store) {
+        this.store = store;
     }
 
     @Enumerated(EnumType.ORDINAL)

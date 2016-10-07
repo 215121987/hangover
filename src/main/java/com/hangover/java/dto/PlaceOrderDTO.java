@@ -2,6 +2,8 @@ package com.hangover.java.dto;
 
 import com.hangover.java.model.type.OrderFrom;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ashqures
@@ -9,6 +11,7 @@ import com.hangover.java.model.type.OrderFrom;
  * Time: 12:30 AM
  * To change this template use File | Settings | File Templates.
  */
+@XmlRootElement(name = "order_placed")
 public class PlaceOrderDTO {
     
     private Long userId;

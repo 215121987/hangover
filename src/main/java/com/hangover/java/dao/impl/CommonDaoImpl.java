@@ -2,7 +2,10 @@ package com.hangover.java.dao.impl;
 
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.model.BaseEntity;
+import com.hangover.java.model.OrderEntity;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,13 +20,25 @@ import java.util.List;
 @Repository("commonDao")
 public class CommonDaoImpl extends BaseDaoImpl implements CommonDao {
 
-    public void deleteFloorDetails(Long floorId, int version) {
-        String hql = "delete from FloorDesignDetailsEntity fdd where fdd.floor.id in (from FloorEntity f where f.id=:floorId and f.designStatus=:designStatus)";
-        Query query = getCurrentSession().createQuery(hql);
-        query.setLong("floorId", floorId);
-        //query.setParameter("designStatus", DesignStatus.Space_Design_Uploaded);
-        query.executeUpdate();
+    @Override
+    public OrderEntity getOrder(String orderNumber) {
+        Criteria criteria = getCurrentSession().createCriteria(OrderEntity.class)
+                .add(Restrictions.eq("orderNumber", orderNumber));
+        return (OrderEntity)criteria.uniqueResult();
     }
+
+
+    @Override
+    public OrderEntity getOrder(Long orderId) {
+        Criteria criteria = getCurrentSession().createCriteria(OrderEntity.class)
+                .add(Restrictions.eq("id", orderId));
+        return (OrderEntity)criteria.uniqueResult();
+    }
+
+
+
+
+
 
 
 

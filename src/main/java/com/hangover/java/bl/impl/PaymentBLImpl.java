@@ -3,10 +3,13 @@ package com.hangover.java.bl.impl;
 import com.hangover.java.bl.PaymentBL;
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.dao.ShoppingDao;
-import com.hangover.java.model.OrderEntity;
-import com.hangover.java.model.PaymentEntity;
+import com.hangover.java.dao.StoreDao;
+import com.hangover.java.model.*;
 import com.hangover.java.model.type.OrderState;
 import com.hangover.java.model.type.PaymentStatus;
+import com.hangover.java.notification.Message;
+import com.hangover.java.notification.PostPaymentSuccessTask;
+import com.hangover.java.notification.PushNotificationService;
 import com.hangover.java.task.AsyncTask;
 import com.hangover.java.task.HangoverBeans;
 import com.hangover.java.util.CommonUtil;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,9 +52,14 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
     @Autowired
     private CommonUtil commonUtil;
 
+    @Autowired
+    private StoreDao storeDao;
 
     @Autowired
     private HangoverBeans hangoverBeans;
+
+    @Autowired
+    private PushNotificationService pushNotificationService;
 
     @Autowired
     private AsyncTask asyncTask;
@@ -84,9 +93,36 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
         map.put("amount", amount+"");
         map.put("status", status);
         this.taskExecutor.execute(this.asyncTask.getOrderPaymentNotificationTask(map));
+        this.taskExecutor.execute(new PostPaymentSuccessTask(orderId));
     }
     
+    public void postPaymentSuccess(String orderNumber){
+        OrderEntity order = commonDao.getOrder(orderNumber);
+        AddressEntity address = order.getAddress();
+        List<SupplierStoreEntity> stores = storeDao.getStoreByLocation(address.getZipCode());
+        SupplierStoreEntity store  = stores.get(0);
+        order.setStore(store);
+        storeDao.save(order);
+        notifyOrderToStore(order);
+    }
     
+    public void notifyOrderToStore(OrderEntity order){
+        logger.info("Notifying order to store...");
+        List<LoginStatusEntity> loggedInStaffs = storeDao.getAvailableStoreStaff(order.getStore().getId());
+        if(null!= loggedInStaffs && loggedInStaffs.size()>0){
+            Message message = new Message();
+            String []to = new String[loggedInStaffs.size()];
+            for(int i=0;i<loggedInStaffs.size();i++){
+                to[i] = loggedInStaffs.get(i).getDeviceId();
+            }
+            message.setTo(to);
+            message.putContext("name", order.getCustomer().getName());
+            message.putContext("mobile", order.getCustomer().getMobile());
+            message.putContext("orderNumber", order.getOrderNumber());
+            logger.info("Sending push to store devices...");
+            pushNotificationService.transactional(message);
+        }
+    }
     
     
 }

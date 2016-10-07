@@ -4,6 +4,7 @@ import com.hangover.java.bl.CommonBL;
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.BaseEntity;
+import com.hangover.java.model.OrderEntity;
 import com.hangover.java.model.ShoppingCartEntity;
 import com.hangover.java.model.UserEntity;
 import com.hangover.java.model.type.OrderFrom;
@@ -129,5 +130,10 @@ public class CommonBLImpl extends BaseBL implements CommonBL, Constants {
     @Override
     public void initializeAssociatedEntity(UserEntity userEntity) {
        userEntity.getRoleName();
+    }
+
+    @Override
+    public OrderEntity getOrder(Long orderId) {
+        return commonDao.getOrder(orderId);
     }
 }

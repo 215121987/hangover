@@ -24,6 +24,10 @@ public interface UserDao extends BaseDao{
 
     UserEntity getUserByUsername(String username);
 
+    UserEntity getUserByEmail(String email);
+
+    UserEntity getUserByMobile(String mobile);
+
     UserEntity getUser(Long id);
 
     void saveUser(UserEntity userEntity) throws DuplicateObjectException;

@@ -10,6 +10,8 @@
         });
 
 
+        $( "#dob" ).datepicker();
+
         //Dropdown cart in header
         $('.cart-holder > h3').click(function () {
             if ($(this).hasClass('cart-opened')) {
@@ -101,11 +103,23 @@
 
 
         $(document).on('blur', '#register_form input[name=email]', function (event) {
-            $.get('/hangover/username/validate.html', {email:$(this).val()}, function (response) {
+            var element = this;
+            $.get('/hangover/validate/email.html', {email:$(this).val()}, function (response) {
                 if (response.code != "200") {
-                    email.setCustomValidity(response.message);
+                    element.setCustomValidity(response.message);
                 }else{
-                    email.setCustomValidity('');
+                    element.setCustomValidity('');
+                }
+            });
+        });
+
+        $(document).on('blur', '#register_form input[name=mobile]', function (event) {
+            var element = this;
+            $.get('/hangover/validate/mobile.html', {mobile:$(this).val()}, function (response) {
+                if (response.code != "200") {
+                    element.setCustomValidity(response.message);
+                }else{
+                    element.setCustomValidity('');
                 }
             });
         });

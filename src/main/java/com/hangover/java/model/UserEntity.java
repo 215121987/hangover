@@ -30,7 +30,6 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     private String password;
     private String confirmPassword;
     private String name;
-    private boolean usernameVerified = false;
     private String email;
     private String mobile;
     private boolean numberVerified = false;
@@ -54,14 +53,6 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
         this.name = name;
     }
 
-    @Column(name = "username_verified")
-    public boolean isUsernameVerified() {
-        return usernameVerified;
-    }
-
-    public void setUsernameVerified(boolean usernameVerified) {
-        this.usernameVerified = usernameVerified;
-    }
 
     @Column(unique = true)
     public String getEmail() {

@@ -23,7 +23,9 @@ public interface UserBL {
     UserEntity loadUserByUsername(String username) throws UsernameNotFoundException;
     
     boolean isEmailExist(String email, StatusDTO status);
-    
+
+    boolean isMobileExist(String mobile, StatusDTO status);
+
     UserEntity authentication(String username, String password)throws UsernameNotFoundException, AuthenticationException;
 
     List<UserEntity> getUser();
@@ -50,7 +52,9 @@ public interface UserBL {
 
     void sendOTP(String username, String requestFrom, StatusDTO status);
 
-    void verifyUserName(String username,  String requestFrom, String otp, StatusDTO status);
+    void verifyEmail(String email,  String requestFrom, String otp, StatusDTO status);
+
+    void verifyMobile(String mobile,  String requestFrom, String otp, StatusDTO status);
 
     UserEntity validateAuthentication(String token);
 

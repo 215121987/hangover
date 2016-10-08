@@ -42,6 +42,19 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         return (UserEntity)criteria.uniqueResult();
     }
 
+
+    public UserEntity getUserByEmail(String email){
+        Criteria criteria = getCurrentSession().createCriteria(UserEntity.class)
+                .add(Restrictions.eq("email", email.trim()));
+        return (UserEntity)criteria.uniqueResult();
+    }
+
+    public UserEntity getUserByMobile(String mobile){
+        Criteria criteria = getCurrentSession().createCriteria(UserEntity.class)
+                .add(Restrictions.eq("mobile", mobile.trim()));
+        return (UserEntity)criteria.uniqueResult();
+    }
+
     public UserEntity getUser(Long id) {
         Criteria criteria = getCurrentSession().createCriteria(UserEntity.class)
                 .add(Restrictions.eq("id", id))

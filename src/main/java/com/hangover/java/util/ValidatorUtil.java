@@ -2,6 +2,7 @@ package com.hangover.java.util;
 
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.UserEntity;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class ValidatorUtil implements Constants {
         /*if (isNullOrEmpty(userEntity.getEmail()))
             status.addError(commonUtil.getText("error.email.required", status.getLocale()));
         else*/
-        if (!isNullOrEmpty(userEntity.getEmail()) &&!isValidEmail(userEntity.getEmail()))
+        if (StringUtils.isEmpty(userEntity.getEmail()) &&!isValidEmail(userEntity.getEmail()))
             status.addError(commonUtil.getText("error.email.invalid", status.getLocale()));
 
         /*if (isNullOrEmpty(userEntity.getUsername()))
@@ -50,25 +51,25 @@ public class ValidatorUtil implements Constants {
         else if (!isValidEmail(userEntity.getEmail()) && !isValidMobile(userEntity.getMobile()))
             status.addError(commonUtil.getText("error.username.invalid", status.getLocale()));*/
 
-        if (isNullOrEmpty(userEntity.getMobile()))
+        if (StringUtils.isEmpty(userEntity.getMobile()))
             status.addError(commonUtil.getText("error.mobile.required", status.getLocale()));
         else if (!isValidMobile(userEntity.getMobile()))
             status.addError(commonUtil.getText("error.mobile.invalid", status.getLocale()));
 
-        if (isNullOrEmpty(userEntity.getPassword()))
+        if (StringUtils.isEmpty(userEntity.getPassword()))
             status.addError(commonUtil.getText("error.password.required", status.getLocale()));
         else if (!userEntity.getPassword().equals(userEntity.getConfirmPassword()))
             status.addError(commonUtil.getText("error.password.and.confirm.password.mismatch", status.getLocale()));
         else if (!isValidPassword(userEntity.getPassword()))
             status.addError(commonUtil.getText("error.password.invalid", status.getLocale()));
 
-        if (isNullOrEmpty(userEntity.getName()))
+        if (StringUtils.isEmpty(userEntity.getName()))
             status.addError(commonUtil.getText("error.first.name.required", status.getLocale()));
         else if (!isValidLength(userEntity.getName(), NORMAL_TEXT_FIELD_LENGTH))
             status.addError(commonUtil.getText("error.text.length.must.be.less.than",
                     new Object[]{PARAM_USER_NAME, NORMAL_TEXT_FIELD_LENGTH}, status.getLocale()));
 
-        if(isNullOrEmpty(userEntity.getDob())){
+        if(StringUtils.isEmpty(userEntity.getDob())){
             status.addError(commonUtil.getText("error.dob.required", status.getLocale()));
         }else if(!isDateValid(userEntity.getDob())){
             status.addError(commonUtil.getText("error.invalid.dob", status.getLocale()));

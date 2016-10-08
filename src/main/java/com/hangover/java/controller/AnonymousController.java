@@ -26,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -187,7 +188,7 @@ public class AnonymousController extends BaseController{
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String performRegister(HttpServletRequest request, HttpServletResponse response,
-                                  UserEntity user) throws JSONException, IOException {
+                                  @ModelAttribute("user")UserEntity user) throws JSONException, IOException {
         StatusDTO status = new StatusDTO();
         userBL.save(user, status);
         saveStatus(request, status);
@@ -195,6 +196,8 @@ public class AnonymousController extends BaseController{
         if(status.getCode()==HttpStatus.OK.value()){
             RETURN_PATH = performLogin(request,response, user.getMobile(),user.getConfirmPassword(),false);
         }else{
+            user.setPassword(user.getConfirmPassword());
+            request.setAttribute("user", user);
             RETURN_PATH = "register";
             if(isAjaxRequest(request)){
                 responseAsJSON(response, getStatusAsJSON(status));
@@ -203,8 +206,6 @@ public class AnonymousController extends BaseController{
         }
         return RETURN_PATH;
     }
-
-
 
     @RequestMapping("/register")
     public String register(HttpServletRequest request){
@@ -228,8 +229,17 @@ public class AnonymousController extends BaseController{
         return sendRedirect("/login.html");
     }
 
-    @RequestMapping("/username/validate")
-    public String validateUserName(HttpServletRequest request, HttpServletResponse response,
+    @RequestMapping("/validate/mobile")
+    public String validateMobile(HttpServletRequest request, HttpServletResponse response,
+                                   @QueryParam("mobile")String mobile) throws JSONException, IOException {
+        StatusDTO status = new StatusDTO();
+        userBL.isMobileExist(mobile, status);
+        responseAsJSON(response, getStatusAsJSON(status));
+        return null;
+    }
+
+    @RequestMapping("/validate/email")
+    public String validateEmail(HttpServletRequest request, HttpServletResponse response,
                                    @QueryParam("email")String email) throws JSONException, IOException {
         StatusDTO status = new StatusDTO();
         userBL.isEmailExist(email, status);

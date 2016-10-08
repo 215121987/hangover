@@ -81,9 +81,20 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
 
     @Override
     public boolean isEmailExist(String email, StatusDTO status) {
-        UserEntity user = userDao.getUserByUsername(email);
+        UserEntity user = userDao.getUserByEmail(email);
         if(null!= user){
             status.setMessage(commonUtil.getText("error.email.already.exist",email, status.getLocale()));
+            saveErrorMessage(status, HttpStatus.CONFLICT.value());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isMobileExist(String mobile, StatusDTO status) {
+        UserEntity user = userDao.getUserByMobile(mobile);
+        if(null!= user){
+            status.setMessage(commonUtil.getText("error.mobile.already.exist",mobile, status.getLocale()));
             saveErrorMessage(status, HttpStatus.CONFLICT.value());
             return false;
         }
@@ -270,8 +281,8 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
     }
 
     @Override
-    public void verifyUserName(String username, String requestFrom,  String otp, StatusDTO status) {
-        OTPEntity otpEntity = userDao.getOTP(username, otp);
+    public void verifyEmail(String email, String requestFrom,  String otp, StatusDTO status) {
+        OTPEntity otpEntity = userDao.getOTP(email, otp);
         if(null== otpEntity){
             status.setCode(HttpStatus.FORBIDDEN.value());
             status.setMessage(commonUtil.getText("error.invalid.otp"));
@@ -279,7 +290,25 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
             otpEntity.setInValidate(true);
             otpEntity.setVerifiedFrom(requestFrom);
             UserEntity user = otpEntity.getUser();
-            user.setUsernameVerified(true);
+            user.setEmailVerified(true);
+            userDao.save(user);
+            userDao.save(otpEntity);
+            status.setCode(HttpStatus.OK.value());
+            saveSuccessMessage(status, commonUtil.getText("success.otp.verified"));
+        }
+    }
+
+    @Override
+    public void verifyMobile(String mobile, String requestFrom,  String otp, StatusDTO status) {
+        OTPEntity otpEntity = userDao.getOTP(mobile, otp);
+        if(null== otpEntity){
+            status.setCode(HttpStatus.FORBIDDEN.value());
+            status.setMessage(commonUtil.getText("error.invalid.otp"));
+        }else{
+            otpEntity.setInValidate(true);
+            otpEntity.setVerifiedFrom(requestFrom);
+            UserEntity user = otpEntity.getUser();
+            user.setNumberVerified(true);
             userDao.save(user);
             userDao.save(otpEntity);
             status.setCode(HttpStatus.OK.value());

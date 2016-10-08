@@ -88,11 +88,20 @@ public class AnonymousService extends BaseService{
     }
 
     @POST
-    @Path("/verify/username")
+    @Path("/verify/email")
     public Response verifyUsername(@FormParam(PARAM_USERNAME) String username, @FormParam(PARAM_OTP) String otp,
                               @FormParam(PARAM_DEVICE_ID) String deviceId) {
         StatusDTO status = new StatusDTO();
-        userBL.verifyUserName(username, deviceId, otp, status);
+        userBL.verifyEmail(username, deviceId, otp, status);
+        return sendResponse(status);
+    }
+
+    @POST
+    @Path("/verify/mobile")
+    public Response verifyMobile(@FormParam(PARAM_USERNAME) String username, @FormParam(PARAM_OTP) String otp,
+                                   @FormParam(PARAM_DEVICE_ID) String deviceId) {
+        StatusDTO status = new StatusDTO();
+        userBL.verifyMobile(username, deviceId, otp, status);
         return sendResponse(status);
     }
 }

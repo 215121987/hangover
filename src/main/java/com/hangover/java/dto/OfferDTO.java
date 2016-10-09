@@ -1,51 +1,36 @@
-package com.hangover.java.model;
+package com.hangover.java.dto;
 
 import com.hangover.java.model.type.OfferFor;
 import com.hangover.java.model.type.OfferType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by IntelliJ IDEA.
  * User: ashqures
- * Date: 10/2/16
- * Time: 5:18 PM
+ * Date: 10/9/16
+ * Time: 11:15 AM
  * To change this template use File | Settings | File Templates.
  */
-@Entity
-@javax.persistence.Table(name = "offers")
-@XmlRootElement(name = "offers")
-public class OffersEntity extends BaseEntity{
-    
+@XmlRootElement(name = "offer")
+public class OfferDTO extends BaseDTO{
+
+
+
     private String imageURL;
-    private OfferFor offerFor = OfferFor.WEB;
     private String description;
     private String title;
     private String subTitle;
-    private OfferType offerType = OfferType.GENERAL_OFFER;
-    private int priority =1;
+    private OfferType offerType;
+    private int priority;
 
 
-    @Column(name = "image_url")
     public String getImageURL() {
         return imageURL;
     }
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
-    }
-
-    @Enumerated
-    @Column(name = "offer_for")
-    public OfferFor getOfferFor() {
-        return offerFor;
-    }
-
-    public void setOfferFor(OfferFor offerFor) {
-        this.offerFor = offerFor;
     }
 
     public String getDescription() {
@@ -72,8 +57,6 @@ public class OffersEntity extends BaseEntity{
         this.subTitle = subTitle;
     }
 
-    @Enumerated
-    @Column(name = "offer_type")
     public OfferType getOfferType() {
         return offerType;
     }
@@ -82,7 +65,6 @@ public class OffersEntity extends BaseEntity{
         this.offerType = offerType;
     }
 
-    @Column(name = "priority", nullable = false)
     public int getPriority() {
         return priority;
     }

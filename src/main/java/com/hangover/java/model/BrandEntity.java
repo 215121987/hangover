@@ -22,6 +22,7 @@ public class BrandEntity extends BaseEntity{
 
     private String code;
     private String name;
+    private String logo;
     private String displayName;
     private String description;
     private String url;
@@ -43,6 +44,14 @@ public class BrandEntity extends BaseEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getDisplayName() {

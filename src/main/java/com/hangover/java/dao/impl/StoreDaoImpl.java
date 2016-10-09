@@ -1,10 +1,9 @@
 package com.hangover.java.dao.impl;
 
 import com.hangover.java.dao.StoreDao;
-import com.hangover.java.model.LoginStatusEntity;
-import com.hangover.java.model.OrderEntity;
-import com.hangover.java.model.SupplierStaffEntity;
-import com.hangover.java.model.SupplierStoreEntity;
+import com.hangover.java.model.*;
+import com.hangover.java.model.type.OfferFor;
+import com.hangover.java.model.type.OfferType;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -52,6 +51,14 @@ public class StoreDaoImpl extends BaseDaoImpl implements StoreDao {
         Criteria criteria  = getCurrentSession().createCriteria(LoginStatusEntity.class)
                 .createAlias("store","store")
                 .add(Restrictions.eq("store.id", storeId));
+        return criteria.list();
+    }
+
+    @Override
+    public List<OffersEntity> getOffer(OfferType offerType ,OfferFor offerFor) {
+        Criteria criteria = getCurrentSession().createCriteria(OffersEntity.class)
+                .add(Restrictions.eq("offerFor", offerFor))
+                .add(Restrictions.eq("offerType", offerType));
         return criteria.list();
     }
 }

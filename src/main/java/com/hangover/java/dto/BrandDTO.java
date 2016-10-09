@@ -2,6 +2,8 @@ package com.hangover.java.dto;
 
 import com.hangover.java.model.master.CategoryEntity;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ashqures
@@ -9,10 +11,12 @@ import com.hangover.java.model.master.CategoryEntity;
  * Time: 11:19 PM
  * To change this template use File | Settings | File Templates.
  */
+@XmlRootElement(name = "brand")
 public class BrandDTO extends BaseDTO{
 
     private String code;
     private String name;
+    private String logo;
     private String displayName;
     private String description;
     private String url;
@@ -34,6 +38,15 @@ public class BrandDTO extends BaseDTO{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getDisplayName() {

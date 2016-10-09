@@ -6,6 +6,7 @@ import com.hangover.java.bl.UserBL;
 import com.hangover.java.dto.*;
 import com.hangover.java.exception.NoRecordFoundException;
 import com.hangover.java.model.*;
+import com.hangover.java.model.type.OfferFor;
 import com.hangover.java.model.type.OrderFrom;
 import com.hangover.java.util.*;
 import org.apache.commons.lang.StringUtils;
@@ -60,6 +61,8 @@ public class CommonController extends BaseController {
 
     @RequestMapping("/home")
     public String register(HttpServletRequest request) {
+        HomeDTO homeDTO = commonBL.getHome(OfferFor.WEB);
+        request.setAttribute("home", homeDTO);
         return "home";
     }
 

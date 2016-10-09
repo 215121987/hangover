@@ -2,13 +2,14 @@ package com.hangover.java.bl.impl;
 
 import com.hangover.java.bl.CommonBL;
 import com.hangover.java.dao.CommonDao;
+import com.hangover.java.dao.ShoppingDao;
+import com.hangover.java.dao.StoreDao;
+import com.hangover.java.dto.HomeDTO;
 import com.hangover.java.dto.StatusDTO;
-import com.hangover.java.model.BaseEntity;
-import com.hangover.java.model.OrderEntity;
-import com.hangover.java.model.ShoppingCartEntity;
-import com.hangover.java.model.UserEntity;
-import com.hangover.java.model.type.OrderFrom;
-import com.hangover.java.model.type.Status;
+import com.hangover.java.model.*;
+import com.hangover.java.model.master.BannerEntity;
+import com.hangover.java.model.type.*;
+import com.hangover.java.service.imp.DataMapper;
 import com.hangover.java.task.HangoverBeans;
 import com.hangover.java.util.*;
 import org.slf4j.Logger;
@@ -43,8 +44,13 @@ public class CommonBLImpl extends BaseBL implements CommonBL, Constants {
     private CommonDao commonDao;
 
     @Autowired
+    private StoreDao storeDao;
+
+    @Autowired
     private CommonUtil commonUtil;
 
+    @Autowired
+    private ShoppingDao shoppingDao;
 
     @Autowired
     private HangoverBeans hangoverBeans;
@@ -135,5 +141,25 @@ public class CommonBLImpl extends BaseBL implements CommonBL, Constants {
     @Override
     public OrderEntity getOrder(Long orderId) {
         return commonDao.getOrder(orderId);
+    }
+
+    @Override
+    public HomeDTO getHome(OfferFor offerFor) {
+        HomeDTO homeDTO = new HomeDTO();
+        List<OffersEntity> generalOffer = storeDao.getOffer(OfferType.GENERAL_OFFER, offerFor);
+        homeDTO.setGeneralOffer(DataMapper.transformOffers(generalOffer));
+        List<OffersEntity> expressOffer = storeDao.getOffer(OfferType.EXPRESS_OFFER, offerFor);
+        if(null != expressOffer && expressOffer.size()>0){
+            homeDTO.setExpressOffer(DataMapper.transform(expressOffer.get(0)));
+        }
+        List<OffersEntity> specificOffer = storeDao.getOffer(OfferType.SPECIFIC_OFFER, offerFor);
+        if(null != specificOffer && specificOffer.size()>0){
+            homeDTO.setSpecificOffer(DataMapper.transform(specificOffer.get(0)));
+        }
+        List<BrandEntity> brands = shoppingDao.getBrands(1L,0,5);
+        homeDTO.setBrands(DataMapper.transformBrands(brands));
+        List<BannerEntity> banners = commonDao.getBanner(BannerType.HOME_BANNER);
+        homeDTO.setBannerURL(banners.get(0).getLImageURL());
+        return homeDTO;
     }
 }

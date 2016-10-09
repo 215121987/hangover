@@ -1,9 +1,12 @@
 package com.hangover.java.service;
 
+import com.hangover.java.bl.CommonBL;
 import com.hangover.java.bl.UserBL;
+import com.hangover.java.dto.HomeDTO;
 import com.hangover.java.dto.LoginStatusDTO;
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.UserEntity;
+import com.hangover.java.model.type.OfferFor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,9 @@ public class AnonymousService extends BaseService{
 
     @Autowired
     private UserBL userBL;
+
+    @Autowired
+    private CommonBL commonBL;
 
     @POST
     @Path("/login")
@@ -103,5 +109,12 @@ public class AnonymousService extends BaseService{
         StatusDTO status = new StatusDTO();
         userBL.verifyMobile(username, deviceId, otp, status);
         return sendResponse(status);
+    }
+
+    @GET
+    @Path("/home")
+    public Response home(@QueryParam("from") String from) {
+        HomeDTO homeDTO = commonBL.getHome(OfferFor.valueOf(from));
+        return sendResponse(homeDTO);
     }
 }

@@ -3,6 +3,8 @@ package com.hangover.java.dao.impl;
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.model.BaseEntity;
 import com.hangover.java.model.OrderEntity;
+import com.hangover.java.model.master.BannerEntity;
+import com.hangover.java.model.type.BannerType;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
@@ -35,11 +37,13 @@ public class CommonDaoImpl extends BaseDaoImpl implements CommonDao {
         return (OrderEntity)criteria.uniqueResult();
     }
 
+    @Override
+    public List<BannerEntity> getBanner(BannerType bannerType) {
+        Criteria criteria = getCurrentSession().createCriteria(BannerEntity.class)
+                .add(Restrictions.eq("bannerType", bannerType));
 
-
-
-
-
+        return criteria.list();
+    }
 
 
 }

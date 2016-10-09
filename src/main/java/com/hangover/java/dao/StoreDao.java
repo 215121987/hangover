@@ -1,9 +1,8 @@
 package com.hangover.java.dao;
 
-import com.hangover.java.model.LoginStatusEntity;
-import com.hangover.java.model.OrderEntity;
-import com.hangover.java.model.SupplierStaffEntity;
-import com.hangover.java.model.SupplierStoreEntity;
+import com.hangover.java.model.*;
+import com.hangover.java.model.type.OfferFor;
+import com.hangover.java.model.type.OfferType;
 
 import java.util.List;
 
@@ -24,4 +23,7 @@ public interface StoreDao extends BaseDao{
     List<SupplierStoreEntity> getStoreByLocation(String zipCode);
     
     List<LoginStatusEntity> getAvailableStoreStaff(Long storeId);
+
+    List<OffersEntity> getOffer(OfferType offerType ,OfferFor offerFor);
+
 }

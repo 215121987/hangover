@@ -1,9 +1,11 @@
 package com.hangover.java.bl;
 
+import com.hangover.java.dto.HomeDTO;
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.BaseEntity;
 import com.hangover.java.model.OrderEntity;
 import com.hangover.java.model.UserEntity;
+import com.hangover.java.model.type.OfferFor;
 
 import java.util.List;
 import java.util.Map;
@@ -38,4 +40,7 @@ public interface CommonBL {
     void initializeAssociatedEntity(UserEntity baseEntity);
     
     OrderEntity getOrder(Long orderId);
+
+    HomeDTO getHome(OfferFor offerFor);
+
 }

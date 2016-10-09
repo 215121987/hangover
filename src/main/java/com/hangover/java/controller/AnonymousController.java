@@ -3,14 +3,12 @@ package com.hangover.java.controller;
 import com.hangover.java.bl.CommonBL;
 import com.hangover.java.bl.ShoppingBL;
 import com.hangover.java.bl.UserBL;
-import com.hangover.java.dto.CartDTO;
-import com.hangover.java.dto.ShoppingDTO;
-import com.hangover.java.dto.StatusDTO;
-import com.hangover.java.dto.UserDTO;
+import com.hangover.java.dto.*;
 import com.hangover.java.model.ShoppingCartItemEntity;
 import com.hangover.java.model.SupplierStaffEntity;
 import com.hangover.java.model.UserEntity;
 import com.hangover.java.model.master.Role;
+import com.hangover.java.model.type.OfferFor;
 import com.hangover.java.model.type.Status;
 import com.hangover.java.util.CommonUtil;
 import com.hangover.java.util.HangoverUtil;
@@ -176,13 +174,8 @@ public class AnonymousController extends BaseController{
 
     @RequestMapping("/home")
     public String home(HttpServletRequest request){
-        /*try {
-            if (request.getUserPrincipal() != null) {
-                return redirectToHome();
-            }
-        } catch (Exception e) {
-            System.out.print("Error occur:- " + e.getMessage());
-        }*/
+        HomeDTO homeDTO = commonBL.getHome(OfferFor.WEB);
+        request.setAttribute("home", homeDTO);
         return "home";
     }
 

@@ -5,7 +5,7 @@
             <li class="post-${item.id} product instock" style="width: 200px;">
                 <a href='<c:url value="/comm/shop/${item.id}.html" />'>
                     <div class="cherry-thumb-wrap">
-                        <span class="onsale">Sale!</span>
+                        <%--<span class="onsale">Sale!</span>--%>
                         <c:choose>
                             <c:when test="${not empty item.imageURL}">
                                 <img width="300" height="300" src="${item.imageURL[0]}" class="attachment-shop_catalog wp-post-image" alt="${item.name}"/>

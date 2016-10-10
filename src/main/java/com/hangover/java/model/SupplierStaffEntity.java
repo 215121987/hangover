@@ -67,6 +67,7 @@ public class SupplierStaffEntity extends BaseEntity{
     }
 
 
+    @Enumerated
     public Status getStatus() {
         return status;
     }
@@ -77,6 +78,7 @@ public class SupplierStaffEntity extends BaseEntity{
 
 
     @ManyToOne
+    @JoinColumn(name = "store_id")
     public SupplierStoreEntity getStore() {
         return store;
     }

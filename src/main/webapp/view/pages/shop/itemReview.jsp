@@ -7,11 +7,10 @@
                     <h2>${fn:length(itemReviews)} reviews for ${item.name}</h2>
                     <ol class="commentlist">
                         <c:forEach items="${itemReviews}" var="review">
-                            <li itemprop="reviews" itemscope itemtype="http://schema.org/Review"
-                                class="comment byuser comment-author-admin bypostauthor even thread-even depth-1" id="li-comment-${review.id}">
+                            <li
+                                    class="comment byuser comment-author-admin bypostauthor even thread-even depth-1" id="li-comment-${review.id}">
                                 <div id="comment-${review.id}" class="comment_container">
-                                    <img alt='admin' src='http://2.gravatar.com/avatar/b263802e2004e058851acabb4111135e?s=60&#038;d=mm&#038;r=g'
-                                         srcset='http://2.gravatar.com/avatar/b263802e2004e058851acabb4111135e?s=120&amp;d=mm&amp;r=g 2x'
+                                    <img alt='admin'
                                          class='avatar avatar-60 photo' height='60' width='60'/>
                                     <div class="comment-text">
                                         <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating"
@@ -20,7 +19,7 @@
                                         </div>
                                         <p class="meta">
                                             <strong itemprop="author">${review.user.name}</strong> &ndash;
-                                            <time itemprop="datePublished" datetime="2014-01-27T16:21:41+00:00">January 27,
+                                            <time itemprop="datePublished">January 27,
                                                 2014
                                             </time>
                                             :
@@ -41,8 +40,7 @@
         <div id="review_form_wrapper">
             <div id="review_form">
                 <div id="respond" class="comment-respond">
-                    <form action="http://livedemo00.template-help.com/woocommerce_53953/wp-comments-post.php"
-                          method="post" id="commentform" class="comment-form">
+                    <form action="#" method="post" id="commentform" class="comment-form">
                         <p class="comment-form-author">
                             <label for="author">Name <span class="required">*</span></label>
                             <input id="author" name="author" type="text" value="" size="30" aria-required="true" required/>

@@ -71,7 +71,7 @@ public class CommonController extends BaseController {
     public String shop(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException, ClassNotFoundException {
         //logger.info("Path Variable Category "+category + " and brand "+ brand);
         Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put(ITEM_CATEGORY,"1");
+        paramMap.put(ITEM_CATEGORY, "1");
         /*CustomClassMapperUtil customClassMapperUtil = CustomClassMapperUtil.getInstance();
         Map<String, Class<? extends BaseEntity>> classNameMap = customClassMapperUtil.getClassNameMap();
         for(String key : classNameMap.keySet()){
@@ -90,7 +90,7 @@ public class CommonController extends BaseController {
             responseAsJSON(response, object);
             return null;
         }*/
-        return shopDefault(request,response, paramMap);
+        return shopDefault(request, response, paramMap);
     }
 
     /*@RequestMapping(value = {"/{category_brand}/shop"})
@@ -113,8 +113,8 @@ public class CommonController extends BaseController {
         Map<String, String> paramMap = new HashMap<String, String>();
         category = category.replace(ITEM_CATEGORY + "-", "");
         paramMap.put(ITEM_CATEGORY, category.replace("-", ","));
-       // brand = brand.replace(BRAND_NAME + "-", "");
-       // paramMap.put(BRAND_NAME, brand.replace("-", ","));
+        // brand = brand.replace(BRAND_NAME + "-", "");
+        // paramMap.put(BRAND_NAME, brand.replace("-", ","));
         return shopDefault(request, response, paramMap);
     }
 
@@ -123,54 +123,54 @@ public class CommonController extends BaseController {
         if (StringUtil.isNotNullOrEmpty(request.getParameter(PAGE_NUMBER)))
             paramMap.put(PAGE_NUMBER, request.getParameter(PAGE_NUMBER));
         String brandName = request.getParameter(BRAND_NAME);
-        if(StringUtil.isNotNullOrEmpty(brandName)){
-            paramMap.put(BRAND_NAME, "'"+brandName.replace("--","','")+"'");
+        if (StringUtil.isNotNullOrEmpty(brandName)) {
+            paramMap.put(BRAND_NAME, "'" + brandName.replace("--", "','") + "'");
         }
         String itemSize = request.getParameter(ITEM_SIZE);
-        if(StringUtil.isNotNullOrEmpty(itemSize)){
-            paramMap.put(ITEM_SIZE, itemSize.replace("--",","));
+        if (StringUtil.isNotNullOrEmpty(itemSize)) {
+            paramMap.put(ITEM_SIZE, itemSize.replace("--", ","));
         }
 
         String discount = request.getParameter(ITEM_DISCOUNT);
-        if(StringUtil.isNotNullOrEmpty(discount)){
-            paramMap.put(ITEM_DISCOUNT, discount.replace("--",","));
+        if (StringUtil.isNotNullOrEmpty(discount)) {
+            paramMap.put(ITEM_DISCOUNT, discount.replace("--", ","));
         }
 
         String orderBy = request.getParameter(ORDER_BY);
-        if(StringUtil.isNotNullOrEmpty(orderBy)){
+        if (StringUtil.isNotNullOrEmpty(orderBy)) {
             paramMap.put(ORDER_BY, orderBy);
         }
         String minPrice = request.getParameter(ITEM_MIN_PRICE);
-        if(StringUtil.isNotNullOrEmpty(minPrice)){
+        if (StringUtil.isNotNullOrEmpty(minPrice)) {
             paramMap.put(ITEM_MIN_PRICE, minPrice);
         }
         String maxPrice = request.getParameter(ITEM_MAX_PRICE);
-        if(StringUtil.isNotNullOrEmpty(maxPrice)){
+        if (StringUtil.isNotNullOrEmpty(maxPrice)) {
             paramMap.put(ITEM_MAX_PRICE, maxPrice);
         }
         Cookie cookie = HangoverUtil.getCookie(request.getCookies(), SUPPLIER_ZIP_CODE);
-        if(null!=cookie && StringUtil.isNotNullOrEmpty(cookie.getValue())){
+        if (null != cookie && StringUtil.isNotNullOrEmpty(cookie.getValue())) {
             paramMap.put(SUPPLIER_ZIP_CODE, cookie.getValue());
         }
-        logger.info("Shop Filter Param:- "+paramMap.toString());
+        logger.info("Shop Filter Param:- " + paramMap.toString());
         List<ItemEntity> itemList = shoppingBL.getItem(paramMap);
         String RETURN_PATH = "shop/shop";
-        if(isAjaxRequest(request)){
+        if (isAjaxRequest(request)) {
             String view = request.getParameter("view");
-            if(StringUtil.isNotNullOrEmpty(view) && "json".equalsIgnoreCase(view)){
+            if (StringUtil.isNotNullOrEmpty(view) && "json".equalsIgnoreCase(view)) {
                 JSONObject object = new JSONObject();
                 object.put("items", getItemsAsJSONArray(itemList));
                 responseAsJSON(response, object);
                 RETURN_PATH = null;
-            }else{
+            } else {
                 request.setAttribute("items", itemList);
                 return "shop/shopItem";
             }
-        }else{
+        } else {
             request.setAttribute("items", itemList);
             request.setAttribute("categories", shoppingBL.getChildCategories());
             Long categoryId = 1L;
-            if(paramMap.containsKey(ITEM_CATEGORY)){
+            if (paramMap.containsKey(ITEM_CATEGORY)) {
                 categoryId = Long.parseLong(paramMap.get(ITEM_CATEGORY));
             }
             request.setAttribute("brands", shoppingBL.getBrands(categoryId, 1));
@@ -224,9 +224,10 @@ public class CommonController extends BaseController {
     public String item(HttpServletRequest request, @PathVariable("itemId") Long itemId) throws NoRecordFoundException {
         ItemEntity item = shoppingBL.getItem(itemId);
         request.setAttribute("item", item);
-        Map<String, String> paramMap = new HashMap<String, String>();
-        request.setAttribute("items", shoppingBL.getItem(paramMap));
-
+        Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
+        if (null != cookie && StringUtils.isNotEmpty(cookie.getValue()) && null!= item) {
+            request.setAttribute("items", shoppingBL.search(cookie.getValue(), item.getCategory().getName()));
+        }
         return "/shop/itemDetail";
     }
 
@@ -259,20 +260,20 @@ public class CommonController extends BaseController {
 
 
     @RequestMapping(value = "/cart")
-    public String cart(HttpServletRequest request, @RequestParam(value = "action", required = false) String action){
+    public String cart(HttpServletRequest request, @RequestParam(value = "action", required = false) String action) {
         String RETURN_PATH = "/shop/cart";
         List<CartDTO> cartDTOs;
-        if(isUserLoggedIn(request)){
+        if (isUserLoggedIn(request)) {
             List<ShoppingCartItemEntity> shoppingCartItems = shoppingBL.getCartItem(getCurrentUsers().getId());
             cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
-        }else{
-            cartDTOs =  HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
+        } else {
+            cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
         }
         request.setAttribute(Constants.SESSION_CART, cartDTOs);
         request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
         if (null == cartDTOs || cartDTOs.size() <= 0) {
             RETURN_PATH = "/shop/emptyCart";
-        }else if(isEditCartItemAction(action)){
+        } else if (isEditCartItemAction(action)) {
             Long itemId = Long.parseLong(request.getParameter("itemId"));
             Long itemDetailId = Long.parseLong(request.getParameter("itemDetailId"));
             request.setAttribute("item", commonBL.getEntity(ItemEntity.class, itemId));
@@ -280,19 +281,18 @@ public class CommonController extends BaseController {
             cartItem.setItemId(itemId);
             cartItem.setItemDetailId(itemDetailId);
             request.setAttribute("cartItem", cartDTOs.get(cartDTOs.indexOf(cartItem)));
-            RETURN_PATH = "/shop/cartForm"; 
+            RETURN_PATH = "/shop/cartForm";
         }
         return RETURN_PATH;
     }
 
 
-    
     /*private void processRequestCart(HttpServletRequest request){
-        Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH);
-        if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
-            String cartHash = cookie.getValue();
-            cartHash = HangoverUtil.base64Decode(cartHash);
-            *//*List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
+Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH);
+if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
+    String cartHash = cookie.getValue();
+    cartHash = HangoverUtil.base64Decode(cartHash);
+    *//*List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
             if(null==cartDTOs){
                 cartDTOs = new ArrayList<CartDTO>();
             }*//*
@@ -340,17 +340,20 @@ public class CommonController extends BaseController {
             cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
             if (null == cartDTOs)
                 cartDTOs = new ArrayList<CartDTO>();
-            if (isAddToCartAction(action)|| isEditCartItemAction(action)) {
+            if (isAddToCartAction(action) || isEditCartItemAction(action)) {
                 CartDTO cartDTO = new CartDTO();
                 cartDTO.setItemId(shoppingDTO.getItemId());
                 cartDTO.setItemDetailId(shoppingDTO.getItemDetailId());
                 cartDTO.setQuantity(shoppingDTO.getQuantity());
                 if (cartDTOs.contains(cartDTO)) {
                     cartDTO = cartDTOs.get(cartDTOs.indexOf(cartDTO));
-                    cartDTO.addQuantity(shoppingDTO.getQuantity());
+                    if (isAddToCartAction(action))
+                        cartDTO.addQuantity(shoppingDTO.getQuantity());
+                    else
+                        cartDTO.setQuantity(shoppingDTO.getQuantity());
                 } else {
                     ItemDetailEntity itemDetail = shoppingBL.getItemDetailWithItem(shoppingDTO.getItemDetailId());
-                    cartDTO.setId(cartDTO.getItemId()*cartDTO.getItemDetailId()*-1);
+                    cartDTO.setId(cartDTO.getItemId() * cartDTO.getItemDetailId() * -1);
                     cartDTO.setName(itemDetail.getItem().getName());
                     cartDTO.setDescription(itemDetail.getItem().getDescription());
                     cartDTO.setSize(itemDetail.getItemSize());
@@ -358,9 +361,10 @@ public class CommonController extends BaseController {
                     cartDTO.setImageURL(itemDetail.getItem().getImageURL().get(0));
                 }
                 cartDTOs.remove(cartDTO);
-                for(CartDTO cDTO : cartDTOs){
-                    if(cDTO.getId().equals(shoppingDTO.getId())){
+                for (CartDTO cDTO : cartDTOs) {
+                    if (cDTO.getId().equals(shoppingDTO.getId())) {
                         cartDTOs.remove(cDTO);
+                        break;
                     }
                 }
                 cartDTOs.add(cartDTO);
@@ -370,7 +374,7 @@ public class CommonController extends BaseController {
             //request.getSession().setAttribute(SESSION_CART, cartDTOs);
             //request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
-            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
+            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(), cartHash));
             if (isAjaxRequest(request)) {
                 JSONObject cartItem = getCartItemAsJson(cartDTOs);
                 cartItem.put("cart_hash", cartHash);
@@ -384,9 +388,8 @@ public class CommonController extends BaseController {
         }
         return sendRedirect("/comm/cart.html");
     }
-    
-    
-    
+
+
     private boolean isAddToCartAction(String action) {
         return StringUtil.isNotNullOrEmpty(action) && action.equalsIgnoreCase(ACTION_ADD_TO_CART);
     }
@@ -405,18 +408,18 @@ public class CommonController extends BaseController {
         cartDTO.setItemId(itemId);
         cartDTO.setItemDetailId(itemDetailId);
         /*cartDTO.setUserId(getCurrentUsers().getId());*/
-        if(cartDTOs.contains(cartDTO)){
+        if (cartDTOs.contains(cartDTO)) {
             cartDTOs.remove(cartDTO);
             //request.getSession().setAttribute(SESSION_CART, cartDTOs);
             //request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
-            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
-            if(isUserLoggedIn(request)){
+            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(), cartHash));
+            if (isUserLoggedIn(request)) {
                 ShoppingDTO shoppingDTO = new ShoppingDTO();
                 shoppingDTO.setUserId(getCurrentUsers().getId());
                 shoppingDTO.setItemId(itemId);
                 shoppingDTO.setItemDetailId(itemDetailId);
-               shoppingBL.deleteItemFromCart(shoppingDTO, statusDTO);
+                shoppingBL.deleteItemFromCart(shoppingDTO, statusDTO);
             }
         }
         return sendRedirect("/comm/cart.html");
@@ -494,12 +497,12 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "/checkout")
     public String checkout(HttpServletRequest request) {
         List<CartDTO> cartDTOs;
-        request.setAttribute(ACTION_PLACE_ORDER,true);
+        request.setAttribute(ACTION_PLACE_ORDER, true);
         if (isUserLoggedIn(request)) {
             cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingBL.getCartItem(getCurrentUsers().getId()));
             Map<String, Object> filterParam = new HashMap<String, Object>();
             //AddressEntity address = (AddressEntity) request.getSession().getAttribute(SESSION_DELIVERY_ADDRESS);
-            Cookie  cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
+            Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
             if (null != cookie) {
                 filterParam.put("zipCode", cookie.getValue());
             }
@@ -508,12 +511,12 @@ public class CommonController extends BaseController {
                 request.getSession().setAttribute(SESSION_DELIVERY_ADDRESS_ID, addressList.get(0).getId());
             }*/
             request.setAttribute("addressList", addressList);
-        }else {
+        } else {
             cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
         }
         String RETURN_PATH = "/customer/checkout";
         if (null == cartDTOs || cartDTOs.size() <= 0) {
-            RETURN_PATH =  "/shop/emptyCart";
+            RETURN_PATH = "/shop/emptyCart";
         }
         request.setAttribute(Constants.SESSION_CART, cartDTOs);
         request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
@@ -557,7 +560,7 @@ public class CommonController extends BaseController {
                          @QueryParam("view") String view) throws JSONException, IOException {
         Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
         String RETURN_PATH = "shop/shop";
-        if (null != cookie && StringUtil.isNotNullOrEmpty(cookie.getValue())) {
+        if (null != cookie && StringUtils.isNotEmpty(cookie.getValue())) {
             List<ItemEntity> itemList = shoppingBL.search(cookie.getValue(), query);
             /*JSONObject object = new JSONObject();
             object.put("items", getItemsAsJSONArray(itemList));
@@ -578,7 +581,7 @@ public class CommonController extends BaseController {
 
     @RequestMapping(value = "/order/place")
     public String placeOrder(HttpServletRequest request, HttpServletResponse response,
-                             @QueryParam("amount")Double amount) throws JSONException, IOException {
+                             @QueryParam("amount") Double amount) throws JSONException, IOException {
         StatusDTO statusDTO = new StatusDTO();
         PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
         placeOrderDTO.setOrderFrom(OrderFrom.WEB);

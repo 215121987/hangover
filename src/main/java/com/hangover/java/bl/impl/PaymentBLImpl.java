@@ -99,6 +99,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
                 orderItem.setItemSize(cartItem.getItemDetail().getItemSize());
                 orderItem.setPrice(cartItem.getPrice());
                 orderItem.setOrder(order);
+                orderItem.setQuantity(cartItem.getQuantity());
                 order.addOrderItem(orderItem);
             }
             shoppingDao.save(order);

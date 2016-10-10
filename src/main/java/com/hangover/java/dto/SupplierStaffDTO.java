@@ -168,5 +168,15 @@ public class SupplierStaffDTO {
             setStoreId(supplierStaff.getStore().getId());
         }
         setStartDate(supplierStaff.getStartDate());
-        setEndDate(supplierStaff.getEndDate());    }
+        setEndDate(supplierStaff.getEndDate());
+        setName(supplierStaff.getUser().getName());
+        setEmail(supplierStaff.getUser().getEmail());
+        setMobile(supplierStaff.getUser().getMobile());
+        setStartDate(supplierStaff.getStartDate());
+        if(null!= supplierStaff.getStore()){
+            setStoreId(supplierStaff.getStore().getId());
+            setZipCode(supplierStaff.getStore().getZipCode());
+        }
+
+    }
 }

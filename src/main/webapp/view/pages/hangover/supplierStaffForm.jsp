@@ -3,7 +3,7 @@
     <div class="woocommerce">
         <c:choose>
             <c:when test="${not empty id}">
-                <h3 class="text-center">${entity.zipCode}'s Staff</h3>
+                <h3 class="text-center">Edit Staff</h3>
             </c:when>
             <c:otherwise>
                 <h3 class="text-center">${entity.zipCode} New Staff</h3>
@@ -26,14 +26,16 @@
                     <label for="mobile">Mobile <span class="required">*</span></label>
                     <form:input path="mobile" id="mobile" class="input-text"  required="true" type="tel" maxlength="12"/>
                 </p>
-                <p class="form-row form-row-wide">
-                    <label for="password">Password <span class="required">*</span></label>
-                    <form:password path="password" id="password" class="input-text"  required="true" maxlength="24"/>
-                </p>
-                <p class="form-row form-row-wide">
-                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
-                    <form:password path="confirmPassword" id="confirmPassword" class="input-text"  required="true" maxlength="24"/>
-                </p>
+                <c:if test="${empty id}">
+                    <p class="form-row form-row-wide">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <form:password path="password" id="password" class="input-text"  required="true" maxlength="24"/>
+                    </p>
+                    <p class="form-row form-row-wide">
+                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                        <form:password path="confirmPassword" id="confirmPassword" class="input-text"  required="true" maxlength="24"/>
+                    </p>
+                </c:if>
                 <p class="form-row form-row-wide">
                     <label for="startDate">Start Date <span class="required">*</span></label>
                     <form:input path="startDate" id="startDate" class="input-text"  required="true"/>

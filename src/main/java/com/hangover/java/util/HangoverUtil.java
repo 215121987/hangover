@@ -36,7 +36,7 @@ public class HangoverUtil implements Constants{
 
     private static final String ALPHA_NUM = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
-    public static final String CART_HASH_SEPARATOR ="-";
+    public static final String CART_HASH_SEPARATOR ="_";
 
 
 
@@ -164,6 +164,8 @@ public class HangoverUtil implements Constants{
             builder.append(cartDTO.getItemDetailId());
             builder.append("X");
             builder.append(cartDTO.getQuantity());
+            builder.append("X");
+            builder.append(cartDTO.getId());
             separator = CART_HASH_SEPARATOR;
         }
         return base64Encode(builder.toString());
@@ -177,6 +179,7 @@ public class HangoverUtil implements Constants{
             cartDTO.setItemId(Long.parseLong(its[0]));
             cartDTO.setItemDetailId(Long.parseLong(its[1]));
             cartDTO.setQuantity(Integer.parseInt(its[2]));
+            cartDTO.setId(Long.parseLong(its[3]));
         }
         return cartDTOs;
     }
@@ -264,6 +267,7 @@ public class HangoverUtil implements Constants{
                 cartDTO.setItemId(Long.parseLong(its[0]));
                 cartDTO.setItemDetailId(Long.parseLong(its[1]));
                 cartDTO.setQuantity(Integer.parseInt(its[2]));
+                cartDTO.setId(Long.parseLong(its[3]));
                 if(!cartDTOs.contains(cartDTO)){
                     ItemDetailEntity itemDetail = shoppingBL.getItemDetailWithItem(cartDTO.getItemDetailId());
                     cartDTO.setName(itemDetail.getItem().getName());

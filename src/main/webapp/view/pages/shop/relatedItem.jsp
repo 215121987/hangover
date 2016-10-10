@@ -1,8 +1,9 @@
 <%@ include file="/view/common/taglib.jsp" %>
 <div class="related products">
-    <h2>Related Products</h2>
+    <h3>Related Products</h3>
     <ul class="products">
-        <c:forEach items="${items}" var="item">
+        <%@ include file="/view/pages/shop/shopItem.jsp" %>
+        <%--<c:forEach items="${items}" var="item">
             <li class=" product  instock">
                 <a href='<c:url value="/comm/shop/${item.id}.html"/>'>
                     <div class="cherry-thumb-wrap">
@@ -21,8 +22,8 @@
                 <a href='<c:url value="/comm/shop/${item.id}.html" />' class='btn'>Details</a>
 
                 <div class="product-list-buttons">
-                    <%--<a href="/woocommerce_53953/product/product-14/?action=yith-woocompare-add-product&amp;id=1946&amp;_wpnonce=2a4f8c3f4d"
-                   class="compare" data-product_id="1946">Compare</a>--%>
+                    &lt;%&ndash;<a href="/woocommerce_53953/product/product-14/?action=yith-woocompare-add-product&amp;id=1946&amp;_wpnonce=2a4f8c3f4d"
+                   class="compare" data-product_id="1946">Compare</a>&ndash;%&gt;
                     <div class="yith-wcwl-add-to-wishlist">
                         <div class="yith-wcwl-add-button show">
                             <a href='<c:url value="/comm/wishlist.html" />' data-product-id="${item.id}"
@@ -52,6 +53,6 @@
                     </script>
                 </div>
             </li>
-        </c:forEach>
+        </c:forEach>--%>
     </ul>
 </div>

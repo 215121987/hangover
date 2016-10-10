@@ -73,8 +73,7 @@
         <div class="row">
             <div class="span12" data-motopress-wrapper-type="content">
                 <div class="row">
-                    <div class="span9 right right" id="content" data-motopress-type="loop"
-                         data-motopress-loop-file="loop/loop-page.php">
+                    <div class="span9 right right" id="content" >
                         <div id="post-2022" class="page post-2022 type-page status-publish hentry">
                             <%--<div class="woocommerce-message">
                                 <a class="button wc-forward"

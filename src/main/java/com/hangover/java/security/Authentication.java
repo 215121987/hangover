@@ -6,6 +6,7 @@ import com.hangover.java.controller.BaseController;
 import com.hangover.java.dto.CartDTO;
 import com.hangover.java.dto.ShoppingDTO;
 import com.hangover.java.dto.StatusDTO;
+import com.hangover.java.model.ItemDetailEntity;
 import com.hangover.java.model.ShoppingCartItemEntity;
 import com.hangover.java.model.SupplierStaffEntity;
 import com.hangover.java.model.UserEntity;
@@ -14,6 +15,7 @@ import com.hangover.java.util.CommonUtil;
 import com.hangover.java.util.Constants;
 import com.hangover.java.util.HangoverUtil;
 import com.hangover.java.util.ValidatorUtil;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,12 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,8 +78,7 @@ public class Authentication extends SavedRequestAwareAuthenticationSuccessHandle
             if(null!=supplierStaff.getStore())
                 session.setAttribute(Constants.LOGGED_IN_USER_STORE_ID, supplierStaff.getStore().getId());
         }
-        //session.setAttribute(Constants.LOGGED_IN_USER, usersEntity);
-        updateUserCart(request, response);
+        HangoverUtil.updateUserCart(request, response,this.shoppingBL, this.user.getId());
         updateUserWishList(request);
         StatusDTO statusDTO = new StatusDTO();
         statusDTO.setCode(HttpStatus.OK.value());
@@ -103,19 +106,34 @@ public class Authentication extends SavedRequestAwareAuthenticationSuccessHandle
 
 
     private void updateUserCart(HttpServletRequest request, HttpServletResponse response){
-        List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
-        List<ShoppingDTO> shoppingDTOs = HangoverUtil.getShoppingDTOFromCart(cartDTOs);
+        //List<CartDTO> cartDTOs =  new ArrayList<CartDTO>();
+        Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH);
+        if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
+            String cartHash = cookie.getValue();
+            cartHash = HangoverUtil.base64Decode(cartHash);
+            List<CartDTO> cartDTOs = HangoverUtil.getCartDTOFromCartHash(cartHash);
+            List<ShoppingDTO> shoppingDTOs = HangoverUtil.getShoppingDTOFromCart(cartDTOs);
+            List<ShoppingCartItemEntity>  shoppingCartItems =  shoppingBL.updateCart(shoppingDTOs, user.getId(), null);
+            if(null!= shoppingCartItems && shoppingCartItems.size()>0){
+                cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
+                request.getSession().setAttribute(SESSION_CART, cartDTOs);
+                cartHash = HangoverUtil.getCartHash(cartDTOs);
+                response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
+            }
+        }
+        //List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
+        /*List<ShoppingDTO> shoppingDTOs = HangoverUtil.getShoppingDTOFromCart(cartDTOs);*/
         /*if(null!=cartDTOs && cartDTOs.size()>0){
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
             response.addCookie(HangoverUtil.getCartHashCookie(cartHash));
         }*/
-        List<ShoppingCartItemEntity>  shoppingCartItems =  shoppingBL.updateCart(shoppingDTOs, user.getId(), null);
+        /*List<ShoppingCartItemEntity>  shoppingCartItems =  shoppingBL.updateCart(shoppingDTOs, user.getId(), null);
         if(null!= shoppingCartItems && shoppingCartItems.size()>0){
             cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
             request.getSession().setAttribute(SESSION_CART, cartDTOs);
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
             response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
-        }
+        }*/
     }
 
     private void updateUserWishList(HttpServletRequest request){

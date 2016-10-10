@@ -237,53 +237,25 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
     }
 
 
-    public CartSummaryDTO getCartSummary(Long userId) {
-        List<ShoppingCartEntity> carts = shoppingDao.gets(ShoppingCartEntity.class, "user", userId);
-        CartSummaryDTO cartSummaryDTO = null;
-        if (null != carts && carts.size() > 0) {
-           cartSummaryDTO = prepareSummary(carts.get(0).getShoppingCartItems());
+
+
+    public CartSummaryDTO prepareSummary(List<ShoppingCartItemEntity> cartItems) {
+        CartSummaryDTO cartSummaryDTO = new CartSummaryDTO();
+        if (null != cartItems && cartItems.size() > 0) {
+            for(ShoppingCartItemEntity cartItem : cartItems){
+                cartSummaryDTO.addCartDTO(HangoverUtil.getCartDTOFromShoppingCartItem(cartItem));
+                if(cartItem.isTaxable()){
+                    cartSummaryDTO.setTaxAbleAmount(cartSummaryDTO.getTaxAbleAmount()+cartItem.getItemDetail().getSellingPrice()*cartItem.getQuantity());
+                }else{
+                    cartSummaryDTO.setNonTaxAbleAmount(cartSummaryDTO.getNonTaxAbleAmount()+cartItem.getItemDetail().getSellingPrice()*cartItem.getQuantity());
+                }
+            }
+            calculateServiceCharges(cartSummaryDTO);
         }
         return cartSummaryDTO;
     }
 
-    private CartSummaryDTO prepareSummary(List<ShoppingCartItemEntity> cartItems) {
-        CartSummaryDTO cartSummaryDTO = new CartSummaryDTO();
-        for (ShoppingCartItemEntity cartItem : cartItems) {
-            if (cartItem.isTaxable())
-                cartSummaryDTO.setTaxAbleAmount(cartSummaryDTO.getTaxAbleAmount() + cartItem.getPrice() * cartItem.getQuantity());
-            else
-                cartSummaryDTO.setNonTaxAbleAmount(cartSummaryDTO.getNonTaxAbleAmount() + cartItem.getPrice() * cartItem.getQuantity());
-        }
-        Map<String, Double> chargesDetail = getServiceDelivery(cartSummaryDTO.getTaxAbleAmount());
-        return cartSummaryDTO;
-    }
-
-    public Map<String, Double> getServiceDelivery(Double taxableAmount) {
-        Map<String, Double> detailMap = new HashMap<String, Double>();
-        List<ServiceChargeEntity> serviceCharges = commonDao.gets(ServiceChargeEntity.class, "");
-        Double totalPercent = 0.0;
-        for (ServiceChargeEntity serviceCharge : serviceCharges) {
-            if (serviceCharge.isPercent()) {
-                totalPercent = totalPercent + serviceCharge.getValue();
-                detailMap.put(serviceCharge.getName(), serviceCharge.getValue() * taxableAmount / 100);
-            } else {
-                detailMap.put(serviceCharge.getName(), serviceCharge.getValue());
-            }
-        }
-        detailMap.put(SERVICE_CHARGE_NAME_TOTAL_TAX, taxableAmount * totalPercent / 100);
-        return detailMap;
-    }
-
-    public CartSummaryDTO getCartSummary(List<CartDTO> cartDTOs){
-        CartSummaryDTO cartSummaryDTO = new CartSummaryDTO();
-        for(CartDTO cartDTO : cartDTOs){
-            cartSummaryDTO.addCartDTO(cartDTO);
-            if(cartDTO.isTaxable()){
-                cartSummaryDTO.setTaxAbleAmount(cartSummaryDTO.getTaxAbleAmount()+cartDTO.getPrice()*cartDTO.getQuantity());
-            }else{
-                cartSummaryDTO.setNonTaxAbleAmount(cartSummaryDTO.getNonTaxAbleAmount()+cartDTO.getPrice()*cartDTO.getQuantity());
-            }
-        }
+    private void calculateServiceCharges(CartSummaryDTO cartSummaryDTO){
         List<ServiceChargeEntity> serviceCharges = commonDao.gets(ServiceChargeEntity.class, "");
         Double totalPercent = 0.0;
         Double minDeliveryValue = 0.0;
@@ -302,6 +274,45 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
         if(cartSummaryDTO.getGrossAmount()<minDeliveryValue){
             cartSummaryDTO.setDeliveryCharge(deliveryCharge);
         }
+    }
+
+    public Map<String, Double> getServiceDelivery(Double taxableAmount) {
+        Map<String, Double> detailMap = new HashMap<String, Double>();
+        List<ServiceChargeEntity> serviceCharges = commonDao.gets(ServiceChargeEntity.class, "");
+        Double totalPercent = 0.0;
+        for (ServiceChargeEntity serviceCharge : serviceCharges) {
+            if (serviceCharge.isPercent()) {
+                totalPercent = totalPercent + serviceCharge.getValue();
+                detailMap.put(serviceCharge.getName(), serviceCharge.getValue() * taxableAmount / 100);
+            } else {
+                detailMap.put(serviceCharge.getName(), serviceCharge.getValue());
+            }
+        }
+        detailMap.put(SERVICE_CHARGE_NAME_TOTAL_TAX, taxableAmount * totalPercent / 100);
+        return detailMap;
+    }
+
+
+    public CartSummaryDTO getCartSummary(Long userId) {
+        List<ShoppingCartEntity> carts = shoppingDao.gets(ShoppingCartEntity.class, "user", userId);
+        CartSummaryDTO cartSummaryDTO = new CartSummaryDTO();
+        if (null != carts && carts.size() > 0) {
+            cartSummaryDTO = prepareSummary(carts.get(0).getShoppingCartItems());
+        }
+        return cartSummaryDTO;
+    }
+
+    public CartSummaryDTO getCartSummary(List<CartDTO> cartDTOs){
+        CartSummaryDTO cartSummaryDTO = new CartSummaryDTO();
+        for(CartDTO cartDTO : cartDTOs){
+            cartSummaryDTO.addCartDTO(cartDTO);
+            if(cartDTO.isTaxable()){
+                cartSummaryDTO.setTaxAbleAmount(cartSummaryDTO.getTaxAbleAmount()+cartDTO.getPrice()*cartDTO.getQuantity());
+            }else{
+                cartSummaryDTO.setNonTaxAbleAmount(cartSummaryDTO.getNonTaxAbleAmount()+cartDTO.getPrice()*cartDTO.getQuantity());
+            }
+        }
+        calculateServiceCharges(cartSummaryDTO);
         return cartSummaryDTO;
     }
 

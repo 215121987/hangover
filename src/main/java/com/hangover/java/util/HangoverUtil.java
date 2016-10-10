@@ -1,18 +1,23 @@
 package com.hangover.java.util;
 
+import com.hangover.java.bl.ShoppingBL;
 import com.hangover.java.dto.CartDTO;
 import com.hangover.java.dto.ShoppingDTO;
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.exception.HangoverException;
+import com.hangover.java.model.ItemDetailEntity;
 import com.hangover.java.model.ShoppingCartItemEntity;
 import com.hangover.java.model.UserEntity;
 import com.hangover.java.model.master.Role;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.util.ReflectionUtils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -163,6 +168,18 @@ public class HangoverUtil implements Constants{
         }
         return base64Encode(builder.toString());
     }
+    
+    public static List<CartDTO> getCartDTOFromCartHash(String cartHash){
+        List<CartDTO> cartDTOs = new ArrayList<CartDTO>();
+        for(String item : cartHash.split(HangoverUtil.CART_HASH_SEPARATOR)){
+            CartDTO cartDTO = new CartDTO();
+            String its[] = item.split("X");
+            cartDTO.setItemId(Long.parseLong(its[0]));
+            cartDTO.setItemDetailId(Long.parseLong(its[1]));
+            cartDTO.setQuantity(Integer.parseInt(its[2]));
+        }
+        return cartDTOs;
+    }
 
 
     public static Cookie getCartHashCookie(String contextPath, String cartHash) {
@@ -173,22 +190,26 @@ public class HangoverUtil implements Constants{
     }
 
 
-    public static List<CartDTO> getCartDTOFromShoppingCartItems(List<ShoppingCartItemEntity> shoppingCartItems){
+    public static List<CartDTO> getCartDTOFromShoppingCartItems(List<ShoppingCartItemEntity> cartItems){
         List<CartDTO> cartDTOs = new ArrayList<CartDTO>();
-        for(ShoppingCartItemEntity shoppingCartItem : shoppingCartItems){
-            CartDTO cartDTO = new CartDTO();
-            cartDTO.setId(shoppingCartItem.getId());
-            cartDTO.setItemId(shoppingCartItem.getItem().getId());
-            cartDTO.setItemDetailId(shoppingCartItem.getItemDetail().getId());
-            cartDTO.setSize(shoppingCartItem.getItemDetail().getItemSize());
-            cartDTO.setPrice(shoppingCartItem.getItemDetail().getSellingPrice());
-            cartDTO.setQuantity(shoppingCartItem.getQuantity());
-            cartDTO.setName(shoppingCartItem.getItem().getName());
-            cartDTO.setDescription(shoppingCartItem.getItem().getDescription());
-            cartDTO.setImageURL(shoppingCartItem.getItem().getImageURL().get(0));
-            cartDTOs.add(cartDTO);
+        for(ShoppingCartItemEntity cartItem : cartItems){
+            cartDTOs.add(getCartDTOFromShoppingCartItem(cartItem));
         }
         return cartDTOs;
+    }
+
+    public static CartDTO getCartDTOFromShoppingCartItem(ShoppingCartItemEntity cartItem){
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId(cartItem.getId());
+        cartDTO.setItemId(cartItem.getItem().getId());
+        cartDTO.setItemDetailId(cartItem.getItemDetail().getId());
+        cartDTO.setSize(cartItem.getItemDetail().getItemSize());
+        cartDTO.setPrice(cartItem.getItemDetail().getSellingPrice());
+        cartDTO.setQuantity(cartItem.getQuantity());
+        cartDTO.setName(cartItem.getItem().getName());
+        cartDTO.setDescription(cartItem.getItem().getDescription());
+        cartDTO.setImageURL(cartItem.getItem().getImageURL().get(0));
+        return cartDTO;
     }
 
     
@@ -229,6 +250,49 @@ public class HangoverUtil implements Constants{
     public static String generateOrderNumber(Long userId, Long cartId){
         Long num = userId*cartId;
         return getAlphaNumeric(8);
+    }
+
+
+    public static List<CartDTO> getCartDTO(Cookie cartHashCookie, ShoppingBL shoppingBL){
+        List<CartDTO> cartDTOs =  new ArrayList<CartDTO>();
+        if(null!=cartHashCookie && StringUtils.isNotEmpty(cartHashCookie.getValue())){
+            String cartHash = cartHashCookie.getValue();
+            cartHash = HangoverUtil.base64Decode(cartHash);
+            for(String item : cartHash.split(HangoverUtil.CART_HASH_SEPARATOR)){
+                CartDTO cartDTO = new CartDTO();
+                String its[] = item.split("X");
+                cartDTO.setItemId(Long.parseLong(its[0]));
+                cartDTO.setItemDetailId(Long.parseLong(its[1]));
+                cartDTO.setQuantity(Integer.parseInt(its[2]));
+                if(!cartDTOs.contains(cartDTO)){
+                    ItemDetailEntity itemDetail = shoppingBL.getItemDetailWithItem(cartDTO.getItemDetailId());
+                    cartDTO.setName(itemDetail.getItem().getName());
+                    cartDTO.setDescription(itemDetail.getItem().getDescription());
+                    cartDTO.setPrice(itemDetail.getSellingPrice());
+                    cartDTO.setSize(itemDetail.getItemSize());
+                    cartDTO.setImageURL(itemDetail.getItem().getImageURL().get(0));
+                    cartDTOs.add(cartDTO);
+                }
+            }
+        }
+        return cartDTOs;
+    }
+
+
+    public static void updateUserCart(HttpServletRequest request, HttpServletResponse response, ShoppingBL shoppingBL, Long userId){
+        Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH);
+        List<CartDTO> cartDTOs = null;
+        if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
+            String cartHash = cookie.getValue();
+            cartHash = HangoverUtil.base64Decode(cartHash);
+            cartDTOs = HangoverUtil.getCartDTOFromCartHash(cartHash);
+        }
+        List<ShoppingDTO> shoppingDTOs = HangoverUtil.getShoppingDTOFromCart(cartDTOs);
+        List<ShoppingCartItemEntity>  shoppingCartItems =  shoppingBL.updateCart(shoppingDTOs, userId, null);
+        if(null!= shoppingCartItems && shoppingCartItems.size()>0){
+            cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
+            response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),HangoverUtil.getCartHash(cartDTOs)));
+        }
     }
 
 }

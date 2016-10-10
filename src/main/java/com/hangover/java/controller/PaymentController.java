@@ -70,8 +70,9 @@ public class PaymentController extends BaseController{
                 parameters.put(paramName,mapData.get(paramName)[0]);
             }
         }
-        paymentBL.paymentDone(checkSumHash, parameters);
-        return "";
+        PaymentCompleteDTO paymentComplete = paymentBL.paymentDone(checkSumHash, parameters);
+        request.setAttribute("payment", paymentComplete);
+        return "/payment/paymentComplete";
     }
 
 

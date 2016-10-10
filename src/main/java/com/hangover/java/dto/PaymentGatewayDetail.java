@@ -13,7 +13,7 @@ public class PaymentGatewayDetail {
     
     
     private String actionURL;
-    private List<NameValuePair> param;
+    private List<NameValuePair> params;
 
     public String getActionURL() {
         return actionURL;
@@ -23,24 +23,24 @@ public class PaymentGatewayDetail {
         this.actionURL = actionURL;
     }
 
-    public List<NameValuePair> getParam() {
-        return param;
+    public List<NameValuePair> getParams() {
+        return params;
     }
 
-    public void setParam(List<NameValuePair> param) {
-        this.param = param;
+    public void setParams(List<NameValuePair> params) {
+        this.params = params;
     }
 
     public void addParam(String name, String value){
-        if(null == getParam())
-            setParam(new ArrayList<NameValuePair>());
-        getParam().add(new NameValuePair(name, value));
+        if(null == getParams())
+            setParams(new ArrayList<NameValuePair>());
+        getParams().add(new NameValuePair(name, value));
     }
     
     public TreeMap<String,String> gerParamAsTreeMap(){
         TreeMap<String,String> treeMap = new TreeMap<String, String>();
-        if(null!= this.param){
-            for(NameValuePair nameValuePair : getParam()){
+        if(null!= this.params){
+            for(NameValuePair nameValuePair : getParams()){
                 treeMap.put(nameValuePair.getName(),nameValuePair.getValue());
             }
         }

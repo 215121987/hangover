@@ -261,8 +261,15 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "/cart")
     public String cart(HttpServletRequest request, @RequestParam(value = "action", required = false) String action){
         String RETURN_PATH = "/shop/cart";
-        processRequestCart(request);
-        List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
+        List<CartDTO> cartDTOs;
+        if(isUserLoggedIn(request)){
+            List<ShoppingCartItemEntity> shoppingCartItems = shoppingBL.getCartItem(getCurrentUsers().getId());
+            cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
+        }else{
+            cartDTOs =  HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
+        }
+        request.setAttribute(Constants.SESSION_CART, cartDTOs);
+        request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
         if (null == cartDTOs || cartDTOs.size() <= 0) {
             RETURN_PATH = "/shop/emptyCart";
         }else if(isEditCartItemAction(action)){
@@ -278,15 +285,18 @@ public class CommonController extends BaseController {
         return RETURN_PATH;
     }
 
-    private void processRequestCart(HttpServletRequest request){
+
+    
+    /*private void processRequestCart(HttpServletRequest request){
         Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH);
-        if(null==request.getUserPrincipal() && null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
+        if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
             String cartHash = cookie.getValue();
             cartHash = HangoverUtil.base64Decode(cartHash);
-            List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
+            *//*List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
             if(null==cartDTOs){
                 cartDTOs = new ArrayList<CartDTO>();
-            }
+            }*//*
+            List<CartDTO> cartDTOs =  new ArrayList<CartDTO>();
             for(String item : cartHash.split(HangoverUtil.CART_HASH_SEPARATOR)){
                 CartDTO cartDTO = new CartDTO();
                 String its[] = item.split("X");
@@ -304,9 +314,12 @@ public class CommonController extends BaseController {
                 }
             }
             request.getSession().setAttribute(Constants.SESSION_CART, cartDTOs);
-            request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
+            if(isUserLoggedIn(request))
+                request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(getCurrentUsers().getId()));
+            else
+                request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
         }
-    }
+    }*/
 
     @RequestMapping(value = "/cart", method = RequestMethod.POST)
     public String addToCart(HttpServletRequest request, HttpServletResponse response,
@@ -324,7 +337,7 @@ public class CommonController extends BaseController {
             }
             cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems);
         } else {
-            cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
+            cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
             if (null == cartDTOs)
                 cartDTOs = new ArrayList<CartDTO>();
             if (isAddToCartAction(action)|| isEditCartItemAction(action)) {
@@ -354,8 +367,8 @@ public class CommonController extends BaseController {
             }
         }
         try {
-            request.getSession().setAttribute(SESSION_CART, cartDTOs);
-            request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
+            //request.getSession().setAttribute(SESSION_CART, cartDTOs);
+            //request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
             response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
             if (isAjaxRequest(request)) {
@@ -387,15 +400,15 @@ public class CommonController extends BaseController {
                                  @PathVariable("itemId") Long itemId,
                                  @PathVariable("itemDetailId") Long itemDetailId) {
         StatusDTO statusDTO = new StatusDTO();
-        List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
+        List<CartDTO> cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
         CartDTO cartDTO = new CartDTO();
         cartDTO.setItemId(itemId);
         cartDTO.setItemDetailId(itemDetailId);
         /*cartDTO.setUserId(getCurrentUsers().getId());*/
         if(cartDTOs.contains(cartDTO)){
             cartDTOs.remove(cartDTO);
-            request.getSession().setAttribute(SESSION_CART, cartDTOs);
-            request.getSession().setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
+            //request.getSession().setAttribute(SESSION_CART, cartDTOs);
+            //request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
             String cartHash = HangoverUtil.getCartHash(cartDTOs);
             response.addCookie(HangoverUtil.getCartHashCookie(request.getContextPath(),cartHash));
             if(isUserLoggedIn(request)){
@@ -480,12 +493,10 @@ public class CommonController extends BaseController {
     /*Checkout*/
     @RequestMapping(value = "/checkout")
     public String checkout(HttpServletRequest request) {
-        List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
-        if (null == cartDTOs || cartDTOs.size() <= 0) {
-            return "/shop/emptyCart";
-        }
+        List<CartDTO> cartDTOs;
         request.setAttribute(ACTION_PLACE_ORDER,true);
         if (isUserLoggedIn(request)) {
+            cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingBL.getCartItem(getCurrentUsers().getId()));
             Map<String, Object> filterParam = new HashMap<String, Object>();
             //AddressEntity address = (AddressEntity) request.getSession().getAttribute(SESSION_DELIVERY_ADDRESS);
             Cookie  cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
@@ -497,8 +508,16 @@ public class CommonController extends BaseController {
                 request.getSession().setAttribute(SESSION_DELIVERY_ADDRESS_ID, addressList.get(0).getId());
             }*/
             request.setAttribute("addressList", addressList);
+        }else {
+            cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
         }
-        return "/customer/checkout";
+        String RETURN_PATH = "/customer/checkout";
+        if (null == cartDTOs || cartDTOs.size() <= 0) {
+            RETURN_PATH =  "/shop/emptyCart";
+        }
+        request.setAttribute(Constants.SESSION_CART, cartDTOs);
+        request.setAttribute(SESSION_CART_SUMMARY, shoppingBL.getCartSummary(cartDTOs));
+        return RETURN_PATH;
     }
 
     @RequestMapping(value = "/delivery/address")

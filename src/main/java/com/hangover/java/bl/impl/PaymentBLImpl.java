@@ -5,6 +5,7 @@ import com.hangover.java.bl.ShoppingBL;
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.dao.ShoppingDao;
 import com.hangover.java.dao.StoreDao;
+import com.hangover.java.dao.UserDao;
 import com.hangover.java.dto.*;
 import com.hangover.java.model.*;
 import com.hangover.java.model.type.OrderState;
@@ -51,6 +52,9 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
     private CommonDao commonDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
     private ShoppingDao shoppingDao;
 
     @Autowired
@@ -77,7 +81,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
         PaymentGatewayDetail paymentGatewayDetail =null;
         List<ShoppingCartItemEntity> cartItems = shoppingDao.getCartItems(placeOrder.getUserId());
         if(null!= cartItems  && cartItems.size()>0){
-            CartSummaryDTO cartSummary = shoppingBL.getCartSummary(DataMapper.transformCartItems(cartItems));
+            CartSummaryDTO cartSummary = shoppingBL.prepareSummary(cartItems);
             if(!placeOrder.getAmount().equals(cartSummary.getNetAmount())){
                 status.setMessage(commonUtil.getText("error.mismatch.amount", status.getLocale()));
                 saveErrorMessage(status, HttpStatus.CONFLICT.ordinal());
@@ -85,7 +89,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
             }
             OrderEntity order = new OrderEntity();
             order.setOrderNumber(HangoverUtil.generateOrderNumber(placeOrder.getUserId(), cartItems.get(0).getShoppingCart().getId()));
-            order.setCustomer(UserEntity.getUser(placeOrder.getUserId()));
+            order.setCustomer(userDao.getUser(placeOrder.getUserId()));
             order.setAddress(AddressEntity.getAddress(placeOrder.getAddressId()));
             order.setOrderFrom(placeOrder.getOrderFrom());
             order.setTotalAmount(cartSummary.getNetAmount());
@@ -108,7 +112,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
 
     public PaymentGatewayDetail initiatePayment(PaymentDetailDTO paymentDetail, OrderEntity order){
         PaymentGatewayDetail paymentGatewayDetail = new PaymentGatewayDetail();
-        switch (paymentDetail.getMode()){
+        switch (PaymentModeType.valueOf(paymentDetail.getMode())){
             case WALLET:
                 paymentGatewayDetail.setActionURL(CommonUtil.getProperty("PAYTM.URL"));
                 paymentGatewayDetail.addParam("ORDER_ID", order.getOrderNumber());
@@ -122,7 +126,6 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
                         paymentGatewayDetail.addParam("CHANNEL_ID", CommonUtil.getProperty("PAYTM.CHANNEL.WEB.ID"));
                         break;
                 }
-                paymentGatewayDetail.addParam("CHANNEL_ID", CommonUtil.getProperty(""));
                 paymentGatewayDetail.addParam("TXN_AMOUNT", order.getTotalAmount() + "");
                 paymentGatewayDetail.addParam("MID", CommonUtil.getProperty("PAYTM.MID"));
                 paymentGatewayDetail.addParam("WEBSITE", CommonUtil.getProperty("PAYTM.WEBSITE"));
@@ -140,22 +143,29 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
     }
 
     
-    public void paymentDone(String checkSumHash, TreeMap<String,String> parameters){
+    public PaymentCompleteDTO paymentDone(String checkSumHash, TreeMap<String,String> parameters){
+        PaymentCompleteDTO paymentComplete = new PaymentCompleteDTO();
         boolean isValidChecksum = false;
         try{
             isValidChecksum = CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(CommonUtil.getProperty("PAYTM.MERCHANT.KEY"), parameters,checkSumHash);
         }catch (Exception e){
             logger.error("Invalid Checksum"+ e);
         }
-        if(isValidChecksum && parameters.containsKey("RESPCODE")){
-            if(parameters.get("RESPCODE").equals("01")){
-
+        String status = "FAILED";
+        if(isValidChecksum && parameters.containsKey("STATUS")){
+            if(parameters.get("STATUS").equals("TXN_SUCCESS")){
+                status = "SUCCESS";
             }else{
-
+                status = "FAILED";
             }
         }else{
             logger.error("Checksum mismatch");
         }
+        payment(parameters.get("ORDERID"), parameters.get("TXNID"), Double.parseDouble(parameters.get("TXNAMOUNT")), "PAYTM", status);
+        paymentComplete.setOrderNumber(parameters.get("ORDERID"));
+        paymentComplete.setStatus(status);
+        paymentComplete.setTransactionId(parameters.get("TXNID"));
+        return paymentComplete;
     }
     
     

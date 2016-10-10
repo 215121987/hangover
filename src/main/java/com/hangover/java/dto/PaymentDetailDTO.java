@@ -9,7 +9,7 @@ package com.hangover.java.dto;
  */
 public class PaymentDetailDTO {
 
-    private PaymentModeType mode;
+    private String mode;
     private Double amount;
     private Long walletId;
     private String cardNumber;
@@ -19,11 +19,11 @@ public class PaymentDetailDTO {
     private boolean saveCard = false;
 
 
-    public PaymentModeType getMode() {
+    public String getMode() {
         return mode;
     }
 
-    public void setMode(PaymentModeType mode) {
+    public void setMode(String mode) {
         this.mode = mode;
     }
 

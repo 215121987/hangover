@@ -1,13 +1,18 @@
 <%@ include file="/view/common/taglib.jsp" %>
 <style type="text/css">
     .panel{
-        width: 68.5%!important;
+        width: 55%!important;
     }
+    #hangover_tabs ul.tabs{
+        width: 25%;
+    }
+
+
 </style>
 <div class="woocommerce-tabs" id="hangover_tabs">
 <ul class="tabs">
     <li class="description_tab">
-        <a href="#tab-credit_card">Wallet</a>
+        <a href="#tab-wallet">Wallet</a>
     </li>
     <%--<li class="description_tab">
         <a href="#tab-credit_card">Credit Card</a>
@@ -19,6 +24,38 @@
         <a href="#tab-internet_banking">Internet Banking</a>
     </li>--%>
 </ul>
+<div class="panel entry-content" id="tab-wallet">
+    <div id="wallet" class="desktop-card-detail" style="display: block;">
+        <div class="step4-creditcard mobile-card-detail">
+            <form action="<c:url value="/payment.html" />" method="POST" id="form-wallet" autocomplete="off"
+                  name="walletForm">
+                <div class="form-row ">
+                    <div class="col-md-5">
+                        <div class="cpl-md-1">
+                            <%--<input type="radio" id="wallet_${wallet.id}" name="walletId" value="${wallet.id}" required="true">
+                            <label for="wallet_${wallet.id}"><img src="<c:url value="/images/logo/paytm.gif" />" alt="Paytm"></label>--%>
+                                <input type="radio" id="wallet_paytm" name="walletId" value="1" required="true">
+                                <label for="wallet_paytm"><img src="<c:url value="/images/logo/paytm.gif" />" alt="Paytm"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <input type="hidden" name="amount" value="${cartSummary.netAmount}"/>
+                    <input type="hidden" name="mode" value="WALLET"/>
+                    <button id="pay-through_wallet" class="btn btn-payment " type="submit">Pay
+                        <span class="standard-price">${cartSummary.netAmount}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <hr/>
+        <p class="step4-note">Please note: You might be redirected to 3-D secure page to complete your transaction. By placing this order, you agree to the
+            <a target="_blank" href="#">Terms of Use</a>
+            and <a target="_blank" href="#">Privacy Policy</a> of Hangover.com</p>
+    </div>
+</div>
+
+
 <div class="panel entry-content" id="tab-credit_card">
     <div id="credit-card" class="desktop-card-detail" style="display: block;">
         <div class="step4-creditcard mobile-card-detail">

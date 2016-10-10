@@ -98,15 +98,10 @@ public class AnonymousController extends BaseController{
             Authentication authenticationToken =
                     new UsernamePasswordAuthenticationToken(j_username, j_password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
             user = (UserEntity)authentication.getPrincipal();
-            /*UserDetails userDetails = userDetailsService.loadUserByUsername(j_username);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails,
-                    j_password, userDetails.getAuthorities());
-            authenticationManager.authenticate(auth);*/
             if(authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                updateUserCart(request, response);
+                HangoverUtil.updateUserCart(request, response,this.shoppingBL, user.getId());
                 updateUserWishList(request);
                 statusDTO.setCode(HttpStatus.OK.value());
                 statusDTO.setMessage("Logged in successfully");
@@ -119,19 +114,6 @@ public class AnonymousController extends BaseController{
             statusDTO.setCode(HttpStatus.UNAUTHORIZED.value());
             statusDTO.setMessage(commonUtil.getText("error.credential.invalid"));
         }
-/*
-        Authentication authenticationToken =
-                new UsernamePasswordAuthenticationToken(j_username, j_password);
-        try {
-            UserEntity user =  userBL.authentication(j_username, j_password);
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            statusDTO.setCode(HttpStatus.OK.value());
-            statusDTO.setMessage("Logged in successfully");
-        } catch (AuthenticationException ex) {
-            statusDTO.setCode(HttpStatus.UNAUTHORIZED.value());
-            statusDTO.setMessage(commonUtil.getText("error.credential.invalid"));
-        }*/
         if(isAjaxRequest(request)){
             responseAsJSON(response, getStatusAsJSON(statusDTO));
             return null;
@@ -154,17 +136,6 @@ public class AnonymousController extends BaseController{
         return sendRedirect(redirectTo);
     }
     
-    private void updateUserCart(HttpServletRequest request, HttpServletResponse response){
-        List<CartDTO> cartDTOs = (List<CartDTO>) request.getSession().getAttribute(SESSION_CART);
-        if(null!=cartDTOs && cartDTOs.size()>0){
-            List<ShoppingDTO> shoppingDTOs = HangoverUtil.getShoppingDTOFromCart(cartDTOs);
-            List<ShoppingCartItemEntity>  shoppingCartItems =  shoppingBL.updateCart(shoppingDTOs, getCurrentUsers().getId(), null);
-            request.getSession().setAttribute(SESSION_CART, HangoverUtil.getCartDTOFromShoppingCartItems(shoppingCartItems));
-            /*String cartHash = HangoverUtil.getCartHash(cartDTOs);
-            response.addCookie(HangoverUtil.getCartHashCookie(cartHash));*/
-        }
-    }
-
     private void updateUserWishList(HttpServletRequest request){
         List<Long> itemIds = (List<Long>) request.getSession().getAttribute(SESSION_SHORTLIST);
         if(null!=itemIds && itemIds.size()>0){

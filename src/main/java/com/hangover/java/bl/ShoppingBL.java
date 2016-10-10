@@ -48,6 +48,10 @@ public interface ShoppingBL {
 
     List<BrandEntity> getBrands(Long categoryId, int pageIndex);
 
+    CartSummaryDTO prepareSummary(List<ShoppingCartItemEntity> cartItems);
+
+    CartSummaryDTO getCartSummary(Long userId);
+
     CartSummaryDTO getCartSummary(List<CartDTO> cartDTOs);
 
     List<ItemEntity> search(String zipCode, String query);

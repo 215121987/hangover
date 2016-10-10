@@ -1,7 +1,7 @@
 <%@ include file="/view/common/taglib.jsp" %>
 <div id="content" style="width: 75%; margin: 0 auto;">
     <div class="woocommerce">
-        <h2 class="text-center">SIGN IN</h2>
+        <h3 class="text-center">SIGN UP</h3>
         <div class="signup_message"></div>
         <div class="signup_action col-md-11">
                 <div class="col-md-6">

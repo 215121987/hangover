@@ -4,7 +4,7 @@
     <%--<div id="post-1917" class="page  type-page status-publish hentry">--%>
     <div class="woocommerce">
         <%--<div class="col2-set" id="customer_login" style="margin: auto!important;">--%>
-        <h2 class="text-center">SIGN IN</h2>
+        <h3 class="text-center">SIGN IN</h3>
         <div class="signin_message"></div>
         <%@ include file="/view/pages/loginForm.jsp"%>
         <%--<div class="col-2">

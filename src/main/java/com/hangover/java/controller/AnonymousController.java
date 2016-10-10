@@ -183,9 +183,9 @@ public class AnonymousController extends BaseController{
 
     @RequestMapping("/forgot/password")
     public String forgotPassword(HttpServletRequest request,
-                                 @RequestParam(value = "email", required = true) String email){
+                                 @RequestParam(value = "username", required = true) String username){
         StatusDTO status = new StatusDTO();
-        userBL.identify(email,status);
+        userBL.identify(username,status);
         saveStatus(request,status);
         if(status.getCode()!= HttpStatus.OK.value()){
             return sendRedirect("/forgot/password/form.html");

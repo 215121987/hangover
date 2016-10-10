@@ -1,10 +1,12 @@
 package com.hangover.java.service.imp;
 
 import com.hangover.java.dto.BrandDTO;
+import com.hangover.java.dto.CartDTO;
 import com.hangover.java.dto.OfferDTO;
 import com.hangover.java.dto.ShoppingDTO;
 import com.hangover.java.model.BrandEntity;
 import com.hangover.java.model.OffersEntity;
+import com.hangover.java.model.ShoppingCartItemEntity;
 import com.hangover.java.service.wso.CartWSO;
 
 import java.util.ArrayList;
@@ -55,6 +57,27 @@ public class DataMapper {
         for(OffersEntity offersEntity : offersEntities)
             offerDTOs.add(transform(offersEntity));
         return offerDTOs;
+    }
+
+    public static CartDTO transform(ShoppingCartItemEntity cartItemEntity){
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId(cartItemEntity.getId());
+        cartDTO.setItemId(cartItemEntity.getItem().getId());
+        cartDTO.setItemDetailId(cartItemEntity.getItemDetail().getId());
+        cartDTO.setSize(cartItemEntity.getItemDetail().getItemSize());
+        cartDTO.setPrice(cartItemEntity.getItemDetail().getSellingPrice());
+        cartDTO.setQuantity(cartItemEntity.getQuantity());
+        cartDTO.setName(cartItemEntity.getItem().getName());
+        cartDTO.setDescription(cartItemEntity.getItem().getDescription());
+        cartDTO.setImageURL(cartItemEntity.getItem().getImageURL().get(0));
+        return cartDTO;
+    }
+
+    public static List<CartDTO> transformCartItems(List<ShoppingCartItemEntity> cartItemEntities){
+        List<CartDTO> cartDTOs = new ArrayList<CartDTO>();
+        for(ShoppingCartItemEntity cartItemEntity : cartItemEntities)
+            cartDTOs.add(transform(cartItemEntity));
+        return cartDTOs;
     }
 
 }

@@ -25,6 +25,13 @@
         <jackson-version>2.4.3</jackson-version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>Internal company repository</id>
+            <url>file://${basedir}/lib</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>asm</groupId>
@@ -558,6 +565,14 @@
             <groupId>com.ganyo</groupId>
             <artifactId>gcm-server</artifactId>
             <version>1.1.0</version>
+        </dependency>
+
+
+        <!--Paytm jar-->
+        <dependency>
+            <groupId>com.paytm</groupId>
+            <artifactId>paytm</artifactId>
+            <version>1.1</version>
         </dependency>
 
     </dependencies>

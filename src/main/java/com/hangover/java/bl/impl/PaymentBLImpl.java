@@ -1,30 +1,37 @@
 package com.hangover.java.bl.impl;
 
 import com.hangover.java.bl.PaymentBL;
+import com.hangover.java.bl.ShoppingBL;
 import com.hangover.java.dao.CommonDao;
 import com.hangover.java.dao.ShoppingDao;
 import com.hangover.java.dao.StoreDao;
+import com.hangover.java.dto.*;
 import com.hangover.java.model.*;
 import com.hangover.java.model.type.OrderState;
 import com.hangover.java.model.type.PaymentStatus;
 import com.hangover.java.notification.Message;
 import com.hangover.java.notification.PostPaymentSuccessTask;
 import com.hangover.java.notification.PushNotificationService;
+import com.hangover.java.service.imp.DataMapper;
 import com.hangover.java.task.AsyncTask;
 import com.hangover.java.task.HangoverBeans;
 import com.hangover.java.util.CommonUtil;
 import com.hangover.java.util.Constants;
+import com.hangover.java.util.HangoverUtil;
 import com.hangover.java.util.ValidatorUtil;
+import com.paytm.merchant.CheckSumServiceHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,9 +48,6 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
     private Logger logger = LoggerFactory.getLogger(PaymentBLImpl.class);
 
     @Autowired
-    private ValidatorUtil validatorUtil;
-
-    @Autowired
     private CommonDao commonDao;
 
     @Autowired
@@ -56,9 +60,6 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
     private StoreDao storeDao;
 
     @Autowired
-    private HangoverBeans hangoverBeans;
-
-    @Autowired
     private PushNotificationService pushNotificationService;
 
     @Autowired
@@ -66,6 +67,96 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
 
     @Autowired
     private TaskExecutor taskExecutor;
+
+
+    @Autowired
+    private ShoppingBL shoppingBL;
+
+    @Override
+    public PaymentGatewayDetail placeOrder(PlaceOrderDTO placeOrder, StatusDTO status) {
+        PaymentGatewayDetail paymentGatewayDetail =null;
+        List<ShoppingCartItemEntity> cartItems = shoppingDao.getCartItems(placeOrder.getUserId());
+        if(null!= cartItems  && cartItems.size()>0){
+            CartSummaryDTO cartSummary = shoppingBL.getCartSummary(DataMapper.transformCartItems(cartItems));
+            if(!placeOrder.getAmount().equals(cartSummary.getNetAmount())){
+                status.setMessage(commonUtil.getText("error.mismatch.amount", status.getLocale()));
+                saveErrorMessage(status, HttpStatus.CONFLICT.ordinal());
+                return paymentGatewayDetail;
+            }
+            OrderEntity order = new OrderEntity();
+            order.setOrderNumber(HangoverUtil.generateOrderNumber(placeOrder.getUserId(), cartItems.get(0).getShoppingCart().getId()));
+            order.setCustomer(UserEntity.getUser(placeOrder.getUserId()));
+            order.setAddress(AddressEntity.getAddress(placeOrder.getAddressId()));
+            order.setOrderFrom(placeOrder.getOrderFrom());
+            order.setTotalAmount(cartSummary.getNetAmount());
+            for(ShoppingCartItemEntity cartItem :  cartItems){
+                OrderItemEntity orderItem = new OrderItemEntity();
+                orderItem.setItem(cartItem.getItem());
+                orderItem.setItemSize(cartItem.getItemDetail().getItemSize());
+                orderItem.setPrice(cartItem.getPrice());
+                orderItem.setOrder(order);
+                order.addOrderItem(orderItem);
+            }
+            shoppingDao.save(order);
+            placeOrder.setOrderNumber(order.getOrderNumber());
+            saveSuccessMessage(status,"");
+            paymentGatewayDetail = initiatePayment(placeOrder.getPaymentDetail(), order);
+        }
+        return paymentGatewayDetail;
+    }
+
+
+    public PaymentGatewayDetail initiatePayment(PaymentDetailDTO paymentDetail, OrderEntity order){
+        PaymentGatewayDetail paymentGatewayDetail = new PaymentGatewayDetail();
+        switch (paymentDetail.getMode()){
+            case WALLET:
+                paymentGatewayDetail.setActionURL(CommonUtil.getProperty("PAYTM.URL"));
+                paymentGatewayDetail.addParam("ORDER_ID", order.getOrderNumber());
+                paymentGatewayDetail.addParam("CUST_ID", order.getCustomer().getId() + "");
+                paymentGatewayDetail.addParam("INDUSTRY_TYPE_ID", CommonUtil.getProperty("PAYTM.INDUSTRY.TYPE.ID"));
+                switch (order.getOrderFrom()){
+                    case APP:
+                        paymentGatewayDetail.addParam("CHANNEL_ID", CommonUtil.getProperty("PAYTM.CHANNEL.WAP.ID"));
+                        break;
+                    default:
+                        paymentGatewayDetail.addParam("CHANNEL_ID", CommonUtil.getProperty("PAYTM.CHANNEL.WEB.ID"));
+                        break;
+                }
+                paymentGatewayDetail.addParam("CHANNEL_ID", CommonUtil.getProperty(""));
+                paymentGatewayDetail.addParam("TXN_AMOUNT", order.getTotalAmount() + "");
+                paymentGatewayDetail.addParam("MID", CommonUtil.getProperty("PAYTM.MID"));
+                paymentGatewayDetail.addParam("WEBSITE", CommonUtil.getProperty("PAYTM.WEBSITE"));
+                paymentGatewayDetail.addParam("MOBILE_NO", order.getCustomer().getMobile());
+                paymentGatewayDetail.addParam("EMAIL", order.getCustomer().getEmail());
+                paymentGatewayDetail.addParam("CALLBACK_URL", CommonUtil.getProperty("PAYMENT.CALLBACK.URL"));
+                try {
+                    paymentGatewayDetail.addParam("CHECKSUMHASH", CheckSumServiceHelper.getCheckSumServiceHelper().genrateCheckSum(CommonUtil.getProperty("PAYTM.MERCHANT.KEY"), paymentGatewayDetail.gerParamAsTreeMap()));
+                } catch (Exception e) {
+                    logger.error("Unable to generate PAYTM Checksum"+ e);
+                }
+                break;
+        }
+        return paymentGatewayDetail;
+    }
+
+    
+    public void paymentDone(String checkSumHash, TreeMap<String,String> parameters){
+        boolean isValidChecksum = false;
+        try{
+            isValidChecksum = CheckSumServiceHelper.getCheckSumServiceHelper().verifycheckSum(CommonUtil.getProperty("PAYTM.MERCHANT.KEY"), parameters,checkSumHash);
+        }catch (Exception e){
+            logger.error("Invalid Checksum"+ e);
+        }
+        if(isValidChecksum && parameters.containsKey("RESPCODE")){
+            if(parameters.get("RESPCODE").equals("01")){
+
+            }else{
+
+            }
+        }else{
+            logger.error("Checksum mismatch");
+        }
+    }
     
     
     public void payment(String orderId, String transactionId, Double amount, String paymentThough, String status){

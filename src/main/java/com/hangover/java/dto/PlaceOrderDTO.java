@@ -21,6 +21,8 @@ public class PlaceOrderDTO {
     private String[] couponCode;
     private Double amount;
     private String orderNumber;
+    private PaymentModeType paymentMode;
+    private PaymentDetailDTO paymentDetail;
 
     public Long getUserId() {
         return userId;
@@ -76,5 +78,21 @@ public class PlaceOrderDTO {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public PaymentModeType getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(PaymentModeType paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public PaymentDetailDTO getPaymentDetail() {
+        return paymentDetail;
+    }
+
+    public void setPaymentDetail(PaymentDetailDTO paymentDetail) {
+        this.paymentDetail = paymentDetail;
     }
 }

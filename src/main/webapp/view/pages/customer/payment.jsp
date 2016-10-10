@@ -7,6 +7,9 @@
 <div class="woocommerce-tabs" id="hangover_tabs">
 <ul class="tabs">
     <li class="description_tab">
+        <a href="#tab-credit_card">Wallet</a>
+    </li>
+    <%--<li class="description_tab">
         <a href="#tab-credit_card">Credit Card</a>
     </li>
     <li class="reviews_tab">
@@ -14,7 +17,7 @@
     </li>
     <li class="cherry_wc_video_tab">
         <a href="#tab-internet_banking">Internet Banking</a>
-    </li>
+    </li>--%>
 </ul>
 <div class="panel entry-content" id="tab-credit_card">
     <div id="credit-card" class="desktop-card-detail" style="display: block;">

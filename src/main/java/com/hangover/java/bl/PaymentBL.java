@@ -1,6 +1,11 @@
 package com.hangover.java.bl;
 
+import com.hangover.java.dto.PaymentGatewayDetail;
+import com.hangover.java.dto.PlaceOrderDTO;
+import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.OrderEntity;
+
+import java.util.TreeMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,6 +16,9 @@ import com.hangover.java.model.OrderEntity;
  */
 public interface PaymentBL {
 
+    PaymentGatewayDetail placeOrder(PlaceOrderDTO placeOrderDTO, StatusDTO status);
+
+    void paymentDone(String checkSumHash, TreeMap<String,String> parameters);
 
     void payment(String orderId, String transactionId, Double amount, String paymentThough, String status);
 

@@ -243,6 +243,13 @@
             var customerAddressAsJSON = $.parseJSON(customer_address);
             $("#delivery_location").html(customerAddressAsJSON.zipCode+", "+customerAddressAsJSON.city);
         }
+
+        $("#delivery_location").on('click', function(e){
+            var zipCode = jQuery.cookie('customer_location');
+            $('#hangover_zip_code_popup form').find("input[name=zipcode]").val(zipCode);
+            open_popup('#hangover_zip_code_popup', true);
+        });
+
         var askForLocation = $('meta[name=askForLocation]').attr("content");
         if(null!=askForLocation && undefined !=askForLocation && askForLocation == 'true'){
             askForPinCode();

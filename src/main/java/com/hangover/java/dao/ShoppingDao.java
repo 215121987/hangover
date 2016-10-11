@@ -20,6 +20,7 @@ public interface ShoppingDao extends CommonDao{
 
     boolean deleteItemFromCart(Long userId, Long itemId, Long itemDetailId);
 
+    void emptyUserCart(Long userId);
 
     List<ShoppingCartItemEntity> getCartItems(Long userId);
 

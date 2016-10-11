@@ -15,11 +15,11 @@
           media='all'/>--%>
     <%--<link rel='stylesheet' id='owl-theme-css' href='<c:url value="/style/lib/owl.theme.css" />' type='text/css'
           media='all'/>--%>
-    <link rel='stylesheet' id='font-awesome-css'
+    <%--<link rel='stylesheet' id='font-awesome-css'
           href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css?ver=3.2.1' type='text/css'
-          media='all'/>
-    <%--<link rel='stylesheet' id='font-awesome-css' href='<c:url value="/style/lib/font-awesome.css" />' type='text/css'
           media='all'/>--%>
+    <link rel='stylesheet' id='font-awesome-css' href='<c:url value="/style/lib/font-awesome.css" />' type='text/css'
+          media='all'/>
     <link rel='stylesheet' id='cherry-plugin-css' href='<c:url value="/style/lib/cherry-plugin.css" />' type='text/css'
           media='all'/>
     <link rel='stylesheet' id='cherry-parallax-css' href='<c:url value="/style/lib/parallax.css" />' type='text/css'

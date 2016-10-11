@@ -238,6 +238,11 @@
             return zipCode;
         };
 
+        var customer_address = jQuery.cookie('customer_address');
+        if(undefined != customer_address && null != customer_address && "" != customer_address){
+            var customerAddressAsJSON = $.parseJSON(customer_address);
+            $("#delivery_location").html(customerAddressAsJSON.zipCode+", "+customerAddressAsJSON.city);
+        }
         var askForLocation = $('meta[name=askForLocation]').attr("content");
         if(null!=askForLocation && undefined !=askForLocation && askForLocation == 'true'){
             askForPinCode();

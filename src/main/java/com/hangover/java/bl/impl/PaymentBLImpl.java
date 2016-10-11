@@ -187,6 +187,9 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
         payment.setPaymentThrough(paymentThough);
         shoppingDao.save(order);
         shoppingDao.save(payment);
+        if("SUCCESS".equals(status)){
+            shoppingDao.emptyUserCart(order.getCustomer().getId());
+        }
         Map<String,String> map = new HashMap<String, String>();
         map.put("email", order.getCustomer().getEmail());
         map.put("mobile", order.getCustomer().getMobile());

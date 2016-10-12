@@ -50,13 +50,13 @@ insert into supplier(id, code, companyName) value(1,'lad', 'Liquor At Door');
 insert into supplier_store(id, street, city,state, country, zipCode,supplier_id , mainBranch) value(1,'New Thippasandra', 'Bangalore', 'Karnataka', 'India','560075', 1, 1);
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h3>Get up to<br> 10% off</h3><h4>on Whiskey</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://liquoratdoor.com/hangover/images/banner/item-banner-3.jpg',1,'');
+value('<h3>Get up to<br> 10% off</h3><h4>on Vodka</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://liquoratdoor.com/hangover/images/banner/item-banner-3.jpg',1,'');
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h3>Get up to<br> 10% off</h3><h4>on Rum</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://liquoratdoor.com/hangover/images/banner/item-banner-2.jpg',1,'');
+value('<h3>Get up to<br> 10% off</h3><h4>on Beer</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://liquoratdoor.com/hangover/images/banner/item-banner-2.jpg',1,'');
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h3>Get up to<br> 10% off</h3><h4>on Vodka</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://liquoratdoor.com/hangover/images/banner/item-banner-1.jpg',1,'');
+value('<h3>Get up to<br> 10% off</h3><h4>on Whisky</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://liquoratdoor.com/hangover/images/banner/item-banner-1.jpg',1,'');
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
 value('<h5>Pure organic grapes</h5>', '<h3>100%</h3><h4>Great tasting wine with a splash of fruit. Wines for momentous encounters.</h4>', 2, 0,'',1,'buy today for Rs399');

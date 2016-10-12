@@ -33,7 +33,7 @@
                         <div class="custom-select-box" style="width: 65%; float: left;">
                             <select name="itemDetailId">
                                 <c:forEach items="${item.itemDetailList}" var="detail">
-                                    <option value="${detail.id}">${detail.itemSize}Ml&nbsp;&nbsp;${detail.sellingPrice}</option>
+                                    <option value="${detail.id}">${detail.itemSize}&nbsp;&nbsp;${detail.sellingPrice}</option>
                                 </c:forEach>
                             </select>
                         </div>

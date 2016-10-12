@@ -56,7 +56,7 @@ public class ItemEntity extends BaseEntity{
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_location_id", nullable = false)
+    @JoinColumn(name = "store_id", nullable = false)
     public SupplierStoreEntity getSupplierStore() {
         return supplierStore;
     }

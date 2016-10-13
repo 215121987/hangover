@@ -13,6 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,55 +29,18 @@ import java.util.Map;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class BaseService implements ServiceConstants{
 
-    private UserEntity user;
-
-    private UserBL userBL;
-
-    /*private CommonBL commonBL;*/
-
-    @Autowired(required = true)
-    public void setUserBL(UserBL userBL) {
-        this.userBL = userBL;
-    }
-
-    /*@Autowired(required = true)
-    public void setCommonBL(CommonBL commonBL) {
-        this.commonBL = commonBL;
-    }*/
-
     /*public BaseService(@Context SecurityContext security) {
         this.user = (UserEntity)security.getUserPrincipal();
         //this.user=new UserEntity();
         //getUser().setId(1l);
     }*/
 
-    protected UserEntity getUser() {
-        return user;
-    }
-
-    protected boolean isUserInRole(String roleName){
-        return getUser().isUserInRole(roleName);
+    protected UserEntity getUser(SecurityContext securityContext){
+        Principal principal =  securityContext.getUserPrincipal();
+        return null!= principal?(UserEntity)principal:null;
     }
 
 
-
-    protected UserBL getUserBL() {
-        //return (UserBL)ApplicationContextUtil.getApplicationContext().getBean("userBL");
-        return userBL;
-    }
-
-
-    protected CommonBL getCommonBL() {
-       return (CommonBL)ApplicationContextUtil.getApplicationContext().getBean("commonBL");
-        //return null;
-    }
-
-    protected ShoppingBL getShoppingBL() {
-        return (ShoppingBL)ApplicationContextUtil.getApplicationContext().getBean("shoppingBL");
-        //return null;
-    }
-    
-    
     protected Map<String,Object> getQueryParam(UriInfo uriInfo){
         MultivaluedMap<String, String> requestData = uriInfo.getQueryParameters();
         Map<String,Object> queryParamMap = new HashMap<String, Object>();
@@ -86,7 +50,6 @@ public class BaseService implements ServiceConstants{
         return queryParamMap;
     }
 
-
     protected Map<String,String> getQueryParamAsStringMap(UriInfo uriInfo){
         MultivaluedMap<String, String> requestData =  uriInfo.getQueryParameters();
         Map<String,String> queryParamMap = new HashMap<String, String>();
@@ -95,7 +58,6 @@ public class BaseService implements ServiceConstants{
         }
         return queryParamMap;
     }
-
 
     protected  Response sendResponse(BaseEntity item) {
         ContainerWSO containerWSO = new ContainerWSO();
@@ -112,7 +74,6 @@ public class BaseService implements ServiceConstants{
     protected Response sendResponse(Object object) {
         return Response.ok(object).build();
     }
-
 
     protected  Response sendResponse(StatusDTO statusDTO) {
         return Response.status(statusDTO.getCode()).entity(statusDTO).build();

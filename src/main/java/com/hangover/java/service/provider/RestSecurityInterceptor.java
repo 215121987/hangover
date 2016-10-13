@@ -14,13 +14,19 @@ import org.glassfish.jersey.internal.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-import java.util.List;
-import java.util.StringTokenizer;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.*;
+import javax.ws.rs.ext.Provider;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,9 +35,20 @@ import java.util.StringTokenizer;
  * Time: 5:27 PM
  * To change this template use File | Settings | File Templates.
  */
+@Provider
 public class RestSecurityInterceptor implements ContainerRequestFilter, Constants {
 
     private Logger logger = LoggerFactory.getLogger(RestSecurityInterceptor.class);
+
+    @Context
+    private ResourceInfo resourceInfo;
+
+    private static final String AUTHORIZATION_PROPERTY = "Authorization";
+    private static final String AUTHENTICATION_SCHEME = "Basic";
+    private static final Response ACCESS_DENIED = Response.status(Response.Status.UNAUTHORIZED)
+            .entity("You cannot access this resource").build();
+    private static final Response ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
+            .entity("Access blocked for all users !!").build();
 
     private UserBL userBL = (UserBL)CommonUtil.getBean("userBL");
 
@@ -39,15 +56,53 @@ public class RestSecurityInterceptor implements ContainerRequestFilter, Constant
 
     private PasswordEncoder passwordEncoder = (PasswordEncoder)CommonUtil.getBean("passwordEncoder");
 
-
     public void filter(ContainerRequestContext containerRequest) {
-        //processMediaType(containerRequest);
-        String requestURI = containerRequest.getUriInfo().getPath();
-        if(!requestURI.contains("/ann/")){
-           // checkToken(containerRequest);
+        Method method = this.resourceInfo.getResourceMethod();
+        if (method.isAnnotationPresent(PermitAll.class)|| method.isAnnotationPresent(DenyAll.class) || method.isAnnotationPresent(RolesAllowed.class)) {
+            if (method.isAnnotationPresent(DenyAll.class)) {
+                containerRequest.abortWith(ACCESS_FORBIDDEN);
+                return;
+            }
+            final MultivaluedMap<String, String> headers = containerRequest.getHeaders();
+            final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+            if (null == authorization || authorization.isEmpty()) {
+                containerRequest.abortWith(ACCESS_DENIED);
+                return;
+            }
+            final String encodedToken = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+            String token = encodedToken;//new String(Base64.decode(encodedToken.getBytes()));
+            UserEntity user = userBL.validateAuthentication(token);
+            if (method.isAnnotationPresent(RolesAllowed.class)) {
+                RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
+                Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
+                if (Collections.disjoint(rolesSet, user.getRoleName()))
+                    containerRequest.abortWith(ACCESS_DENIED);
+            }
+            containerRequest.setSecurityContext(new Authorizer(user));
         }
-        //return containerRequest;
     }
+
+    private boolean isUserAllowed(ContainerRequestContext containerRequest, String token, Set<String> roles) {
+        UserEntity user = userBL.validateAuthentication(token);
+        if (roles.containsAll(user.getRoleName())) {
+            containerRequest.setSecurityContext(new Authorizer(user));
+            return true;
+        } else
+            return false;
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void processMediaType(ContainerRequestContext containerRequest) {
         String requestUri = containerRequest.getUriInfo().getPath();

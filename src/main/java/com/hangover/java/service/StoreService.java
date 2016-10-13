@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import java.util.HashMap;
 import java.util.List;
@@ -42,21 +44,14 @@ public class StoreService extends BaseService {
 
     private Logger logger = LoggerFactory.getLogger(StoreService.class);
 
+    @Autowired
     private CommonBL commonBL;
 
-    @Autowired(required = true)
-    public void setCommonBL(CommonBL commonBL) {
-        this.commonBL = commonBL;
-    }
-
+     @Autowired
     private CommonUtil commonUtil;
 
+    @Autowired
     private ShoppingBL shoppingBL;
-
-    @Autowired(required = true)
-    public void setShoppingBL(ShoppingBL shoppingBL) {
-        this.shoppingBL = shoppingBL;
-    }
 
     @Autowired
     private StoreBL storeBL;
@@ -71,9 +66,9 @@ public class StoreService extends BaseService {
 
     @GET
     @Path("/cart")
-    public Response cart(@Context UriInfo uriInfo){
-        Long userId= 1L;
-        List<ShoppingCartItemEntity> shoppingCartItems = shoppingBL.getCartItem(userId);
+    @PermitAll
+    public Response cart(@Context UriInfo uriInfo, @Context SecurityContext context){
+        List<ShoppingCartItemEntity> shoppingCartItems = shoppingBL.getCartItem(getUser(context).getId());
         List<ServiceChargeEntity> serviceCharges = commonBL.getEntities(ServiceChargeEntity.class, null);
         CartWSO cartWSO = new CartWSO();
         cartWSO.setCartItems(shoppingCartItems);
@@ -85,13 +80,14 @@ public class StoreService extends BaseService {
 
     @POST
     @Path("/cart")
-    public Response addToCart(@FormParam("itemId")Long itemId, @FormParam("itemDetailId")Long itemDetailId, @FormParam("quantity")Integer quantity) {
-        Long userId= 1L;
+    @PermitAll
+    public Response addToCart(@FormParam("itemId")Long itemId, @FormParam("itemDetailId")Long itemDetailId,
+                              @FormParam("quantity")Integer quantity, @Context SecurityContext context) {
         StatusDTO statusDTO = new StatusDTO();
         ShoppingDTO shoppingDTO = new ShoppingDTO();
         shoppingDTO.setItemId(itemId);
         shoppingDTO.setItemDetailId(itemDetailId);
-        shoppingDTO.setUserId(userId);
+        shoppingDTO.setUserId(getUser(context).getId());
         shoppingDTO.setQuantity(quantity);
         List<ShoppingCartItemEntity> shoppingCartItems = shoppingBL.addItemToCart(shoppingDTO, statusDTO);
         CartWSO cartWSO = new CartWSO();
@@ -115,12 +111,12 @@ public class StoreService extends BaseService {
 
     @POST
     @Path("/order/place")
+    @PermitAll
     public Response placeOrder(@FormParam("cartHash")String cartHas, @FormParam("amount")Double amount,
-                               @FormParam("addressId")Long addressId) {
-        Long userId= 1L;
+                               @FormParam("addressId")Long addressId, @Context SecurityContext context) {
         StatusDTO statusDTO = new StatusDTO();
         PlaceOrderDTO placeOrderDTO = new PlaceOrderDTO();
-        placeOrderDTO.setUserId(userId);
+        placeOrderDTO.setUserId(getUser(context).getId());
         placeOrderDTO.setCartHash(cartHas);
         placeOrderDTO.setAddressId(addressId);
         placeOrderDTO.setOrderFrom(OrderFrom.APP);
@@ -133,14 +129,15 @@ public class StoreService extends BaseService {
 
     @GET
     @Path("/order")
-    public Response getStoreOrder(){
-        Long userId= 1L;
-        List<OrderEntity> orders = storeBL.getStoreOrder(userId);
+    @PermitAll
+    public Response getStoreOrder(@Context SecurityContext context){
+        List<OrderEntity> orders = storeBL.getStoreOrder(getUser(context).getId());
         return sendResponse(orders);
     }
 
     @GET
     @Path("/order/{id}")
+    @PermitAll
     public Response getOrder(@PathParam("id") Long id){
         OrderEntity order = commonBL.getOrder(id);
         return sendResponse(order);

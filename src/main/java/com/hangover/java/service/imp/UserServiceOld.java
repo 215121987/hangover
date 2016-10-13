@@ -41,9 +41,9 @@ public class UserServiceOld extends BaseService {
     @GET
     @Path("profile")
     public Response getProfile(@QueryParam("id") Long id) {
-        if (null == id)
-            id = getUser().getId();
-        return Response.ok(getUserBL().getUser(id)).build();
+        //if (null == id)
+            /*id = getUser().getId();*/
+        return null;//Response.ok(getUserBL().getUser(id)).build();
     }
 
 
@@ -53,8 +53,8 @@ public class UserServiceOld extends BaseService {
         MultivaluedMap<String, String> requestData = uriInfo.getQueryParameters();
         if (null != requestData && requestData.containsKey(PARAM_NAME)) {
             StatusDTO status = new StatusDTO();
-            getUserBL().updateProfile(requestData.getFirst(PARAM_NAME),
-                    requestData.getFirst(PARAM_VALUE), getUser().getId(), status);
+            /*getUserBL().updateProfile(requestData.getFirst(PARAM_NAME),
+                    requestData.getFirst(PARAM_VALUE), getUser().getId(), status);*/
             return status.getCode()==HttpStatus.OK.value()?Response.ok().build()
                     :Response.status(status.getCode()).entity(status).build();
         }
@@ -67,7 +67,7 @@ public class UserServiceOld extends BaseService {
                              @FormParam(PARAM_USER_PASSWORD) String password,
                              @FormParam(PARAM_USER_CONFIRM_PASSWORD) String confirmPassword) {
         StatusDTO statusDTO = new StatusDTO();
-        getUserBL().changePassword(oldPassword, password, confirmPassword,getUser().getId(), statusDTO);
+        /*getUserBL().changePassword(oldPassword, password, confirmPassword,getUser().getId(), statusDTO);*/
         return sendResponse(statusDTO);//Response.status(status.getCode()).entity(status).build();
     }
 

@@ -24,22 +24,9 @@ public class DeliveryService extends BaseService{
 
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    @Autowired
     private CommonBL commonBL;
 
-    @Autowired(required = true)
-    public void setCommonBL(CommonBL commonBL) {
-        this.commonBL = commonBL;
-    }
-
+    @Autowired
     private UserBL userBL;
-
-    @Autowired(required = true)
-    public void setUserBL(UserBL userBL) {
-        this.userBL = userBL;
-    }
-
-
-
-
-
 }

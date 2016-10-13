@@ -331,7 +331,7 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
         } else {
             throw new HangoverException(HttpStatus.MOVED_TEMPORARILY.value(), commonUtil.getText("302.session.message"));
         }
-
+        HangoverUtil.initializeAssociatedEntity(loginStatus.getUser(), "roles");
         return loginStatus.getUser();
     }
 

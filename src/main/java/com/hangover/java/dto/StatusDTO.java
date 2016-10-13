@@ -20,7 +20,6 @@ public class StatusDTO {
 
     private static final long serialVersionUID = 1L;
 
-    private BaseEntity entity;
     private int code = 200;
     private String message;
     private List<String> errors;
@@ -36,15 +35,6 @@ public class StatusDTO {
         this.message = HttpStatus.valueOf(code).toString();
     }
 
-
-    @XmlElementRef
-    public BaseEntity getEntity() {
-        return entity;
-    }
-
-    public void setEntity(BaseEntity entity) {
-        this.entity = entity;
-    }
 
     public int getCode() {
         return code;

@@ -1,6 +1,8 @@
 package com.hangover.java.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hangover.java.model.master.Role;
 import com.hangover.java.model.type.PasswordType;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +24,7 @@ import java.util.*;
 @Entity
 @javax.persistence.Table(name = "user")
 @XmlRootElement(name = "user")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserEntity extends BaseEntity implements UserDetails, Principal {
 
     //private static final long serialVersionUID = 3256446889040622647L;
@@ -107,6 +110,7 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
         this.dob = dob;
     }
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

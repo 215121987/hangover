@@ -3,6 +3,8 @@ package com.hangover.java.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.hangover.java.model.type.OrderFrom;
 import com.hangover.java.model.type.OrderState;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,7 +20,7 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@javax.persistence.Table(name = "order_entity")
+@javax.persistence.Table(name = "customer_order")
 @XmlRootElement(name = "order")
 public class OrderEntity extends BaseEntity{
 
@@ -27,9 +29,10 @@ public class OrderEntity extends BaseEntity{
     private Double totalAmount;
     private OrderFrom orderFrom;
     private AddressEntity address;
-    Set<OrderItemEntity> orderItem;
-    SupplierStoreEntity store;
+    private Set<OrderItemEntity> orderItem;
+    private SupplierStoreEntity store;
     private OrderState state = OrderState.ORDER_CREATED;
+    private UserEntity staff;
 
     @Column(name = "order_number", nullable = false, unique = true, updatable = false)
     public String getOrderNumber() {
@@ -78,7 +81,8 @@ public class OrderEntity extends BaseEntity{
         this.address = address;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
     public Set<OrderItemEntity> getOrderItem() {
         return orderItem;
     }
@@ -104,12 +108,23 @@ public class OrderEntity extends BaseEntity{
         this.store = store;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public OrderState getState() {
         return state;
     }
 
     public void setState(OrderState state) {
         this.state = state;
+    }
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_id", nullable = true)
+    public UserEntity getStaff() {
+        return staff;
+    }
+
+    public void setStaff(UserEntity staff) {
+        this.staff = staff;
     }
 }

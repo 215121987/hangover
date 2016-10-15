@@ -2,7 +2,7 @@
 <c:choose>
     <c:when test="${not empty items  && fn:length(items) gt 0}">
         <c:forEach items="${items}" var="item">
-            <li>
+            <li class="product">
                 <div class="item_wrapper">
                     <a href='<c:url value="/comm/shop/${item.id}.html" />'>
                         <div style="float: left;">

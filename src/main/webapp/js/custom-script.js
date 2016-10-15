@@ -241,7 +241,8 @@
         var customer_address = jQuery.cookie('customer_address');
         if(undefined != customer_address && null != customer_address && "" != customer_address){
             var customerAddressAsJSON = $.parseJSON(customer_address);
-            $("#delivery_location").html(customerAddressAsJSON.zipCode+", "+customerAddressAsJSON.city);
+            $("#delivery_location").find("span").html(customerAddressAsJSON.zipCode+", "+customerAddressAsJSON.city);
+            $("#delivery_location").show();
         }
 
         $("#delivery_location").on('click', function(e){

@@ -3,6 +3,7 @@ package com.hangover.java.dao;
 import com.hangover.java.model.*;
 import com.hangover.java.model.type.OfferFor;
 import com.hangover.java.model.type.OfferType;
+import com.hangover.java.model.type.OrderState;
 
 import java.util.List;
 
@@ -17,8 +18,8 @@ public interface StoreDao extends BaseDao{
     
     
     SupplierStoreEntity getStaffStore(Long staffId);
-    
-    List<OrderEntity> getStoreOrder(Long storeId);
+
+    List<OrderEntity> getStoreOrder(Long storeId,Long staffId, List<OrderState> orderStates, int startIndex, int maxResult);
 
     List<SupplierStoreEntity> getStoreByLocation(String zipCode);
     

@@ -89,23 +89,40 @@ public class EmailFactory {
 
     public Message getOrderCompleteMessage(Map<String,String> map){
         Message message = null;
-        UserEntity user = userDao.getUserByUsername(map.get("username"));
-
-        if(null!= user && StringUtils.isNotEmpty(user.getEmail()) && user.isEmailVerified()){
+        OrderEntity order = shoppingDao.getOrder(map.get("orderNumber"));
+        if(null!= order.getCustomer() && StringUtils.isNotEmpty(order.getCustomer().getEmail()) && order.getCustomer().isEmailVerified()){
             message = new Message();
-            message.setTo(user.getEmail());
+            message.setTo(order.getCustomer().getEmail());
             message.setTemplateName(Constants.ORDER_CONFIRMATION_TEMPLATE);
-            message.putContext("name", user.getName());
-            OrderEntity order = shoppingDao.getOrder(map.get("orderNumber"));
+            message.putContext("name", order.getCustomer().getName());
+            message.putContext("status", order.getState());
             switch (order.getState()){
                 case PAYMENT_SUCCESS:
                     message.setSubject(commonUtil.getText("email.notification.subject.order.success"));
                     break;
-                default:
+                case PAYMENT_FAILED:
                     message.setSubject(commonUtil.getText("email.notification.subject.order.failure"));
                     break;
+                case PAYMENT_CANCELED:
+                    return null;
+                case ORDER_ACCEPTED:
+                    return null;
+                case ORDER_REJECTED:
+                    return null;
+                case ORDER_INVOICE_GENERATED:
+                    return null;
+                case ORDER_PACKED:
+                    return null;
+                case ORDER_DISPATCHED:
+                    return null;
+                case ORDER_DELIVERED:
+                    message.setSubject(commonUtil.getText("email.notification.subject.order.delivery.success"));
+                    break;
+                case ORDER_DELIVERY_FAILED:
+                    message.setSubject(commonUtil.getText("email.notification.subject.order.delivery.failed"));
+                    break;
+                default:  return null;
             }
-            message.putContext("status", order.getState());
         }
         return message;
     }

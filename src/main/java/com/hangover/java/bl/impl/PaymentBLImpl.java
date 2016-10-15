@@ -197,7 +197,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
         map.put("transactionId", transactionId);
         map.put("amount", amount+"");
         map.put("status", status);
-        this.taskExecutor.execute(this.asyncTask.getOrderPaymentNotificationTask(map));
+        this.taskExecutor.execute(this.asyncTask.getOrderNotificationTask(map));
         this.taskExecutor.execute(new PostPaymentSuccessTask(orderId));
     }
     

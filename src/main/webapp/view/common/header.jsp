@@ -30,9 +30,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="" style="z-index: 3;top: 0px;position: absolute;display: block;left: 71%">
-                                    <div style="color: #ffffff; font-size: 10px;" title="Delivery Location">
-                                        <i class="fa fa-map-marker" style="font-size: 15px;"></i><span id="delivery_location" class="delivery_location"  style="text-decoration: underline; cursor: pointer"></span>
+                                <div class="delivery_location_block">
+                                    <div class="delivery_location_wrapper hide" id="delivery_location" title="Delivery Location">
+                                        <i class="fa fa-map-marker" style="font-size: 15px;"></i>
+                                        <span class="delivery_location"></span>
                                     </div>
                                 </div>
                                 <div class="menu-wrapper" style="list-style: none;float: right;">

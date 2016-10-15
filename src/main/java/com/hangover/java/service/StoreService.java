@@ -11,6 +11,7 @@ import com.hangover.java.model.ShoppingCartItemEntity;
 import com.hangover.java.model.SupplierStoreEntity;
 import com.hangover.java.model.master.ServiceChargeEntity;
 import com.hangover.java.model.type.OrderFrom;
+import com.hangover.java.model.type.OrderState;
 import com.hangover.java.service.wso.CartWSO;
 import com.hangover.java.service.wso.OrderWSO;
 import com.hangover.java.util.CommonUtil;
@@ -131,7 +132,16 @@ public class StoreService extends BaseService {
     @Path("/order")
     @PermitAll
     public Response getStoreOrder(@Context SecurityContext context){
-        List<OrderEntity> orders = storeBL.getStoreOrder(getUser(context).getId());
+        List<OrderEntity> orders = storeBL.getStoreOpenOrder(getUser(context).getId());
+        return sendResponse(orders);
+    }
+
+
+    @GET
+    @Path("/order/archive")
+    @PermitAll
+    public Response getStoreOrderArchive(@Context SecurityContext context, @QueryParam("pageNumber")int pageNumber){
+        List<OrderEntity> orders = storeBL.getStoreStaffArchiveOrder(getUser(context).getId(), pageNumber);
         return sendResponse(orders);
     }
 
@@ -141,6 +151,15 @@ public class StoreService extends BaseService {
     public Response getOrder(@PathParam("id") Long id){
         OrderEntity order = commonBL.getOrder(id);
         return sendResponse(order);
+    }
+
+
+    @POST
+    @Path("/order/process")
+    public Response updateOrderState(@FormParam("orderId")Long orderId, @FormParam("state")String state, @Context SecurityContext context){
+       StatusDTO status = new StatusDTO();
+        storeBL.updateState(orderId, getUser(context).getId(), state, status);
+        return sendResponse(status);
     }
     
 }

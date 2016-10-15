@@ -10,12 +10,16 @@ import com.hangover.java.model.type.MessageType;
 import com.hangover.java.model.type.PasswordType;
 import com.hangover.java.security.PasswordEncoder;
 import com.hangover.java.util.CommonUtil;
+import com.hangover.java.util.DateUtil;
 import com.hangover.java.util.HangoverUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,20 +95,48 @@ public class SMSFactory {
     
     public Message getOrderCompleteMessage(Map<String,String> map){
         Message message = new Message();
-        UserEntity user = userDao.getUserByUsername(map.get("username"));
-        message.setTo(user.getMobile());
         OrderEntity order = shoppingDao.getOrder(map.get("orderNumber"));
-        MessageType type;
+        message.setTo(order.getCustomer().getMobile());
+        MessageType type = null;
+        List<String> placeHolders = new ArrayList<String>();
+        placeHolders.add(order.getCustomer().getName());
+        placeHolders.add(order.getOrderNumber());
         switch (order.getState()){
-            case PAYMENT_SUCCESS: type = MessageType.ORDER_PAYMENT_SUCCESS;
+            case PAYMENT_SUCCESS:
+                type = MessageType.ORDER_PAYMENT_SUCCESS;
                 break;
-            default: type = MessageType.ORDER_PAYMENT_FAILED;
+            case PAYMENT_FAILED:
+                type = MessageType.ORDER_PAYMENT_FAILED;
                 break;
+            case PAYMENT_CANCELED:
+                type = MessageType.ORDER_PAYMENT_CANCELED;
+                break;
+            case ORDER_ACCEPTED:
+                return null;
+            case ORDER_REJECTED:
+                type = MessageType.ORDER_REJECTED;
+                break;
+            case ORDER_INVOICE_GENERATED:
+                return null;
+            case ORDER_PACKED:
+                return null;
+            case ORDER_DISPATCHED:
+                type = MessageType.ORDER_DISPATCHED;
+                break;
+            case ORDER_DELIVERED:
+                type = MessageType.ORDER_DELIVERED;
+                placeHolders.add(DateUtil.convertDateToString(order.getUpdatedAt()));
+                break;
+            case ORDER_DELIVERY_FAILED:
+                type = MessageType.ORDER_DELIVERY_FAILED;
+                break;
+            default: return null;
         }
         SMSTemplateEntity smsTemplate = userDao.getMasterData(SMSTemplateEntity.class, "type", type);
         String sms = smsTemplate.getMessage();
-        sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, user.getName());
-        sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, map.get("orderNumber"));
+        for(String placeHolder : placeHolders){
+            sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, placeHolder);
+        }
         message.setContent(sms);
         return message;
     }

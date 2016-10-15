@@ -1,6 +1,8 @@
 package com.hangover.java.bl;
 
+import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.OrderEntity;
+import com.hangover.java.model.type.OrderState;
 
 import java.util.List;
 
@@ -14,8 +16,12 @@ import java.util.List;
 public interface StoreBL {
 
 
-    List<OrderEntity> getStoreOrder(Long staffId);
+    List<OrderEntity> getStoreOpenOrder(Long staffId);
 
+    List<OrderEntity> getStoreStaffArchiveOrder(Long staffId, int pageNumber);
 
+    List<OrderEntity> getStoreArchiveOrder(Long staffId, int pageNumber);
+    
+    void updateState(Long orderId, Long staffId, String state,StatusDTO statusDTO);
 
 }

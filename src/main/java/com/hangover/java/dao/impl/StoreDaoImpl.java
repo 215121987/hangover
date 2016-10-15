@@ -4,7 +4,9 @@ import com.hangover.java.dao.StoreDao;
 import com.hangover.java.model.*;
 import com.hangover.java.model.type.OfferFor;
 import com.hangover.java.model.type.OfferType;
+import com.hangover.java.model.type.OrderState;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -32,10 +34,18 @@ public class StoreDaoImpl extends BaseDaoImpl implements StoreDao {
     }
 
     @Override
-    public List<OrderEntity> getStoreOrder(Long storeId) {
+    public List<OrderEntity> getStoreOrder(Long storeId, Long staffId, List<OrderState> orderStates, int startIndex, int maxResult) {
         Criteria criteria = getCurrentSession().createCriteria(OrderEntity.class)
                 .createAlias("store", "store")
-                .add(Restrictions.eq("store.id", storeId));
+                .add(Restrictions.eq("store.id", storeId))
+                .add(Restrictions.in("state", orderStates))
+                .addOrder(Order.asc("updatedAt"));
+        if(maxResult>0)
+             criteria.setFirstResult(startIndex)
+                     .setMaxResults(maxResult);
+        if(null != staffId)
+            criteria.createAlias("staff","staff")
+                    .add(Restrictions.eq("staff.id", staffId));
         return criteria.list();
     }
 

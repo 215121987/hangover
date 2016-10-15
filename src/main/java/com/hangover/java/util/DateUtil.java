@@ -16,6 +16,7 @@ public class DateUtil {
 
 
     public static final String DATE_FORMAT = "dd/MM/yyyy";
+    public static final String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
 
     public static Date convertStringToDate(String dateToConvert) throws DataFormatException {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
@@ -25,5 +26,11 @@ public class DateUtil {
         } catch (ParseException e) {
            throw new DataFormatException("Unable to Parse date");
         }
+    }
+
+    public static String convertDateToString(Date  dateToConvert){
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        sdf.setLenient(false);
+       return sdf. format(dateToConvert);
     }
 }

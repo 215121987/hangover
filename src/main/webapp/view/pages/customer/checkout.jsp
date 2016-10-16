@@ -48,7 +48,7 @@
                             </section>
                             <div class="clear"></div>
                             <section id="section-4" class="payment_section" order-number="4">
-                                <div id="checkout_info-4" class="woocommerce-info checkout-info">Payment</div>
+                                <div id="checkout_info-4" class="woocommerce-info checkout-info noDrop">Payment</div>
                                 <div id="checkout-info-content-4" class='checkout-info-content hide'>
                                     <%@ include file="/view/pages/customer/payment.jsp" %>
                                 </div>

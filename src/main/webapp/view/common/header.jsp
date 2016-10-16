@@ -41,8 +41,8 @@
                                         <li>
                                             <div class="menu_block dropdown">
                                                 <div class="menu_title" style="display: block;">
-                                                    <i class="hanover-icon icon-account-user"></i>
-                                                    <i class="hanover-icon icon-expand-arrow"></i>
+                                                    <i class="fa fa-user fa-1x"></i>
+                                                    <i class="fa fa-sort-desc fa-1x"></i>
                                                     <span>Account</span>
                                                 </div>
 
@@ -83,7 +83,8 @@
                                         <li>
                                             <div class="menu_block">
                                                 <div class="menu_title" style="display: block;">
-                                                    <i class=" hanover-icon icon-nhelpfilled"></i>
+                                                    <i class="fa fa-question fa-1x "></i>
+                                                    <br>
                                                     <span>Help</span>
                                                 </div>
                                             </div>
@@ -102,8 +103,8 @@
                                         <li>
                                             <div class="menu_block dropdown">
                                                 <div class="menu_title" style="display: block;">
-                                                    <i class="hanover-icon icon-account-user"></i>
-                                                    <i class="hanover-icon icon-expand-arrow"></i>
+                                                    <i class="fa fa-cogs fa-1x"></i>
+                                                    <i class="fa fa-sort-desc fa-1x"></i>
                                                     <span>Settings</span>
                                                 </div>
 

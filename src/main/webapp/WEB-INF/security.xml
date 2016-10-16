@@ -19,6 +19,7 @@
         <intercept-url pattern="/save/SupplierDTO*" access="ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_STAFF"/>
         <intercept-url pattern="/save/SupplierStaffDTO*" access="ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_STAFF, ROLE_SUPPLIER"/>
         <intercept-url pattern="/SupplierEntity*" access="ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_STAFF"/>
+        <intercept-url pattern="/SupplierStoreEntity*" access="ROLE_SUPER_ADMIN,ROLE_SUPPLIER, ROLE_ADMIN, ROLE_STAFF"/>
         <!--<intercept-url pattern="/comm/floor/save*" access="ROLE_ADMIN, ROLE_SPACE_PLANNER"/>
         <intercept-url pattern="/comm/request/*" access="ROLE_ADMIN, ROLE_SPACE_PLANNER"/>
         <intercept-url pattern="/comm/floor/upload/*" access="ROLE_ADMIN, ROLE_SPACE_PLANNER"/>

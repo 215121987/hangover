@@ -18,12 +18,12 @@
                         <div class="search-form search-form__h clearfix" id="search-header">
                             <input type="text" name="filterQuery" data_url="supplier_staff" searchOnUI="true" searchFor="name-email-mobile"
                                    view="hangover/staffList" placeholder="Search Staff" class="search-form_it"/>
-                            <i class="fa icon-search icon-2x"></i>
+                            <i class="fa fa-search fa-2x"></i>
                         </div>
                     </div>
                     <div class="action_button">
                         <a href="" class="add-parallax-item" data_url="add_staff" req_data="supplierId:1" view="hangover/supplierStaffForm" title="Add Staff">
-                            <i class="fa icon-plus-sign icon-3x"></i>
+                            <i class="fa fa-plus fa-3x"></i>
                         </a>
                     </div>
                 </div>

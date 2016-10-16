@@ -19,12 +19,12 @@
                         <div class="search-form search-form__h clearfix" id="search-header">
                             <input type="text" name="filterQuery" data_url="supplier" searchOnUI="false" searchFor="companyName"
                                    view="hangover/supplierList" placeholder="Search Supplier" class="search-form_it"/>
-                            <i class="fa icon-search icon-2x"></i>
+                            <i class="fa fa-search fa-2x"></i>
                         </div>
                     </div>
                     <div class="action_button">
                         <a href="" class="add-parallax-item" data_url="add_supplier" view="hangover/supplierForm" title="Add Supplier">
-                            <i class="fa icon-plus-sign icon-3x"></i>
+                            <i class="fa fa-plus fa-3x"></i>
                         </a>
                     </div>
                 </div>
@@ -38,12 +38,12 @@
                                 <p>${supplier.description}. Hangover is a online alcoholic Shop. Hangover is a online alcoholic Shop.Hangover is a online alcoholic Shop.Hangover is a online alcoholic Shop.</p>
                                 <div class="item-info">
                                     <h4>${supplier.companyName}<span>(${supplier.code})</span></h4>
-                                    <p>${supplier.contactPerson}:-<i class="fa icon-mobile-phone icon-1x"></i>${supplier.contactNumber}</p>
+                                    <p>${supplier.contactPerson}:-<i class="fa fa-mobile-phone fa-1x"></i>${supplier.contactNumber}</p>
                                     <ul class="item-meta">
-                                        <li><a href="" data_id="${supplier.id}"><i class="fa icon-google-plus icon-2x"></i></a></li>
-                                        <li><a href="" data_id="${supplier.id}"><i class="fa icon-google-plus icon-2x"></i></a></li>
-                                        <li><a href="" data_id="${supplier.id}" title="New Location"><i class="fa icon-plus-sign icon-2x"></i></a></li>
-                                        <li><a href="" class="delete-parallax-item" data_url="delete_supplier" data_id="${supplier.id}" title="Remove Supplier"><i class="fa icon-remove-sign icon-2x"></i></a></li>
+                                        <li><a href="" data_id="${supplier.id}"><i class="fa fa-google-plus fa-2x"></i></a></li>
+                                        <li><a href="" data_id="${supplier.id}"><i class="fa fa-google-plus fa-2x"></i></a></li>
+                                        <li><a href="" data_id="${supplier.id}" title="New Location"><i class="fa fa-plus-sign fa-2x"></i></a></li>
+                                        <li><a href="" class="delete-parallax-item" data_url="delete_supplier" data_id="${supplier.id}" title="Remove Supplier"><i class="fa fa-remove-sign fa-2x"></i></a></li>
                                     </ul>
                                 </div>
                             </div>

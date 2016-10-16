@@ -48,6 +48,7 @@ insert into brand(id, code, name,displayName, description, category_id) value(19
 
 insert into supplier(id, code, companyName) value(1,'lad', 'Liquor At Door');
 insert into supplier_store(id, street, city,state, country, zipCode,supplier_id , mainBranch) value(1,'New Thippasandra', 'Bangalore', 'Karnataka', 'India','560075', 1, 1);
+insert into supplier_staff(user_id, supplier_id, status, store_id) value(1,1,0,1);
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
 value('<h3>Get up to<br> 10% off</h3><h4>on Vodka</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://104.155.202.8/hangover/images/banner/item-banner-3.jpg',1,'');

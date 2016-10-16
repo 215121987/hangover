@@ -168,6 +168,10 @@
             });
         });
 
+        $(".checkout-info").each(function(e){
+            toggleCaret(this);
+        });
+
         $(document).on('click', '.checkout-info', function (event) {
             var orderNumber = $(this).parent().attr("order-number");
             $(this).find("span").slideToggle();
@@ -183,6 +187,7 @@
                 } else if (orderNumber == '3') {
                     $('#section-' + orderNumber).attr("status", "incomplete");
                     $('#section-4').find('.checkout-info').removeClass("clickAble");
+                    $('#section-4').find('.checkout-info').addClass("noDrop");
                     $('#section-4').find(".checkout-info-content").slideUp();
                     $(this).parent().find(".checkout-info-content").slideDown();
                 } else {
@@ -191,12 +196,28 @@
             } else {
                 $(this).parent().find(".checkout-info-content").slideUp();
             }
+            toggleCaret(this);
         });
+
+        function toggleCaret(element){
+            if($(element).find("i").length<=0){
+                $(element).prepend('<i class="fa fa-1x">&nbsp;</i>');
+            }
+            var isOpen = $(element).hasClass("clickAble") && $(element).find("i").hasClass("fa-caret-right");
+            if(isOpen){
+                $(element).find("i").removeClass("fa-caret-right");
+                $(element).find("i").addClass("fa-caret-down");
+            }else{
+                $(element).find("i").removeClass("fa-caret-down");
+                $(element).find("i").addClass("fa-caret-right");
+            }
+        }
 
         $(document).on('click', '#proceedToPay', function (event) {
             $(".checkout-info-content").slideUp();
             $('.checkout-info').find("span").slideDown();
             $('#section-3').attr("status", "complete");
+            $('#section-4').find('.checkout-info').removeClass("noDrop");
             $('#section-4').find('.checkout-info').addClass("clickAble");
             $('#section-4').find(".checkout-info-content").slideDown();
         });
@@ -529,7 +550,7 @@ var doSearchOnUI = function(query){
     $('#entity_content .item-block').each(function(){
         var keep = false;
         $(this).find('.searchable').each(function(){
-            if($(this).html().toLowerCase().contains(query.toLowerCase())){
+            if($(this).html().toLowerCase().indexOf(query.toLowerCase()) != -1){
                 keep=true;
             }
         });

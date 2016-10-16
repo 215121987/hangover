@@ -149,7 +149,7 @@
             color: #009587;
         }
     </style>
-    <title><decorator:getProperty property="page.titleText"/><decorator:getProperty property="page.pageTitle"/></title>
+    <title><fmt:message key="app.tag.line"/></title>
     <decorator:head/>
     <!--[if gte IE 9]><!-->
     <script src="<c:url value="/js/lib/jquery.mobile.customized.min.js" />" type="text/javascript"></script>

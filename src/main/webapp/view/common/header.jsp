@@ -10,8 +10,11 @@
                                 <div class="logo-wrapper">
                                     <div class="logo pull-left">
                                         <a href="<c:url value="/comm/home.html"/>" class="logo_h logo_h__img" >
-                                            <img width="200px" src="http://livedemo00.template-help.com/woocommerce_53953/wp-content/themes/theme53953/images/logo.png"
-                                                 alt="Alcoholic" title="Beverage store"><span class="beta" style="color: #009587;margin-left: 5px;">Beta</span></a>
+                                            <%--<img width="200px" src="http://livedemo00.template-help.com/woocommerce_53953/wp-content/themes/theme53953/images/logo.png"
+                                                 alt="Alcoholic" title="Beverage store"><span class="beta" style="color: #009587;margin-left: 5px;">Beta</span>--%>
+                                                <span style="font-size: 28px; color: #FFFFFF; text-transform: uppercase; font-weight: bold;">Liquor@Door</span>
+                                                <span class="beta" style="color: #009587;font-weight: bold;left: -20%;position: absolute;z-index: 3;top: 10px;transform:rotate(-45deg);">Beta</span>
+                                        </a>
                                         <p class="logo_tagline">Beverage store</p>
                                     </div>
                                 </div>

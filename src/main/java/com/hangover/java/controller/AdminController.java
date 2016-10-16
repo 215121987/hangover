@@ -275,9 +275,9 @@ public class AdminController extends BaseController{
             }
             request.setAttribute("entities", entities);
         } catch (IOException e) {
-
+            logger.error("Error "+className +" exception "+e);
         } catch (ClassNotFoundException e){
-
+            logger.error("Error "+className +" exception "+e);
         }
         return view;
     }

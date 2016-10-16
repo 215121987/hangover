@@ -38,9 +38,9 @@
                                     <div id="nav_menu-2">
                                         <div class="menu-shop-menu-container">
                                             <ul id="menu-shop-menu" class="menu">
-                                                <li class="cherry-compare menu-item menu-item-type-custom menu-item-object-custom menu-item-2025">
+                                                <%--<li class="cherry-compare menu-item menu-item-type-custom menu-item-object-custom menu-item-2025">
                                                     <a href="#">Compare</a>
-                                                </li>
+                                                </li>--%>
                                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2024">
                                                     <a href="<c:url value="/comm/shortList.html"/>">Wishlist</a>
                                                 </li>

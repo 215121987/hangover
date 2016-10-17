@@ -39,7 +39,7 @@ public class ShoppingCartEntity extends BaseEntity{
         this.user = user;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "shoppingCart")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "shoppingCart", orphanRemoval = true)
     public List<ShoppingCartItemEntity> getShoppingCartItems() {
         return shoppingCartItems;
     }

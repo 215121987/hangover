@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PaymentEntity extends BaseEntity{
 
     private OrderEntity order;
-    private UserCardInfoEntity userCardInfo;
     private Double amount;
     private String transactionId;
     private PaymentStatus status;
@@ -32,16 +31,6 @@ public class PaymentEntity extends BaseEntity{
 
     public void setOrder(OrderEntity order) {
         this.order = order;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "credit_car_id", nullable = false)
-    public UserCardInfoEntity getUserCardInfo() {
-        return userCardInfo;
-    }
-
-    public void setUserCardInfo(UserCardInfoEntity userCardInfo) {
-        this.userCardInfo = userCardInfo;
     }
 
     @Column(name = "amount", nullable = false, updatable = false)

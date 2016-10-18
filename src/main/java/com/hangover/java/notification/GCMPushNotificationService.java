@@ -55,7 +55,7 @@ public class GCMPushNotificationService implements PushNotificationService{
 
     private Boolean sendPush(Message message){
         Sender sender = new Sender(CommonUtil.getProperty("GCM_API_KEY"), Endpoint.GCM); // Here you will write APP key given by Android end
-        com.google.android.gcm.server.Message msg = new com.google.android.gcm.server.Message.Builder().addData("message", message.getContent()).build();
+        com.google.android.gcm.server.Message msg = new com.google.android.gcm.server.Message.Builder().setData(message.getContext()).build();
         Boolean response=null;
         try{
             MulticastResult results = sender.send(msg, Arrays.asList(message.getTo()), 5); // Where appId is given by Android end

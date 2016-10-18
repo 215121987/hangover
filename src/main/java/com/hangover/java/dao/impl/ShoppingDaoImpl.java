@@ -63,9 +63,13 @@ public class ShoppingDaoImpl extends CommonDaoImpl implements ShoppingDao, Const
 
     @Override
     public void emptyUserCart(Long userId) {
-        String hql = "delete from ShoppingCartEntity sc where sc.user.id="+userId;
-        Query query = getCurrentSession().createQuery(hql);
-        query.executeUpdate();
+        String cartItemHQL = "delete from ShoppingCartItemEntity sci where sci.shoppingCart.id = (select sc.id from ShoppingCartEntity sc where sc.user.id=:userId)";
+        Query cartItemQuery = getCurrentSession().createQuery(cartItemHQL);
+        cartItemQuery.setParameter("userId", userId);
+        cartItemQuery.executeUpdate();
+        String cartHql = "delete from ShoppingCartEntity sc where sc.user.id="+userId;
+        Query cartHqlQuery = getCurrentSession().createQuery(cartHql);
+        cartHqlQuery.executeUpdate();
     }
 
     @Override

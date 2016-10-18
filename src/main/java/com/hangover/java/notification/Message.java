@@ -29,7 +29,7 @@ public class Message {
 
     private String contentType;
     
-    private Map<String,Object> context;
+    private Map<String,String> context;
 
     private boolean promotional = false;
 
@@ -113,17 +113,17 @@ public class Message {
         this.contentType = contentType;
     }
 
-    public Map<String, Object> getContext() {
+    public Map<String, String> getContext() {
         return context;
     }
 
-    public void setContext(Map<String, Object> context) {
+    public void setContext(Map<String, String> context) {
         this.context = context;
     }
     
-    public void putContext(String key, Object value){
+    public void putContext(String key, String value){
         if(null==getContext())
-            setContext(new HashMap<String, Object>());
+            setContext(new HashMap<String, String>());
         getContext().put(key,value);
     }
 

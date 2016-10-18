@@ -360,3 +360,26 @@ i.fa.fa-align-justify, .item-block  i.fa.fa-user{
 .noDrop{
     cursor: no-drop!important;
 }
+
+.success_message_title{
+    color: #009587;
+}
+
+.failed_message_title{
+    color: #FF0000;
+}
+
+.result_message{
+    font-size: 18px;
+}
+.message_highlight{
+    width: 100%;
+    display: inline-block;
+    border: 1px solid #E5E5E5;
+    border-radius: 10px;
+    background-color: #EEEEEE;
+}
+
+.message_highlight,.result_message, .message_note{
+    padding: 10px;
+}

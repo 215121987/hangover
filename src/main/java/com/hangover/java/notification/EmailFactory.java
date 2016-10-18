@@ -95,7 +95,7 @@ public class EmailFactory {
             message.setTo(order.getCustomer().getEmail());
             message.setTemplateName(Constants.ORDER_CONFIRMATION_TEMPLATE);
             message.putContext("name", order.getCustomer().getName());
-            message.putContext("status", order.getState());
+            message.putContext("status", order.getState().name());
             switch (order.getState()){
                 case PAYMENT_SUCCESS:
                     message.setSubject(commonUtil.getText("email.notification.subject.order.success"));

@@ -60,9 +60,9 @@ public class BaseService implements ServiceConstants{
     }
 
     protected  Response sendResponse(BaseEntity item) {
-        ContainerWSO containerWSO = new ContainerWSO();
-        containerWSO.addItems(item);
-        return Response.ok(containerWSO).build();
+        /*ContainerWSO containerWSO = new ContainerWSO();
+        containerWSO.addItems(item);*/
+        return Response.ok(item).build();
     }
 
     protected Response sendResponse(List items) {

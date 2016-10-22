@@ -90,7 +90,7 @@ public class StoreBLImpl extends BaseBL implements StoreBL {
         if(null==orderId)
             throw new NoRecordFoundException("Invalid order id");
         SupplierStoreEntity store = storeDao.getStaffStore(staffId);
-        if(store.getId().equals(order.getStore().getId()))
+        if(!store.getId().equals(order.getStore().getId()))
             throw new AccessDeniedException("User doesn't have permission to update status for this order. Order Id="+orderId +" and User Id="+staffId);
         /*switch (OrderState.valueOf(state)){
             case ORDER_INVOICE_GENERATED:

@@ -7,7 +7,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +35,8 @@ public class OrderEntity extends BaseEntity{
     private SupplierStoreEntity store;
     private OrderState state = OrderState.ORDER_CREATED;
     private UserEntity staff;
+    private Date orderPlacedAt;
+    private Date orderUpdatedAt;
 
     @Column(name = "order_number", nullable = false, unique = true, updatable = false)
     public String getOrderNumber() {
@@ -126,5 +130,19 @@ public class OrderEntity extends BaseEntity{
 
     public void setStaff(UserEntity staff) {
         this.staff = staff;
+    }
+
+
+    @Transient
+    @XmlElement(name = "order_placed_at")
+    public Date getOrderPlacedAt() {
+        return getCreatedAt();
+    }
+
+
+    @Transient
+    @XmlElement(name = "order_updated_at")
+    public Date getOrderUpdatedAt() {
+        return getUpdatedAt();
     }
 }

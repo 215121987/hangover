@@ -156,6 +156,7 @@ public class StoreService extends BaseService {
 
     @POST
     @Path("/order/process")
+    @PermitAll
     public Response updateOrderState(@FormParam("orderId")Long orderId, @FormParam("state")String state, @Context SecurityContext context){
        StatusDTO status = new StatusDTO();
         storeBL.updateState(orderId, getUser(context).getId(), state, status);

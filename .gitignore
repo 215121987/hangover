@@ -1,4 +1,8 @@
 /target/
-/.classpath
-/.project
-/.settings/
+.DS_Store
+.gitignore
+.idea/*
+.project
+.settings/*
+hangover.iml
+README

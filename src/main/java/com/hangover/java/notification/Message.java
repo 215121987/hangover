@@ -24,6 +24,8 @@ public class Message {
     private String subject;
 
     private String content;
+    
+    private int priority = 1;
 
     private String templateName;
 
@@ -95,6 +97,14 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public String getTemplateName() {

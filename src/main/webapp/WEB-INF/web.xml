@@ -94,7 +94,7 @@
         </init-param>-->
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
-            <param-value>com.hangover.java.service.provider.RestSecurityInterceptor</param-value>
+            <param-value>com.hangover.java.service.provider.RestSecurityInterceptor;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>

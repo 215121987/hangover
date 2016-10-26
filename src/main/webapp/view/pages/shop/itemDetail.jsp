@@ -128,25 +128,25 @@
                             <div class="share-buttons_item">
                                 <a href="#"
                                    data-url="https://www.facebook.com/sharer/sharer.php"
-                                   class="share-buttons_link link-facebook"><i class="icon-facebook"></i>
+                                   class="share-buttons_link link-facebook"><i class="fa fa-facebook"></i>
                                 </a>
                             </div>
                             <div class="share-buttons_item">
                                 <a href="#"
                                    data-url="https://twitter.com/intent/tweet"
-                                   class="share-buttons_link link-twitter"><i class="icon-twitter"></i>
+                                   class="share-buttons_link link-twitter"><i class="fa fa-twitter"></i>
                                 </a>
                             </div>
                             <div class="share-buttons_item">
                                 <a href="#"
                                    data-url="https://plus.google.com/share"
-                                   class="share-buttons_link link-google-plus"><i class="icon-google-plus"></i>
+                                   class="share-buttons_link link-google-plus"><i class="fa fa-google-plus"></i>
                                 </a>
                             </div>
                             <div class="share-buttons_item">
                                 <a href="#"
                                    data-url="https://pinterest.com/pin/create/bookmarklet/"
-                                   class="share-buttons_link link-pinterest"><i class="icon-pinterest"></i>
+                                   class="share-buttons_link link-pinterest"><i class="fa fa-pinterest"></i>
                                 </a>
                             </div>
                         </div>

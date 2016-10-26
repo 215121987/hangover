@@ -501,15 +501,11 @@ if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
         if (isUserLoggedIn(request)) {
             cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingBL.getCartItem(getCurrentUsers().getId()));
             Map<String, Object> filterParam = new HashMap<String, Object>();
-            //AddressEntity address = (AddressEntity) request.getSession().getAttribute(SESSION_DELIVERY_ADDRESS);
             Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
             if (null != cookie) {
                 filterParam.put("zipCode", cookie.getValue());
             }
             List<AddressEntity> addressList = userBL.getUserAddress(getCurrentUsers().getId(), filterParam);
-            /*if(null != addressList && addressList.size()>0 && null== request.getSession().getAttribute(SESSION_DELIVERY_ADDRESS_ID)){
-                request.getSession().setAttribute(SESSION_DELIVERY_ADDRESS_ID, addressList.get(0).getId());
-            }*/
             request.setAttribute("addressList", addressList);
         } else {
             cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);

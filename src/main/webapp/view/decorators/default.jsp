@@ -1,205 +1,206 @@
 <!DOCTYPE html>
 <%@ include file="/view/common/taglib.jsp" %>
 <head>
-    <%@ include file="/view/common/meta.jsp" %>
-    <link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/lib/bootstrap-custom.css" />'/>
-    <link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/lib/bootstrap.min-3.3.5.css" />'/>
-    <link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/responsive.css" />'/>
-    <%--<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/lib/camera.css" />'/>--%>
-    <link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/style.css" />'/>
-    <link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/style-4-2-7.css" />'/>
-    <link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/cart.css" />'/>
-    <link rel='stylesheet' id='flexslider-css' href='<c:url value="/style/lib/flexslider.css" />' type='text/css'
-          media='all'/>
-    <%--<link rel='stylesheet' id='owl-carousel-css' href='<c:url value="/style/lib/owl.carousel.css" />' type='text/css'
-          media='all'/>--%>
-    <%--<link rel='stylesheet' id='owl-theme-css' href='<c:url value="/style/lib/owl.theme.css" />' type='text/css'
-          media='all'/>--%>
-    <link rel='stylesheet' id='font-awesome-css'
-          href='//netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css?ver=4.6.3' type='text/css'
-          media='all'/>
-    <%--<link rel='stylesheet' id='font-awesome-css' href='<c:url value="/style/lib/font-awesome.css" />' type='text/css'
-          media='all'/>--%>
-    <link rel='stylesheet' id='cherry-plugin-css' href='<c:url value="/style/lib/cherry-plugin.css" />' type='text/css'
-          media='all'/>
-    <link rel='stylesheet' id='cherry-parallax-css' href='<c:url value="/style/lib/parallax.css" />' type='text/css'
-          media='all'/>
-    <link rel='stylesheet' id='contact-form-7-css' href='<c:url value="/style/styles.css" />' type='text/css'
-          media='all'/>
+<%@ include file="/view/common/meta.jsp" %>
+<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/lib/bootstrap-custom.css" />'/>
+<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/lib/bootstrap.min-3.3.5.css" />'/>
+<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/responsive.css" />'/>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<%--<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/lib/camera.css" />'/>--%>
+<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/style.css" />'/>
+<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/style-4-2-7.css" />'/>
+<link rel="stylesheet" type="text/css" media="all" href='<c:url value="/style/cart.css" />'/>
+<link rel='stylesheet' id='flexslider-css' href='<c:url value="/style/lib/flexslider.css" />' type='text/css'
+      media='all'/>
+<%--<link rel='stylesheet' id='owl-carousel-css' href='<c:url value="/style/lib/owl.carousel.css" />' type='text/css'
+media='all'/>--%>
+<%--<link rel='stylesheet' id='owl-theme-css' href='<c:url value="/style/lib/owl.theme.css" />' type='text/css'
+media='all'/>--%>
+<link rel='stylesheet' id='font-awesome-css'
+      href='//netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css?ver=4.6.3' type='text/css'
+      media='all'/>
+<%--<link rel='stylesheet' id='font-awesome-css' href='<c:url value="/style/lib/font-awesome.css" />' type='text/css'
+media='all'/>--%>
+<link rel='stylesheet' id='cherry-plugin-css' href='<c:url value="/style/lib/cherry-plugin.css" />' type='text/css'
+      media='all'/>
+<link rel='stylesheet' id='cherry-parallax-css' href='<c:url value="/style/lib/parallax.css" />' type='text/css'
+      media='all'/>
+<link rel='stylesheet' id='contact-form-7-css' href='<c:url value="/style/styles.css" />' type='text/css'
+      media='all'/>
 
-    <link rel='stylesheet' id='contact-form-7-css' href='<c:url value="/style/hangover.css" />' type='text/css'
-          media='all'/>
+<link rel='stylesheet' id='contact-form-7-css' href='<c:url value="/style/hangover.css" />' type='text/css'
+      media='all'/>
 
-    <link rel='stylesheet' id='woocommerce-layout-css' href='<c:url value="/style/hangover-layout.css" />'
-          type='text/css' media='all'/>
-    <link rel='stylesheet' id='woocommerce-general-css' href='<c:url value="/style/woocommerce.css" />' type='text/css'
-          media='all'/>
-    <link rel='stylesheet' id='jquery-colorbox-css' href='<c:url value="/style/lib/colorbox.css" />' type='text/css'
-          media='all'/>
-    <%--<link rel='stylesheet' id='mailchimp-for-wp-checkbox-css' href='<c:url value="/style/lib/checkbox.min.css" />'
-          type='text/css' media='all'/>--%>
-    <link rel='stylesheet' id='theme53953-css' href='<c:url value="/style/main-style.css" />' type='text/css'
-          media='all'/>
-    <link rel='stylesheet' id='magnific-popup-css' href='<c:url value="/style/lib/magnific-popup.css" />' type='text/css'
-          media='all'/>
-    <link rel='stylesheet' id='mailchimp-for-wp-form-css' href='<c:url value="/style/lib/form.min.css" />' type='text/css'
-          media='all'/>
-    <!--[if lt IE 9]>
-    <link rel='stylesheet' id='theme_ie-css' href='<c:url value="/style/ie.css"/>' type='text/css' media='all'/>
-    <![endif]-->
-    <%--<link rel='stylesheet' id='cherry_prettyPhoto_css-css' href='<c:url value="/style/lib/prettyPhoto.css" />'
-          type='text/css' media='all'/>--%>
-    <script type="text/javascript">
-        var yith_wcwl_plugin_ajax_web_url = 'http://localhost:8080/hangover/comm/shortList/add/1.html';
-        /*var login_redirect_url = 'http://livedemo00.template-help.com/woocommerce_53953/wp-login.php?redirect_to=%2Fwoocommerce_53953%2Fshop%2F%3Forderby%3Dpopularity';*/
-    </script>
-    <script type='text/javascript' src='<c:url value="/js/lib/jquery-2.1.4.js" />'></script>
-    <%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.easing.1.3.js" />'></script>--%>
-    <%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.elastislide.js" />'></script>--%>
-    <script type='text/javascript' src='<c:url value="/js/lib/jquery-ui.min.js" />'></script>
-    <%--<script type='text/javascript'
-            src='//maps.googleapis.com/maps/api/js?v=3.exp&#038;sensor=false&#038;ver=4.2.7'></script>--%>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,visualization&sensor=false"></script>
-    <script type='text/javascript' src='<c:url value="/js/lib/jquery-migrate-1.2.1.min.js" />'></script>
-    <%--<script type='text/javascript' src='<c:url value="/js/lib/swfobject.js" />'></script>--%>
-    <%--<script type='text/javascript' src='<c:url value="/js/lib/modernizr.js" />'></script>--%>
-    <script type='text/javascript' src='<c:url value="/js/custom.js" />'></script>
-    <script type='text/javascript' src='<c:url value="/js/lib/bootstrap.min.js" />'></script>
-    <script type='text/javascript' src='<c:url value="/js/shop.js" />'></script>
-    <script type='text/javascript' src='<c:url value="/js/lib/zelect.js" />'></script>
+<link rel='stylesheet' id='woocommerce-layout-css' href='<c:url value="/style/hangover-layout.css" />'
+      type='text/css' media='all'/>
+<link rel='stylesheet' id='woocommerce-general-css' href='<c:url value="/style/woocommerce.css" />' type='text/css'
+      media='all'/>
+<link rel='stylesheet' id='jquery-colorbox-css' href='<c:url value="/style/lib/colorbox.css" />' type='text/css'
+      media='all'/>
+<%--<link rel='stylesheet' id='mailchimp-for-wp-checkbox-css' href='<c:url value="/style/lib/checkbox.min.css" />'
+type='text/css' media='all'/>--%>
+<link rel='stylesheet' id='theme53953-css' href='<c:url value="/style/main-style.css" />' type='text/css'
+      media='all'/>
+<link rel='stylesheet' id='magnific-popup-css' href='<c:url value="/style/lib/magnific-popup.css" />' type='text/css'
+      media='all'/>
+<link rel='stylesheet' id='mailchimp-for-wp-form-css' href='<c:url value="/style/lib/form.min.css" />' type='text/css'
+      media='all'/>
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='theme_ie-css' href='<c:url value="/style/ie.css"/>' type='text/css' media='all'/>
+<![endif]-->
+<%--<link rel='stylesheet' id='cherry_prettyPhoto_css-css' href='<c:url value="/style/lib/prettyPhoto.css" />'
+type='text/css' media='all'/>--%>
+<script type="text/javascript">
+    var yith_wcwl_plugin_ajax_web_url = 'http://localhost:8080/hangover/comm/shortList/add/1.html';
+    /*var login_redirect_url = 'http://livedemo00.template-help.com/woocommerce_53953/wp-login.php?redirect_to=%2Fwoocommerce_53953%2Fshop%2F%3Forderby%3Dpopularity';*/
+</script>
+<script type='text/javascript' src='<c:url value="/js/lib/jquery-2.1.4.js" />'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.easing.1.3.js" />'></script>--%>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.elastislide.js" />'></script>--%>
+<script type='text/javascript' src='<c:url value="/js/lib/jquery-ui.min.js" />'></script>
+<%--<script type='text/javascript'
+src='//maps.googleapis.com/maps/api/js?v=3.exp&#038;sensor=false&#038;ver=4.2.7'></script>--%>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places,visualization&sensor=false"></script>
+<script type='text/javascript' src='<c:url value="/js/lib/jquery-migrate-1.2.1.min.js" />'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/swfobject.js" />'></script>--%>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/modernizr.js" />'></script>--%>
+<script type='text/javascript' src='<c:url value="/js/custom.js" />'></script>
+<script type='text/javascript' src='<c:url value="/js/lib/bootstrap.min.js" />'></script>
+<script type='text/javascript' src='<c:url value="/js/shop.js" />'></script>
+<script type='text/javascript' src='<c:url value="/js/lib/zelect.js" />'></script>
 
-    <style type="text/css">
-        img.wp-smiley,
-        img.emoji {
-            display: inline !important;
-            border: none !important;
-            box-shadow: none !important;
-            height: 1em !important;
-            width: 1em !important;
-            margin: 0 .07em !important;
-            vertical-align: -0.1em !important;
-            background: none !important;
-            padding: 0 !important;
-        }
-    </style>
-    <style>
-        .wishlist_table .add_to_cart, .yith-wcwl-add-button > a.button.alt {
-            border-radius: 16px;
-            -moz-border-radius: 16px;
-            -webkit-border-radius: 16px;
-        }
-    </style>
-    <style type='text/css'>
-        body {
-            background-color: #ffffff
-        }
+<style type="text/css">
+    img.wp-smiley,
+    img.emoji {
+        display: inline !important;
+        border: none !important;
+        box-shadow: none !important;
+        height: 1em !important;
+        width: 1em !important;
+        margin: 0 .07em !important;
+        vertical-align: -0.1em !important;
+        background: none !important;
+        padding: 0 !important;
+    }
+</style>
+<style>
+    .wishlist_table .add_to_cart, .yith-wcwl-add-button > a.button.alt {
+        border-radius: 16px;
+        -moz-border-radius: 16px;
+        -webkit-border-radius: 16px;
+    }
+</style>
+<style type='text/css'>
+    body {
+        background-color: #ffffff
+    }
 
-        .header {
-            background-color: #0c0c0c
-        }
+    .header {
+        background-color: #0c0c0c
+    }
 
-    </style>
-    <style type='text/css'>
-        h1 {
-            font: normal 48px/48px Roboto;
-            color: #0c0c0c;
-        }
+</style>
+<style type='text/css'>
+    h1 {
+        font: normal 48px/48px Roboto;
+        color: #0c0c0c;
+    }
 
-        h2 {
-            font: normal 48px/48px Roboto;
-            color: #0c0c0c;
-        }
+    h2 {
+        font: normal 48px/48px Roboto;
+        color: #0c0c0c;
+    }
 
-        h3 {
-            /*font: bold 14px/25px Roboto;*/
-            color: #009587;
-        }
+    h3, h1 {
+        /*font: bold 14px/25px Roboto;*/
+        color: #009587;
+    }
 
-        h4 {
-            font: bold 14px/25px Roboto;
-            color: #009587;
-        }
+    h4 {
+        font: bold 14px/25px Roboto;
+        color: #009587;
+    }
 
-        h5 {
-            font: bold 14px/25px Roboto;
-            color: #009587;
-        }
+    h5 {
+        font: bold 14px/25px Roboto;
+        color: #009587;
+    }
 
-        h6 {
-            font: bold 14px/25px Roboto;
-            color: #009587;
-        }
+    h6 {
+        font: bold 14px/25px Roboto;
+        color: #009587;
+    }
 
-        body {
-            font-weight: normal;
-        }
+    body {
+        font-weight: normal;
+    }
 
-        .logo_h__txt, .logo_link {
-            font: normal 72px/72px Roboto;
-            color: #ffffff;
-        }
+    .logo_h__txt, .logo_link {
+        font: normal 72px/72px Roboto;
+        color: #ffffff;
+    }
 
-        .sf-menu > li > a {
-            font: normal 20px/20px Roboto;
-            color: #ffffff;
-        }
+    .sf-menu > li > a {
+        font: normal 20px/20px Roboto;
+        color: #ffffff;
+    }
 
-        .nav.footer-nav a {
-            font: bold 14px/20px Roboto;
-            color: #009587;
-        }
-    </style>
-    <title><fmt:message key="app.tag.line"/></title>
-    <decorator:head/>
-    <!--[if gte IE 9]><!-->
-    <script src="<c:url value="/js/lib/jquery.mobile.customized.min.js" />" type="text/javascript"></script>
-    <script type="text/javascript">
-        jQuery(function () {
-            jQuery('.sf-menu').mobileMenu({defaultText:"Navigate to..."});
+    .nav.footer-nav a {
+        font: bold 14px/20px Roboto;
+        color: #009587;
+    }
+</style>
+<title><fmt:message key="app.tag.line"/></title>
+<decorator:head/>
+<!--[if gte IE 9]><!-->
+<script src="<c:url value="/js/lib/jquery.mobile.customized.min.js" />" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery(function () {
+        jQuery('.sf-menu').mobileMenu({defaultText:"Navigate to..."});
+    });
+</script>
+<!--<![endif]-->
+<script type="text/javascript">
+    // Init navigation menu
+    jQuery(function () {
+        // main navigation init
+        jQuery('ul.sf-menu').superfish({
+            delay:1000, // the delay in milliseconds that the mouse can remain outside a sub-menu without it closing
+            animation:{
+                opacity:"show",
+                height:"show"
+            }, // used to animate the sub-menu open
+            speed:"normal", // animation speed
+            autoArrows:false, // generation of arrow mark-up (for submenu)
+            disableHI:true // to disable hoverIntent detection
         });
-    </script>
-    <!--<![endif]-->
-    <script type="text/javascript">
-        // Init navigation menu
-        jQuery(function () {
-            // main navigation init
-            jQuery('ul.sf-menu').superfish({
-                delay:1000, // the delay in milliseconds that the mouse can remain outside a sub-menu without it closing
-                animation:{
-                    opacity:"show",
-                    height:"show"
-                }, // used to animate the sub-menu open
-                speed:"normal", // animation speed
-                autoArrows:false, // generation of arrow mark-up (for submenu)
-                disableHI:true // to disable hoverIntent detection
-            });
 
-            //Zoom fix
-            //IPad/IPhone
-            var viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]'),
-                    ua = navigator.userAgent,
-                    gestureStart = function () {
-                        viewportmeta.content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6, initial-scale=1.0";
-                    },
-                    scaleFix = function () {
-                        if (viewportmeta && /iPhone|iPad/.test(ua) && !/Opera Mini/.test(ua)) {
-                            viewportmeta.content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
-                            document.addEventListener("gesturestart", gestureStart, false);
-                        }
-                    };
-            scaleFix();
-        });
-    </script>
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            if (!device.mobile() && !device.tablet()) {
-                jQuery('header .logo_box').tmStickUp({
-                    correctionSelector:jQuery('#wpadminbar'), listenSelector:jQuery('.listenSelector'), active:true, pseudo:true                });
-                /*jQuery('#sidebar').tmStickUp({
-                    correctionSelector:jQuery('#wpadminbar'), listenSelector:jQuery('.listenSelector'), active:true, pseudo:true});*/
-            }
-        });
-    </script>
+        //Zoom fix
+        //IPad/IPhone
+        var viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]'),
+                ua = navigator.userAgent,
+                gestureStart = function () {
+                    viewportmeta.content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6, initial-scale=1.0";
+                },
+                scaleFix = function () {
+                    if (viewportmeta && /iPhone|iPad/.test(ua) && !/Opera Mini/.test(ua)) {
+                        viewportmeta.content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                        document.addEventListener("gesturestart", gestureStart, false);
+                    }
+                };
+        scaleFix();
+    });
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        if (!device.mobile() && !device.tablet()) {
+            jQuery('header .logo_box').tmStickUp({
+                correctionSelector:jQuery('#wpadminbar'), listenSelector:jQuery('.listenSelector'), active:true, pseudo:true                });
+            /*jQuery('#sidebar').tmStickUp({
+             correctionSelector:jQuery('#wpadminbar'), listenSelector:jQuery('.listenSelector'), active:true, pseudo:true});*/
+        }
+    });
+</script>
 
 
 </head>
@@ -287,18 +288,19 @@
     /* ]]> */
 </script>
 </body>
-<script type='text/javascript' src='<c:url value="/js/lib/jquery.flexslider-min.js"/>'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.flexslider-min.js"/>'></script>--%>
 <script type='text/javascript' src='<c:url value="/js/lib/cherry-plugin.js" />'></script>
-<script type='text/javascript' src='<c:url value="/js/lib/jquery.mousewheel.min.js" />'></script>
-<script type='text/javascript' src='<c:url value="/js/lib/jquery.simplr.smoothscroll.min.js" />'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.mousewheel.min.js" />'></script>--%>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.simplr.smoothscroll.min.js" />'></script>--%>
 <script type='text/javascript' src='<c:url value="/js/lib/device.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/lib/cherry.parallax.js" />'></script>
+
 <script type='text/javascript' src='<c:url value="/js/script.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/lib/jquery.form.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/scripts.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/add-to-cart.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/lib/jquery.blockUI.min.js" />'></script>
-<script type='text/javascript' src='<c:url value="/js/hangover.min.js" />'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/hangover.min.js" />'></script>--%>
 <script type='text/javascript' src='<c:url value="/js/lib/jquery.cookie.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/cart-fragments.min.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/woocompare.js" />'></script>
@@ -313,10 +315,10 @@
 --%>
 <script type='text/javascript' src='<c:url value="/js/lib/tmstickup.js?ver=1.0.0" />'></script>
 <%--<script type='text/javascript' src='<c:url value="/js/lib/device.min.js?ver=1.0.0" />'></script>--%>
-<script type='text/javascript' src='<c:url value="/js/lib/jquery.zaccordion.min.js" />'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.zaccordion.min.js" />'></script>--%>
 <%--<script type='text/javascript' src='<c:url value="/js/lib/camera.min.js" />'></script>--%>
 <script type='text/javascript' src='<c:url value="/js/custom-script.js" />'></script>
-<script type='text/javascript' src='<c:url value="/js/lib/jquery.prettyPhoto.min.js" />'></script>
+<%--<script type='text/javascript' src='<c:url value="/js/lib/jquery.prettyPhoto.min.js" />'></script>--%>
 <script type='text/javascript' src='<c:url value="/js/lib/parallaxSlider.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/lib/jquery.elevatezoom.min-1.2.1.js" />'></script>
 <script type='text/javascript' src='<c:url value="/js/single-product.min-2.1.12.js" />'></script>

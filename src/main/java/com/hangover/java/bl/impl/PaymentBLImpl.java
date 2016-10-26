@@ -64,7 +64,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
     private StoreDao storeDao;
 
     @Autowired
-    private PushNotificationService pushNotificationService;
+    private PushNotificationService fcmPush;
 
     @Autowired
     private AsyncTask asyncTask;
@@ -75,6 +75,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
 
     @Autowired
     private ShoppingBL shoppingBL;
+
 
     @Override
     public PaymentGatewayDetail placeOrder(PlaceOrderDTO placeOrder, StatusDTO status) {
@@ -221,11 +222,14 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
                 to[i] = loggedInStaffs.get(i).getDeviceId();
             }
             message.setTo(to);
+            message.setSubject("New Order");
+            message.setContent(commonUtil.getText("push.notification.order.placed.content"));
             message.putContext("name", order.getCustomer().getName());
             message.putContext("mobile", order.getCustomer().getMobile());
+            message.putContext("orderId", order.getId()+"");
             message.putContext("orderNumber", order.getOrderNumber());
             logger.info("Sending push to store devices...");
-            pushNotificationService.transactional(message);
+            fcmPush.transactional(message);
         }
     }
     

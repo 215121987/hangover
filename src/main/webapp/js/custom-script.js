@@ -10,7 +10,18 @@
         });
 
 
-        $( "#dob" ).datepicker();
+        $('body').on('focus',"#dob", function(){
+            $(this).datepicker();
+            /* $( this).datepicker({
+             dateFormat: 'dd/mm/yy',
+             changeMonth: true,
+             changeYear: true
+             } );*/
+            $(this).datepicker("option","minDate", "0");
+            $(this).datepicker("option","minDate", "-60Y");
+            $(this).datepicker("option","maxDate", "-18Y");
+            $(this).datepicker("option","dateFormat", "dd/mm/yy");
+        });
 
         //Dropdown cart in header
         $('.cart-holder > h3').click(function () {
@@ -88,7 +99,7 @@
         $(document).on('submit', '#login_form', function (event) {
             event.preventDefault();
             var c = $(this).serialize();
-            $.post($(this).attr("action"), $(this).serialize(), function (response) {
+            $(this).ajaxSubmit(function (response) {
                 if (response.code == "200") {
                     parent.$.fn.colorbox.close();
                     window.top.location.reload();
@@ -104,37 +115,49 @@
 
         $(document).on('blur', '#register_form input[name=email]', function (event) {
             var element = this;
-            $.get('/hangover/validate/email.html', {email:$(this).val()}, function (response) {
-                if (response.code != "200") {
-                    element.setCustomValidity(response.message);
-                }else{
-                    element.setCustomValidity('');
-                }
-            });
+            var emailText = $(this).val();
+            if(undefined != emailText && null != emailText && emailText.trim() != ''){
+                $.get('/hangover/validate/email.html', {email:emailText}, function (response) {
+                    if (response.code != "200") {
+                        element.setCustomValidity(response.message);
+                    }else{
+                        element.setCustomValidity('');
+                    }
+                });
+            }
+
         });
 
         $(document).on('blur', '#register_form input[name=mobile]', function (event) {
             var element = this;
-            $.get('/hangover/validate/mobile.html', {mobile:$(this).val()}, function (response) {
-                if (response.code != "200") {
-                    element.setCustomValidity(response.message);
-                }else{
-                    element.setCustomValidity('');
-                }
-            });
+            var mobileText = $(this).val();
+            if(undefined != mobileText && null != mobileText && mobileText.trim() != ''){
+                $.get('/hangover/validate/mobile.html', {mobile:mobileText}, function (response) {
+                    if (response.code != "200") {
+                        element.setCustomValidity(response.message);
+                    }else{
+                        element.setCustomValidity('');
+                    }
+                });
+            }
         });
 
         $(document).on('submit', '#register_form', function (event) {
             event.preventDefault();
-            $.post($(this).attr("action"), $(this).serialize(), function (response) {
+            $(this).ajaxSubmit(function (response) {
                 if (response.code == "200") {
-                    parent.$.fn.colorbox.close();
-                    window.top.location.reload();
+                    //parent.$.fn.colorbox.close();
+                    //window.top.location.reload();
+                    $(".signup_action").slideUp();
+                    $(".signup_action").html("");
+                    $('.server_message').html(response.message);
+                    $('.server_message').slideDown();
                 } else {
-                    var username = document.getElementsByName("email")[0];
-                    var password = document.getElementsByName("mobile")[0];
-                    username.setCustomValidity(response.message);
-                    password.setCustomValidity(response.message);
+                    var fieldError = response.fielderror;
+                    for(var i=0;i<fieldError.length;i++){
+                        var input = document.getElementsByName(fieldError.key)[0];
+                        input.setCustomValidity(fieldError.value);
+                    }
                 }
             });
         });
@@ -143,7 +166,7 @@
         $(document).on('submit', '#address_form', function (event) {
             event.preventDefault();
             var c = $(this).serialize();
-            $.post($(this).attr("action"), $(this).serialize(), function (response) {
+            $(this).ajaxSubmit(function (response) {
                 if (response.code == "200") {
                     window.top.location.reload();
                 } else {

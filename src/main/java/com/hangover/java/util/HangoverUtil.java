@@ -180,6 +180,7 @@ public class HangoverUtil implements Constants{
             cartDTO.setItemDetailId(Long.parseLong(its[1]));
             cartDTO.setQuantity(Integer.parseInt(its[2]));
             cartDTO.setId(Long.parseLong(its[3]));
+            cartDTOs.add(cartDTO);
         }
         return cartDTOs;
     }
@@ -211,7 +212,9 @@ public class HangoverUtil implements Constants{
         cartDTO.setQuantity(cartItem.getQuantity());
         cartDTO.setName(cartItem.getItem().getName());
         cartDTO.setDescription(cartItem.getItem().getDescription());
-        cartDTO.setImageURL(cartItem.getItem().getImageURL().get(0));
+        //TODO: IN update cart case its coming null. because many places not fetcing item object from db. just created itemObject using its item id.
+        if(null!= cartItem.getItem().getImageURL() && cartItem.getItem().getImageURL().size()>0)
+            cartDTO.setImageURL(cartItem.getItem().getImageURL().get(0));
         return cartDTO;
     }
 

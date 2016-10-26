@@ -24,7 +24,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -128,27 +131,43 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
             return user;
         }
         HangoverUtil.processRole(user);
-        user.setUsername(user.getEmail());
-        user.setPassword(passwordEncoder.encodePassword(user.getPassword(), null));
+        user.setUsername(user.getMobile());
+        user.setPassword(passwordEncoder.encodePassword(HangoverUtil.getTempPassword(), null));
         try {
             boolean isRegister = null == user.getId();
+            if(isRegister){
+                String filePath = writeUserAgeProof(user.getMobile(), user.getAgeProof().getInputStream(), user.getAgeProof().getOriginalFilename());
+                user.setAgeProofFilePath(filePath);
+            }
             userDao.saveUser(user);
             if(isRegister){
                 Map<String,String> map = new HashMap<String, String>();
                 map.put("username", user.getUsername());
-                map.put("password", user.getConfirmPassword());
+                //map.put("password", user.getConfirmPassword());
                 this.taskExecutor.execute(this.asyncTask.getRegisterNotificationTask(map));
+                saveSuccessMessage(status, commonUtil.getText("success.user.register", status.getLocale()));
             }
-            saveSuccessMessage(status, commonUtil.getText("success.save", status.getLocale()));
         } catch (DuplicateObjectException e) {
             user.setPassword(user.getConfirmPassword());
             status.setCode(HttpStatus.CONFLICT.value());
             status.setMessage(commonUtil.getText("error.email.or.mobile.already.exist",
                     new Object[]{user.getEmail(),user.getMobile()}, status.getLocale()));
+        } catch (IOException e) {
+            status.setMessage("Unable to write file on server");
+            saveErrorMessage(status, HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
         return user;
     }
 
+    public String writeUserAgeProof(String newFileName, InputStream content, String fileName) throws IOException {
+        String fileExtension = fileName.split("\\.")[1];
+        String path = CommonUtil.getProperty("file.location.age.proof");
+        fileName = newFileName+"."+fileExtension;
+        String fullPath = path+fileName;
+        FileUtil.write(fullPath, content);
+        return fileName;
+    }
+    
     @Override
     public void delete(Long id) {
         UserEntity userEntity = userDao.getUser(id);

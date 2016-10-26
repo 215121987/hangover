@@ -8,6 +8,8 @@ import com.hangover.java.model.type.LoginStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,8 @@ public interface UserBL {
     UserEntity getUser(Long id);
 
     UserEntity save(UserEntity userEntity, StatusDTO status);
+
+    String writeUserAgeProof(String newFileName, InputStream content, String fileName) throws IOException;
     
     void delete(Long id);
 

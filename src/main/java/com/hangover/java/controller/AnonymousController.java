@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -156,19 +157,19 @@ public class AnonymousController extends BaseController{
         StatusDTO status = new StatusDTO();
         userBL.save(user, status);
         saveStatus(request, status);
-        String RETURN_PATH = "";
+        if(isAjaxRequest(request)){
+            responseAsJSON(response, getStatusAsJSON(status));
+            return null;
+        }
+        request.setAttribute("status", status);
         if(status.getCode()==HttpStatus.OK.value()){
-            RETURN_PATH = performLogin(request,response, user.getMobile(),user.getConfirmPassword(),false);
+            //this.userBL.writeUserAgeProof(user.getId(), ageProof.getInputStream(), ageProof.getOriginalFilename());
+            return sendRedirect("/login.html");
         }else{
             user.setPassword(user.getConfirmPassword());
             request.setAttribute("user", user);
-            RETURN_PATH = "register";
-            if(isAjaxRequest(request)){
-                responseAsJSON(response, getStatusAsJSON(status));
-                return null;
-            }
+            return "register";
         }
-        return RETURN_PATH;
     }
 
     @RequestMapping("/register")

@@ -8,6 +8,7 @@ import com.hangover.java.model.type.PasswordType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,8 +36,9 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     private String name;
     private String email;
     private String mobile;
-    private boolean numberVerified = false;
+    private boolean numberVerified = true;
     private boolean emailVerified = false;
+    private boolean ageVerified = false;
     private String alternateNumber;
     private String dob;
     private Set<Role> roles;
@@ -46,6 +48,8 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     private boolean credentialsNonExpired=true;
     private boolean enabled=true;
     private Set<String> roleName = new HashSet<String>();
+    private String ageProofFilePath;
+    private MultipartFile ageProof;
 
 
     public String getName() {
@@ -57,7 +61,7 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     }
 
 
-    @Column(unique = true)
+    @Column()
     public String getEmail() {
         return email;
     }
@@ -92,6 +96,15 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    @Column(name = "is_age_verified")
+    public boolean isAgeVerified() {
+        return ageVerified;
+    }
+
+    public void setAgeVerified(boolean ageVerified) {
+        this.ageVerified = ageVerified;
     }
 
     public String getAlternateNumber() {
@@ -159,6 +172,7 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
         this.password = password;
     }
 
+    @JsonIgnore
     @Transient
     public String getConfirmPassword() {
         return confirmPassword;
@@ -269,6 +283,25 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
         UserEntity user = new UserEntity();
         user.setId(userId);
         return user;
+    }
+
+    @Column(name = "age_proof_file_path")
+    public String getAgeProofFilePath() {
+        return ageProofFilePath;
+    }
+
+    public void setAgeProofFilePath(String ageProofFilePath) {
+        this.ageProofFilePath = ageProofFilePath;
+    }
+
+    @Transient
+    @JsonIgnore
+    public MultipartFile getAgeProof() {
+        return ageProof;
+    }
+
+    public void setAgeProof(MultipartFile ageProof) {
+        this.ageProof = ageProof;
     }
 }
 

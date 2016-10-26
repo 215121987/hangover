@@ -30,7 +30,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Component
-public class GCMPushNotificationService implements PushNotificationService{
+public class GCMPushNotificationService /*implements PushNotificationService*/{
 
     private static Logger logger = LoggerFactory.getLogger(GCMPushNotificationService.class);
 
@@ -39,13 +39,13 @@ public class GCMPushNotificationService implements PushNotificationService{
     private String key;
 
 
-    @Override
+    /*@Override*/
     public void promotional(Message message) {
         JSONObject jsonObject = new JSONObject();
         makeGCMRequest(jsonObject);
     }
 
-    @Override
+    /*@Override*/
     public void transactional(Message message) {
         /*JSONObject jsonObject = new JSONObject();
         makeGCMRequest(jsonObject);*/

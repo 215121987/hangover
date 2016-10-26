@@ -22,6 +22,7 @@ public interface ServiceConstants {
     static final String PARAM_DOB = "dob";
     static final String PARAM_START_DATE = "start_date";
     static final String PARAM_OTP = "otp";
+    static final String PARAM_AGE_PROOF = "ageProof";
 
 
     /*Address*/

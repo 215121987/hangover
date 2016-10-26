@@ -383,3 +383,17 @@ i.fa.fa-align-justify, .item-block  i.fa.fa-user{
 .message_highlight,.result_message, .message_note{
     padding: 10px;
 }
+
+
+.label_info{
+    color: #DD0000;
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.server_message{
+    text-align: center;
+    font-size: 24px;
+    display: none;
+
+}

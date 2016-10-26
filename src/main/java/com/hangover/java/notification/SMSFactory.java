@@ -51,7 +51,7 @@ public class SMSFactory {
         Message message = new Message();
         UserEntity user = userDao.getUserByUsername(username);
         message.setTo(user.getMobile());
-        String temPassword ="Welcome123";
+        String temPassword ="Welcome123";//HangoverUtil.getAlphaNumeric(6);
         user.setPassword(passwordEncoder.encode(temPassword));
         user.setPasswordType(PasswordType.TEMPORARY);
         userDao.save(user);
@@ -65,12 +65,15 @@ public class SMSFactory {
     public Message getRegistrationMessage(Map<String,String> map){
         Message message = new Message();
         UserEntity user = userDao.getUserByUsername(map.get("username"));
+        String temPassword ="Welcome123";//HangoverUtil.getAlphaNumeric(6);
+        user.setPassword(passwordEncoder.encode(temPassword));
+        user.setPasswordType(PasswordType.TEMPORARY);
         message.setTo(user.getMobile());
         SMSTemplateEntity smsTemplate = userDao.getMasterData(SMSTemplateEntity.class, "type", MessageType.REGISTRATION_NOTIFICATION);
         String sms = smsTemplate.getMessage();
         sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, user.getName());
         sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, map.get("username"));
-        sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, map.get("password"));
+        sms = sms.replaceFirst(SMS_DYNAMIC_TEXT, temPassword);
         message.setContent(sms);
         return message;
     }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,38 +44,55 @@ public class ValidatorUtil implements Constants {
         /*if (isNullOrEmpty(userEntity.getEmail()))
             status.addError(commonUtil.getText("error.email.required", status.getLocale()));
         else*/
-        if (StringUtils.isEmpty(userEntity.getEmail()) &&!isValidEmail(userEntity.getEmail()))
+        if (StringUtils.isNotEmpty(userEntity.getEmail()) && !isValidEmail(userEntity.getEmail())){
             status.addError(commonUtil.getText("error.email.invalid", status.getLocale()));
+            status.put("email", commonUtil.getText("error.email.invalid", status.getLocale()));
+        }
 
         /*if (isNullOrEmpty(userEntity.getUsername()))
             status.addError(commonUtil.getText("error.username.required", status.getLocale()));
         else if (!isValidEmail(userEntity.getEmail()) && !isValidMobile(userEntity.getMobile()))
             status.addError(commonUtil.getText("error.username.invalid", status.getLocale()));*/
 
-        if (StringUtils.isEmpty(userEntity.getMobile()))
+        if (StringUtils.isEmpty(userEntity.getMobile())){
             status.addError(commonUtil.getText("error.mobile.required", status.getLocale()));
-        else if (!isValidMobile(userEntity.getMobile()))
+            status.put("mobile", commonUtil.getText("error.mobile.required", status.getLocale()));
+        } else if (!isValidMobile(userEntity.getMobile())){
             status.addError(commonUtil.getText("error.mobile.invalid", status.getLocale()));
-
-        if (StringUtils.isEmpty(userEntity.getPassword()))
+            status.put("mobile",commonUtil.getText("error.mobile.invalid", status.getLocale()));
+        }
+        /*if (StringUtils.isEmpty(userEntity.getPassword()))
             status.addError(commonUtil.getText("error.password.required", status.getLocale()));
         else if (!userEntity.getPassword().equals(userEntity.getConfirmPassword()))
             status.addError(commonUtil.getText("error.password.and.confirm.password.mismatch", status.getLocale()));
         else if (!isValidPassword(userEntity.getPassword()))
-            status.addError(commonUtil.getText("error.password.invalid", status.getLocale()));
+            status.addError(commonUtil.getText("error.password.invalid", status.getLocale()));*/
 
-        if (StringUtils.isEmpty(userEntity.getName()))
+        if (StringUtils.isEmpty(userEntity.getName())){
             status.addError(commonUtil.getText("error.first.name.required", status.getLocale()));
-        else if (!isValidLength(userEntity.getName(), NORMAL_TEXT_FIELD_LENGTH))
+            status.put("name",commonUtil.getText("error.first.name.required", status.getLocale()));
+        }else if (!isValidLength(userEntity.getName(), NORMAL_TEXT_FIELD_LENGTH)){
             status.addError(commonUtil.getText("error.text.length.must.be.less.than",
                     new Object[]{PARAM_USER_NAME, NORMAL_TEXT_FIELD_LENGTH}, status.getLocale()));
+            status.put("name",commonUtil.getText("error.text.length.must.be.less.than", new Object[]{PARAM_USER_NAME, NORMAL_TEXT_FIELD_LENGTH}, status.getLocale()));
+        }
 
         if(StringUtils.isEmpty(userEntity.getDob())){
             status.addError(commonUtil.getText("error.dob.required", status.getLocale()));
+            status.put("dob",commonUtil.getText("error.dob.required", status.getLocale()));
         }else if(!isDateValid(userEntity.getDob())){
             status.addError(commonUtil.getText("error.invalid.dob", status.getLocale()));
+            status.put("dob",commonUtil.getText("error.invalid.dob", status.getLocale()));
         }else if(calculateAge(userEntity.getDob())< Integer.parseInt(CommonUtil.getProperty("user.age.limit"))){
             status.addError(commonUtil.getText("error.age.must.be.greater.than.18", status.getLocale()));
+            status.put("dob",commonUtil.getText("error.age.must.be.greater.than.18", status.getLocale()));
+        }
+
+        if(null == userEntity.getAgeProof() || userEntity.getAgeProof().isEmpty()){
+            status.addError(commonUtil.getText("error.age.proof.required"));
+            status.put("ageProof",commonUtil.getText("error.age.proof.required"));
+        }else{
+            //TDO: Need to add validation to check file type.
         }
     }
 
@@ -159,6 +177,7 @@ public class ValidatorUtil implements Constants {
             Date date = sdf.parse(dateToValidate);
             System.out.println(date);
         } catch (ParseException e) {
+            e.printStackTrace();
             return false;
         }
         return true;

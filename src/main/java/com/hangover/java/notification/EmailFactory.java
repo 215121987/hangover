@@ -64,7 +64,7 @@ public class EmailFactory {
         UserEntity user = userDao.getUserByUsername(map.get("username"));
         message.putContext("name", user.getName());
         message.putContext("username", map.get("username"));
-        message.putContext("password", map.get("password"));
+        //message.putContext("password", map.get("password"));
         message.putContext("login_url", commonUtil.getText("application.login.url"));
         return message;
     }

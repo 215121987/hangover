@@ -5,11 +5,11 @@ Welcome in Hangover.
 Your login Credential
 
     username: ${username}
-    password: ${password}
+    #*password: ${password}*#
 
 Click here to login to hangover.
 
 Note: This is computer generated copy. Do no reply.
 
 For,
-Hangover Ltd
+Liquor at door

@@ -7,14 +7,21 @@ import com.hangover.java.dto.LoginStatusDTO;
 import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.UserEntity;
 import com.hangover.java.model.type.OfferFor;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by IntelliJ IDEA.
@@ -54,13 +61,16 @@ public class AnonymousService extends BaseService{
 
     @POST
     @Path("/register")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response saveUser(@FormParam(PARAM_USER_EMAIL) String email,
                              @FormParam(PARAM_USER_PASSWORD) String password,
                              @FormParam(PARAM_USER_CONFIRM_PASSWORD) String confirmPassword,
                              @FormParam(PARAM_NAME) String name,
                              @FormParam(PARAM_DOB) String dob,
                              @FormParam(PARAM_MOBILE) String mobile,
-                             @FormParam(PARAM_DEVICE_ID) String deviceId) {
+                             @FormParam(PARAM_DEVICE_ID)String deviceId,
+                             @FormDataParam(PARAM_AGE_PROOF)  InputStream ageProofStream,
+                             @FormDataParam(PARAM_AGE_PROOF) FormDataContentDisposition fileDetail) throws IOException {
         UserEntity user = new UserEntity();
         user.setEmail(email);
         user.setName(name);
@@ -69,6 +79,8 @@ public class AnonymousService extends BaseService{
         user.setDob(dob);
         user.setMobile(mobile);
         StatusDTO status = new StatusDTO();
+        MultipartFile ageProofFile =getMultipartFile(fileDetail, ageProofStream);
+        user.setAgeProof(ageProofFile);
         userBL.save(user, status);
         if(status.getCode() == HttpStatus.OK.value()){
             LoginStatusDTO loginStatusDTO = userBL.createSession( deviceId, user);
@@ -116,5 +128,53 @@ public class AnonymousService extends BaseService{
     public Response home(@QueryParam("from") String from) {
         HomeDTO homeDTO = commonBL.getHome(OfferFor.valueOf(from));
         return sendResponse(homeDTO);
+    }
+
+    private MultipartFile getMultipartFile(final FormDataContentDisposition fileDetail, final InputStream ageProofStream ){
+        if(null != fileDetail && null != ageProofStream){
+            return new MultipartFile() {
+                @Override
+                public String getName() {
+                    return fileDetail.getName();
+                }
+
+                @Override
+                public String getOriginalFilename() {
+                    return fileDetail.getFileName();
+                }
+
+                @Override
+                public String getContentType() {
+                    return fileDetail.getType();
+                }
+
+                @Override
+                public boolean isEmpty() {
+                    return null== ageProofStream || fileDetail.getSize()<=0;
+                }
+
+                @Override
+                public long getSize() {
+                    return fileDetail.getSize();
+                }
+
+                @Override
+                public byte[] getBytes() throws IOException {
+                    return IOUtils.toByteArray(ageProofStream);
+                }
+
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    return ageProofStream;
+                }
+
+                @Override
+                public void transferTo(File dest) throws IOException, IllegalStateException {
+                    //TODO: No supporting in this application.
+                }
+            };
+        }else{
+            return null;
+        }
     }
 }

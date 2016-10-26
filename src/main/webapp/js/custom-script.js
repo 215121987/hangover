@@ -153,7 +153,7 @@
                     $('.server_message').html(response.message);
                     $('.server_message').slideDown();
                 } else {
-                    var fieldError = response.fielderror;
+                    var fieldError = response.fieldError;
                     for(var i=0;i<fieldError.length;i++){
                         var input = document.getElementsByName(fieldError.key)[0];
                         input.setCustomValidity(fieldError.value);

@@ -55,6 +55,13 @@ public class BaseController implements Constants {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", statusDTO.getCode());
         jsonObject.put("message", statusDTO.getMessage());
+        JSONObject fieldError = new JSONObject();
+        if(null!= statusDTO.getFielderror()){
+            for(String key : statusDTO.getFielderror().keySet()){
+                fieldError.put(key,statusDTO.getFielderror().get(key));
+            }
+        }
+        jsonObject.put("fieldError", fieldError);
         return jsonObject;
     }
 

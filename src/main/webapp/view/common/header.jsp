@@ -44,10 +44,13 @@
                     </div>
                 </div>
                 <div class="delivery_location_block">
-                    <div class="delivery_location_wrapper hide" id="delivery_location" title="Delivery Location">
+                    <div class="delivery_location_wrapper lfloat hide" id="delivery_location" title="Delivery Location">
                         <i class="fa fa-map-marker" style="font-size: 15px;"></i>
                         <span class="delivery_location"></span>
                     </div>
+                    <security:authorize access="isAuthenticated()">
+                        <div class="login_detail rfloat" style="margin-left: 5px;">| Welcome: ${sessionScope.fullName}</div>
+                    </security:authorize>
                 </div>
                 <div class="menu-wrapper" style="list-style: none;float: right;">
                     <ul>

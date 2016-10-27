@@ -496,21 +496,26 @@ if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
     /*Checkout*/
     @RequestMapping(value = "/checkout")
     public String checkout(HttpServletRequest request) {
-        List<CartDTO> cartDTOs;
+        String RETURN_PATH = "/customer/checkout";
+        List<CartDTO> cartDTOs = new ArrayList<CartDTO>();
         request.setAttribute(ACTION_PLACE_ORDER, true);
         if (isUserLoggedIn(request)) {
-            cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingBL.getCartItem(getCurrentUsers().getId()));
-            Map<String, Object> filterParam = new HashMap<String, Object>();
-            Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
-            if (null != cookie) {
-                filterParam.put("zipCode", cookie.getValue());
+            if(getCurrentUsers().isAgeVerified()){
+                cartDTOs = HangoverUtil.getCartDTOFromShoppingCartItems(shoppingBL.getCartItem(getCurrentUsers().getId()));
+                Map<String, Object> filterParam = new HashMap<String, Object>();
+                Cookie cookie = HangoverUtil.getCookie(request.getCookies(), COOKIES_CUSTOMER_LOCATION);
+                if (null != cookie) {
+                    filterParam.put("zipCode", cookie.getValue());
+                }
+                List<AddressEntity> addressList = userBL.getUserAddress(getCurrentUsers().getId(), filterParam);
+                request.setAttribute("addressList", addressList);
+            }else{
+                request.setAttribute(SER_AGE_VERIFIED, false);
+                RETURN_PATH = "/shop/emptyCart";
             }
-            List<AddressEntity> addressList = userBL.getUserAddress(getCurrentUsers().getId(), filterParam);
-            request.setAttribute("addressList", addressList);
         } else {
             cartDTOs = HangoverUtil.getCartDTO(HangoverUtil.getCookie(request.getCookies(), COOKIES_CART_HASH), shoppingBL);
         }
-        String RETURN_PATH = "/customer/checkout";
         if (null == cartDTOs || cartDTOs.size() <= 0) {
             RETURN_PATH = "/shop/emptyCart";
         }

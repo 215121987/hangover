@@ -68,9 +68,8 @@ public class Authentication extends SavedRequestAwareAuthenticationSuccessHandle
          this.user = (UserEntity) authentication.getPrincipal();
         HttpSession session = request.getSession();
         session.setAttribute(Constants.LOGGED_IN_USER_ID, user.getId());
-        session.setAttribute(Constants.LOGGED_IN_USERNAME, user.getEmail());
+        session.setAttribute(Constants.LOGGED_IN_USERNAME, user.getUsername());
         session.setAttribute(Constants.LOGGED_IN_FULL_NAME, user.getName());
-        session.setAttribute(Constants.PATTERN_DOUBLE, ValidatorUtil.PATTERN_DOUBLE);
         List<SupplierStaffEntity> supplierStaffs = commonBL.getEntities(SupplierStaffEntity.class, "user", user.getId());
         if(null!=supplierStaffs && supplierStaffs.size()>0){
             SupplierStaffEntity supplierStaff =  supplierStaffs.get(0);

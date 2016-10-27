@@ -13,8 +13,7 @@
                 <div><span class="standard-price"> ${cartSummary.netAmount}</span></div>
             </div>
             <c:if test="${empty placeOrder || placeOrder eq false}">
-                <a href='<c:url value="/comm/checkout.html"/>' class="btn btn-primary"
-                   data-gaq-event="Cart~$~Place_order~$~|6">PLACE ORDER</a>
+                <a href='<c:url value="/comm/checkout.html"/>' class="btn btn-primary">PLACE ORDER</a>
             </c:if>
             <div class="summary-heading mob-accordion text-uppercase">order summary
                 <span class="accor-icon common-sprite visible-xs-inline-block"></span>

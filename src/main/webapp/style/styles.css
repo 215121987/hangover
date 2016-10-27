@@ -323,13 +323,11 @@ div.wpcf7 .placeheld {
     z-index: 3;
     top: 0;
     position: absolute;
-    display: block;left: 71%
-}
-
-.delivery_location_wrapper{
-    color: #ffffff;
+    display: block;left: 71%;
+    color: #FFFFFF;
     font-size: 10px;
     margin-top: 3px;
+
 }
 
 #delivery_location .delivery_location{
@@ -395,5 +393,17 @@ i.fa.fa-align-justify, .item-block  i.fa.fa-user{
     text-align: center;
     font-size: 24px;
     display: none;
+}
 
+.btn_disable{
+    color: #E8E8E8;
+    cursor: no-drop;
+}
+
+.lfloat{
+    float: left;
+}
+
+.rfloat{
+    float: right;
 }

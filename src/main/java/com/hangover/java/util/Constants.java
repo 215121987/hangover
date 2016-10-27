@@ -30,6 +30,7 @@ public interface Constants {
     static final String LOGGED_IN_FULL_NAME = "fullName";
     static final String LOGGED_IN_USER_SUPPLIER_ID = "supplierId";
     static final String LOGGED_IN_USER_STORE_ID = "storeId";
+    static final String SER_AGE_VERIFIED = "ageVerified";
 
     static final String PARAM_USER_NAME = "name";
     static final String PARAM_USER_PROFILE_PICK = "profile_pick";

@@ -105,15 +105,15 @@ public class ValidatorUtil implements Constants {
             dob.setTime(birthDate);
             Calendar today = Calendar.getInstance();
             int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-            if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR))
+            if(today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)){
+                age--;
+            }else if (today.get(Calendar.MONTH)== dob.get(Calendar.MONTH) && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH))
                 age--;
             return age;
         } catch (DataFormatException e) {
             return 0;
         }
     }
-
-
 
     public void validateUserUpdateAbleFiled(String name, String value, StatusDTO status) {
         name = null!= name?name.trim():name;

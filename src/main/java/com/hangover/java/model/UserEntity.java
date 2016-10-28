@@ -142,7 +142,7 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     }
 
     @JsonIgnore
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "password_type")
     public PasswordType getPasswordType() {
         return passwordType;

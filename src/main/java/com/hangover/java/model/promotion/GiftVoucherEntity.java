@@ -60,7 +60,7 @@ public class GiftVoucherEntity extends BaseEntity{
         this.validTill = validTill;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public VoucherStatus getStatus() {
         return status;
     }

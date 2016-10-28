@@ -5,6 +5,7 @@ import com.hangover.java.model.type.OfferType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,7 +39,7 @@ public class OffersEntity extends BaseEntity{
         this.imageURL = imageURL;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "offer_for")
     public OfferFor getOfferFor() {
         return offerFor;
@@ -72,7 +73,7 @@ public class OffersEntity extends BaseEntity{
         this.subTitle = subTitle;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "offer_type")
     public OfferType getOfferType() {
         return offerType;

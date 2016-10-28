@@ -85,7 +85,7 @@ public class ShippingEntity extends BaseEntity{
         this.pickedBy = pickedBy;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public ShippingState getState() {
         return state;
     }

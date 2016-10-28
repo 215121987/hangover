@@ -120,7 +120,7 @@ public class ItemEntity extends BaseEntity{
         getItemDetailList().add(itemDetail);
     }
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "item_status", nullable = true)
     public ItemStatus getStatus() {
         return status;

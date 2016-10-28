@@ -80,7 +80,7 @@ public class SupplierEntity extends BaseEntity{
         this.contactNumber = contactNumber;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public Status getStatus() {
         return status;
     }

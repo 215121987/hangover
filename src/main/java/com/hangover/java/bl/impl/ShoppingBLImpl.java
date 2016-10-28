@@ -213,7 +213,8 @@ public class ShoppingBLImpl extends BaseBL implements ShoppingBL, Constants {
     @Override
     public ItemDetailEntity getItemDetailWithItem(Long itemDetailId) {
         ItemDetailEntity itemDetail = shoppingDao.get(ItemDetailEntity.class, itemDetailId);
-        HangoverUtil.initializeAssociatedEntity(itemDetail, "item");
+        if(null!= itemDetail)
+            HangoverUtil.initializeAssociatedEntity(itemDetail, "item");
         return itemDetail;
     }
 

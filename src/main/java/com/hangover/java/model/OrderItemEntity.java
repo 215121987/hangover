@@ -76,7 +76,7 @@ public class OrderItemEntity extends BaseEntity{
         this.order = order;
     }
 
-    @Enumerated()
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_item_state")
     public OrderItemState getOrderItemState() {
         return orderItemState;

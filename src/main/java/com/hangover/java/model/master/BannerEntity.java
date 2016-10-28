@@ -60,7 +60,7 @@ public class BannerEntity {
         this.LImageURL = LImageURL;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "banner_type")
     public BannerType getBannerType() {
         return bannerType;

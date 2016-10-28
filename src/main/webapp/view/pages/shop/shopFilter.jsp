@@ -65,7 +65,7 @@
             <input type="text" data-name="filterSearch-Brand" placeholder="Search Brand"
                    class="input-filter js-searchable-box">
 
-            <div data-name="Brand" class="filter-inner ">
+            <div data-name="Brand" class="filter-inner" style="overflow-y: scroll;max-height: 200px;">
                 <c:forEach items="${brands}" var="brand">
                     <div class="sdCheckbox filters-list ">
                         <input type="checkbox" value="${brand.name}" name="brandName" class="filter-value visible-filter"

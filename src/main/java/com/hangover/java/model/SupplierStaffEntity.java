@@ -67,7 +67,7 @@ public class SupplierStaffEntity extends BaseEntity{
     }
 
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public Status getStatus() {
         return status;
     }

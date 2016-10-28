@@ -65,7 +65,7 @@ public class OrderEntity extends BaseEntity{
         this.totalAmount = totalAmount;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_from")
     public OrderFrom getOrderFrom() {
         return orderFrom;

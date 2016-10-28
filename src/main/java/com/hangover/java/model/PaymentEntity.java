@@ -51,7 +51,7 @@ public class PaymentEntity extends BaseEntity{
         this.transactionId = transactionId;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public PaymentStatus getStatus() {
         return status;
     }

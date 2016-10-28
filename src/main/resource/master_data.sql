@@ -5,9 +5,9 @@ insert into role(id,name, description) value(4, 'ROLE_CUSTOMER','Customer');
 insert into role(id,name, description) value(5, 'ROLE_STAFF','Staff');
 insert into role(id,name, description) value(6, 'ROLE_DELIVERY','Delivery');
 insert into user(id,created_at, updated_at,accountNonExpired,accountNonLocked,credentialsNonExpired, enabled,
-  name, username, email, password, password_type, is_age_verified)
-   value(1, '2015-06-26 12:40:55', '2015-06-26 12:40:55',1,1,1,1, 'Ashif Qureshi','ashifqureshi15@gmail.com','ashifqureshi15@gmail.com',
-'8e5d3299950d242bd51ea91c68ac08f9a79852b83a84822e3cc33ae51c3bea4208800afba20c6637c0c1d102bffbdf9cd3ddeb30658992c5553ab6d8ba0363f5',0,1);
+  name, username,mobile, email, password, password_type,is_email_verified,is_number_verified, is_age_verified)
+   value(1, '2015-06-26 12:40:55', '2015-06-26 12:40:55',1,1,1,1, 'Ashif Qureshi','8050283640','8050283640','ashifqureshi15@gmail.com',
+'8e5d3299950d242bd51ea91c68ac08f9a79852b83a84822e3cc33ae51c3bea4208800afba20c6637c0c1d102bffbdf9cd3ddeb30658992c5553ab6d8ba0363f5','PERMANENT',1,1,1);
 insert into user_address(id, address, street, city, state, country, zipCode, user_id) value(1,'4th B cross, 9th Main', 'New Thippasandra', 'Bangalore', 'Karnataka', 'India', '560075',1);
 insert into user_role(user_id,role_id) value(1,1);
 
@@ -48,25 +48,25 @@ insert into brand(id, code, name,displayName, description, category_id) value(19
 
 insert into supplier(id, code, companyName) value(1,'lad', 'Liquor At Door');
 insert into supplier_store(id, street, city,state, country, zipCode,supplier_id , mainBranch) value(1,'New Thippasandra', 'Bangalore', 'Karnataka', 'India','560075', 1, 1);
-insert into supplier_staff(user_id, supplier_id, status, store_id) value(1,1,0,1);
+insert into supplier_staff(user_id, supplier_id, status, store_id) value(1,1,'ACTIVE',1);
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h3>Get up to<br> 10% off</h3><h4>on Vodka</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://104.155.202.8/hangover/images/banner/item-banner-3.jpg',1,'');
+value('<h3>Get up to<br> 10% off</h3><h4>on Vodka</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 'GENERAL_OFFER', 'WEB', 'http://104.155.202.8/hangover/images/banner/item-banner-3.jpg',1,'');
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h3>Get up to<br> 10% off</h3><h4>on Beer</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://104.155.202.8/hangover/images/banner/item-banner-2.jpg',1,'');
+value('<h3>Get up to<br> 10% off</h3><h4>on Beer</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 'GENERAL_OFFER', 'WEB', 'http://104.155.202.8/hangover/images/banner/item-banner-2.jpg',1,'');
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h3>Get up to<br> 10% off</h3><h4>on Whisky</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 3, 0, 'http://104.155.202.8/hangover/images/banner/item-banner-1.jpg',1,'');
+value('<h3>Get up to<br> 10% off</h3><h4>on Whisky</h4><h5>more than 50 items</h5>', '<h3>Free shipping</h3><h5>on orders over Rs299</h5>', 'GENERAL_OFFER', 'WEB', 'http://104.155.202.8/hangover/images/banner/item-banner-1.jpg',1,'');
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h5>Pure organic grapes</h5>', '<h3>100%</h3><h4>Great tasting wine with a splash of fruit. Wines for momentous encounters.</h4>', 2, 0,'',1,'buy today for Rs399');
+value('<h5>Pure organic grapes</h5>', '<h3>100%</h3><h4>Great tasting wine with a splash of fruit. Wines for momentous encounters.</h4>', 'SPECIFIC_OFFER', 'WEB','',1,'buy today for Rs399');
 
 
 insert into offers(title, subTitle, offer_type, offer_for, image_url, priority, description)
-value('<h4>Big sale<br/> of the year!</h4><h3>save up to 10%</h3>', '<h5>buy a 1l bottle for the 750ml price and</h5><p>get 30%<br/> off</p>', 0, 0,'http://104.155.202.8/hangover/images/banner/banner-2.jpg',1,'');
+value('<h4>Big sale<br/> of the year!</h4><h3>save up to 10%</h3>', '<h5>buy a 1l bottle for the 750ml price and</h5><p>get 30%<br/> off</p>', 'EXPRESS_OFFER', 'WEB','http://104.155.202.8/hangover/images/banner/banner-2.jpg',1,'');
 
-insert into banner(large_image_url, banner_type) value('http://104.155.202.8/hangover/images/banner/banner-1.jpg',0);
+insert into banner(large_image_url, banner_type) value('http://104.155.202.8/hangover/images/banner/banner-1.jpg','HOME_BANNER');
 
 ALTER TABLE item MODIFY description blob;
 

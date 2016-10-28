@@ -42,7 +42,7 @@ public class SMSTemplateEntity{
         this.message = message;
     }
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public MessageType getType() {
         return type;
     }

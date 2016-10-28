@@ -75,7 +75,7 @@ public class LoginStatusEntity extends BaseEntity{
         this.store = store;
     }
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "login_status", nullable = false)
     public LoginStatus getLoginStatus() {
         return loginStatus;

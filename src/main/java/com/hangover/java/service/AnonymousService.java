@@ -46,8 +46,9 @@ public class AnonymousService extends BaseService{
     @Path("/login")
     public Response login(@FormParam(PARAM_USERNAME) String username,
                           @FormParam(PARAM_USER_PASSWORD) String password,
-                          @FormParam(PARAM_DEVICE_ID) String deviceId) {
-        LoginStatusDTO loginStatusDTO = userBL.login(username, password, deviceId);
+                          @FormParam(PARAM_DEVICE_ID) String deviceId,
+                          @FormParam(PARAM_DEVICE_PUSH_TOKEN) String pushToken) {
+        LoginStatusDTO loginStatusDTO = userBL.login(username, password, deviceId, pushToken);
         return sendResponse(loginStatusDTO);
     }
 
@@ -69,6 +70,7 @@ public class AnonymousService extends BaseService{
                              @FormParam(PARAM_DOB) String dob,
                              @FormParam(PARAM_MOBILE) String mobile,
                              @FormParam(PARAM_DEVICE_ID)String deviceId,
+                             @FormParam(PARAM_DEVICE_PUSH_TOKEN)String pushToken,
                              @FormDataParam(PARAM_AGE_PROOF)  InputStream ageProofStream,
                              @FormDataParam(PARAM_AGE_PROOF) FormDataContentDisposition fileDetail) throws IOException {
         UserEntity user = new UserEntity();
@@ -82,11 +84,12 @@ public class AnonymousService extends BaseService{
         MultipartFile ageProofFile =getMultipartFile(fileDetail, ageProofStream);
         user.setAgeProof(ageProofFile);
         userBL.save(user, status);
-        if(status.getCode() == HttpStatus.OK.value()){
-            LoginStatusDTO loginStatusDTO = userBL.createSession( deviceId, user);
+        /*if(status.getCode() == HttpStatus.OK.value()){
+            LoginStatusDTO loginStatusDTO = userBL.createSession( deviceId,pushToken, user);
             return sendResponse(loginStatusDTO);
         }else
-            return sendResponse(status);
+            return sendResponse(status);*/
+        return sendResponse(status);
     }
 
     @POST

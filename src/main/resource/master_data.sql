@@ -70,6 +70,18 @@ insert into banner(large_image_url, banner_type) value('http://104.155.202.8/han
 
 ALTER TABLE item MODIFY description blob;
 
+insert into sms_template(message, type) value('Your new password PLACEHOLDER for Liquor at door','RESET_PASSWORD' );
+insert into sms_template(message, type) value('Your OTP PLACEHOLDER for Liquor at door','OTP' );
+insert into sms_template(message, type) value('Welcome to Liquor at door. You can login by using temporary password PLACEHOLDER. Cheers!','REGISTRATION_NOTIFICATION' );
+insert into sms_template(message, type) value('We have received your order PLACEHOLDER amounting to Rs. PLACEHOLDER and it is being processed. You can expect delivery in next 45 Min. Thank You!','ORDER_PAYMENT_SUCCESS' );
+insert into sms_template(message, type) value('Sorry! Due to some reason your payment failed. Please try again.','ORDER_PAYMENT_FAILED' );
+insert into sms_template(message, type) value('Sorry! Due to some reason, your payment has been canceled. Please try again','ORDER_PAYMENT_CANCELED' );
+insert into sms_template(message, type) value('Your order PLACEHOLDER has been accepted by the store. it is being processed. You can expect delivery on time','ORDER_ACCEPTED' );
+insert into sms_template(message, type) value('Sorry! Your order PLACEHOLDER has been rejected by the store. Your refund will be processed automatically within 72 hr.','ORDER_REJECTED' );
+insert into sms_template(message, type) value('Your order PLACEHOLDER dispatched. Soon it will know your door.','ORDER_DISPATCHED' );
+insert into sms_template(message, type) value('Your order PLACEHOLDER successfully delivered. Login to Liquor at door to give feedback.','ORDER_DELIVERED' );
+insert into sms_template(message, type) value('Your order PLACEHOLDER delivery failed due to PLACEHOLDER. Sorry for inconvenience. ','ORDER_DELIVERY_FAILED' );
+
 
 
 

@@ -190,7 +190,7 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
 
 
 
-    public LoginStatusDTO login(String username, String password, String deviceId) {
+    public LoginStatusDTO login(String username, String password, String deviceId, String pushToken) {
         if (ValidatorUtil.isNullOrEmpty(username) || ValidatorUtil.isNullOrEmpty(password)
                 || ValidatorUtil.isNullOrEmpty(deviceId))
             throw new HangoverException(HttpStatus.NON_AUTHORITATIVE_INFORMATION.value(),
@@ -212,12 +212,13 @@ public class UserBLImpl extends BaseBL implements UserBL, UserDetailsService, Co
             loginStatus.setSupplierStore(supplierStaff.get(0).getStore());
         }
         userDao.save(loginStatus);*/
-        return createSession(deviceId, user);//new LoginStatusDTO(loginStatus);
+        return createSession(deviceId,pushToken, user);//new LoginStatusDTO(loginStatus);
     }
     
-    public LoginStatusDTO createSession(String deviceId, UserEntity user){
+    public LoginStatusDTO createSession(String deviceId, String pushToken, UserEntity user){
         LoginStatusEntity loginStatus = new LoginStatusEntity();
         loginStatus.setDeviceId(deviceId);
+        loginStatus.setPushToken(pushToken);
         loginStatus.setToken(generateToken(deviceId));
         loginStatus.setUser(user);
         List<SupplierStaffEntity> supplierStaff = commonDao.gets(SupplierStaffEntity.class,"user", user.getId());

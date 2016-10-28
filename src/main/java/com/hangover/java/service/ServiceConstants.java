@@ -12,6 +12,7 @@ public interface ServiceConstants {
     /*User */
     static final String PARAM_USERNAME = "username";
     static final String PARAM_DEVICE_ID = "deviceId";
+    static final String PARAM_DEVICE_PUSH_TOKEN = "pushToken";
     static final String PARAM_USER_EMAIL = "email";
     static final String PARAM_USER_PASSWORD = "password";
     static final String PARAM_USER_OLD_PASSWORD = "old_password";

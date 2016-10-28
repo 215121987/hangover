@@ -219,7 +219,7 @@ public class PaymentBLImpl extends BaseBL implements PaymentBL, Constants {
             Message message = new Message();
             String []to = new String[loggedInStaffs.size()];
             for(int i=0;i<loggedInStaffs.size();i++){
-                to[i] = loggedInStaffs.get(i).getDeviceId();
+                to[i] = loggedInStaffs.get(i).getPushToken();
             }
             message.setTo(to);
             message.setSubject("New Order");

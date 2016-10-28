@@ -42,9 +42,9 @@ public interface UserBL {
 
     void updateProfile(String name, String value, Long id, StatusDTO status);
 
-    LoginStatusDTO login(String username, String password, String deviceId);
+    LoginStatusDTO login(String username, String password, String deviceId, String pushToken);
 
-    LoginStatusDTO createSession(String deviceId, UserEntity user);
+    LoginStatusDTO createSession(String deviceId, String pushToken, UserEntity user);
 
     void logout(String deviceId);
 

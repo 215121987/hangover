@@ -21,6 +21,7 @@ import java.util.Map;
 public class LoginStatusEntity extends BaseEntity{
 
     private String deviceId;
+    private String pushToken;
     private String token;
     private UserEntity user;
     private SupplierStoreEntity store;
@@ -43,6 +44,15 @@ public class LoginStatusEntity extends BaseEntity{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Column(name = "push_token")
+    public String getPushToken() {
+        return pushToken;
+    }
+
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
     }
 
     @ManyToOne

@@ -29,7 +29,7 @@ public class ItemEntity extends BaseEntity{
     private String name;
     private String description;
     private SupplierStoreEntity supplierStore;
-    private Gender itemFor;
+    private Gender itemFor = Gender.UNISEX;
     private CategoryEntity category;
     private BrandEntity brand;
     private int count=0;
@@ -66,7 +66,7 @@ public class ItemEntity extends BaseEntity{
     }
 
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     public Gender getItemFor() {
         return itemFor;
     }

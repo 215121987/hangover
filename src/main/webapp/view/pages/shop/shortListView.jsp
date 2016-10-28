@@ -81,9 +81,7 @@
                                 "Antica Formula Carpano Vermouth 1L" was successfully added to your cart.
                             </div>--%>
                             <div id="yith-wcwl-messages"></div>
-                            <form id="yith-wcwl-form"
-                                  action=""
-                                  method="post">
+                            <form id="yith-wcwl-form"  action="" method="post">
                                 <c:forEach items="${wishLists}" var="wishList">
                                     <h2>${wishList.name}</h2>
                                     <table class="shop_table cart wishlist_table" cellspacing="0">

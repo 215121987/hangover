@@ -71,9 +71,9 @@
                                             <li class="cherry-wc-account_list_item orders">
                                                 <a href='<c:url value="/account/order.html"/>'>My Order</a>
                                             </li>
-                                            <li class="cherry-wc-account_list_item credit">
+                                            <%--<li class="cherry-wc-account_list_item credit">
                                                 <a href='<c:url value="/account/credit.html"/>'>Credit</a>
-                                            </li>
+                                            </li>--%>
                                         </security:authorize>
                                         <%--<li class="cherry-wc-account_list_item cherry-compare"><a href="#">Compare</a></li>--%>
                                         <li class="cherry-wc-account_list_item cherry-wishlist">

@@ -430,6 +430,12 @@ if(null!=cookie && StringUtils.isNotEmpty(cookie.getValue())){
         List<WishListEntity> wishLists;
         if (isUserLoggedIn(request)) {
             wishLists = shoppingBL.getWishList(getCurrentUsers().getId());
+            if(null == wishLists || wishLists.size()<=0 ){
+                wishLists = new ArrayList<WishListEntity>();
+                WishListEntity wishList = new WishListEntity();
+                wishList.setName(SHOTLIST_DEFAULT_NAME);
+                wishLists.add(wishList);
+            }
         } else {
             wishLists = new ArrayList<WishListEntity>();
             WishListEntity wishList = new WishListEntity();

@@ -88,7 +88,7 @@
                         <div id="footer-text" class="footer-text">
 
                             <a href="#" title="Beverage store" class="site-name">Alcoholic</a> is proudly powered by <a
-                                href="#">Hangover Groups</a>
+                                href="#">Liquor At Door Groups</a>
                             <a href="#" title="Privacy Policy">Privacy Policy</a>
                         </div>
                     </div>

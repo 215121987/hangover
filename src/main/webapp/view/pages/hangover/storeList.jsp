@@ -6,7 +6,7 @@
                 <div class="parallax-item sans-shadow text-center">
                     <i class="fa fa-align-justify fa-3x"></i>
                     <h4 class="searchable">${store.zipCode}</h4>
-                    <p class="searchable">${store.address},${store.street},${store.city},${store.state},${store.country}</p>
+                    <p class="searchable">${store.address}, ${store.street}, ${store.city}, ${store.state}, ${store.country}</p>
                     <div class="item-info">
                         <h4>${store.zipCode}</h4>
                         <p>${store.contactPerson}:-<i class="fa fa-mobile-phone fa-1x"></i>${store.contactNumber}</p>

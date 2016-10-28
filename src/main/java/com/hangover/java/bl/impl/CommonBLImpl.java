@@ -9,7 +9,7 @@ import com.hangover.java.dto.StatusDTO;
 import com.hangover.java.model.*;
 import com.hangover.java.model.master.BannerEntity;
 import com.hangover.java.model.type.*;
-import com.hangover.java.service.imp.DataMapper;
+import com.hangover.java.service.DataMapper;
 import com.hangover.java.task.HangoverBeans;
 import com.hangover.java.util.*;
 import org.slf4j.Logger;

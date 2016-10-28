@@ -1,6 +1,5 @@
 package com.hangover.java.service;
 
-import com.hangover.java.service.imp.HangoverServiceOld;
 import com.hangover.java.service.provider.RestExceptionMapper;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -18,7 +17,7 @@ public class RestApplication extends ResourceConfig {
 
     public  RestApplication(){
         // register application resources
-        register(HangoverServiceOld.class);
+        register(HangoverService.class);
         register(PaymentService.class);
 
         // register filters

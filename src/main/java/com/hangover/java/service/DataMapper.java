@@ -1,4 +1,4 @@
-package com.hangover.java.service.imp;
+package com.hangover.java.service;
 
 import com.hangover.java.dto.BrandDTO;
 import com.hangover.java.dto.CartDTO;

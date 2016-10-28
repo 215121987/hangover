@@ -16,7 +16,8 @@
                                             </li>
                                             <li id="menu-item-1821"
                                                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1821">
-                                                <a href="<c:url value="/comm/aboutUs.html"/>">About</a>
+                                                <%--<a href="<c:url value="/comm/aboutUs.html"/>">About</a>--%>
+                                                <a href="#">About</a>
                                             </li>
                                             <li id="menu-item-2039"
                                                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2039">
@@ -28,7 +29,8 @@
                                             </li>
                                             <li id="menu-item-1818"
                                                 class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1818">
-                                                <a href="<c:url value="/comm/contacts.html"/>">Contacts</a>
+                                                <%--<a href="<c:url value="/comm/contacts.html"/>">Contacts</a>--%>
+                                                <a href="#">Contacts</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -42,13 +44,16 @@
                                                     <a href="#">Compare</a>
                                                 </li>--%>
                                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2024">
-                                                    <a href="<c:url value="/comm/shortList.html"/>">Wishlist</a>
+                                                    <%--<a href="<c:url value="/comm/shortList.html"/>">Wishlist</a>--%>
+                                                    <a href="#">Wishlist</a>
                                                 </li>
                                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2029">
-                                                    <a href="<c:url value="/comm/delivery.html"/>">Delivery</a>
+                                                    <%--<a href="<c:url value="/comm/delivery.html"/>">Delivery</a>--%>
+                                                    <a href="#">Delivery</a>
                                                 </li>
                                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2033">
-                                                    <a href="<c:url value="/comm/help.html"/>">Help</a>
+                                                    <%--<a href="<c:url value="/comm/help.html"/>">Help</a>--%>
+                                                    <a href="#">Help</a>
                                                 </li>
                                             </ul>
                                         </div>

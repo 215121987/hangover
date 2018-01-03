@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebRequestDataBinder;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -79,5 +80,13 @@ public class BaseController implements Constants {
     protected void writeJSONObject(HttpServletResponse response, Object obj) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
          objectMapper.writeValue(response.getWriter(), obj);
+    }
+    
+    
+    protected void removeCookie(HttpServletResponse response, String contextPath, String name){
+        Cookie cookie = new Cookie(name, "");
+        cookie.setMaxAge(0);
+        cookie.setPath(contextPath);
+        response.addCookie(cookie);
     }
 }

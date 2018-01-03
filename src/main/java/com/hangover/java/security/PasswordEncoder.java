@@ -45,7 +45,8 @@ public class PasswordEncoder implements org.springframework.security.crypto.pass
             StringBuilder hexString = new StringBuilder();
             for (byte aDigest : digest) {
                 String hex = Integer.toHexString(0xff & aDigest);
-                if (hex.length() == 1) hexString.append('0');
+                if (hex.length() == 1)
+                    hexString.append('0');
                 hexString.append(hex);
             }
             return hexString.toString();

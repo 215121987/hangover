@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,6 +16,29 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class Temp {
+
+
+    public static boolean isBalanced(String expression) {
+        boolean  isBalanced = true;
+        Stack<Character> stack = new Stack<Character>();
+        for(int i=0; i<expression.length();i++){
+            char c = expression.charAt(i);
+            if(c=='{' || c=='[' || c=='('){
+                stack.push(c);
+            }else{
+                if(stack.empty())
+                    isBalanced = false;
+                else{
+                    char e = stack.pop();
+                    if((e=='{' && c!='}')|| (e=='[' && c!=']')||(e=='(' && c!=')')){
+                        isBalanced = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return isBalanced;
+    }
 
     public static String input = ""; 
     

@@ -57,7 +57,7 @@ public class PaymentController extends BaseController{
 
 
     @RequestMapping(value = "/done" , method = RequestMethod.POST)
-    public String paymentDone(HttpServletRequest request){
+    public String paymentDone(HttpServletRequest request, HttpServletResponse response){
         Enumeration<String> paramNames = request.getParameterNames();
         Map<String, String[]> mapData = request.getParameterMap();
         TreeMap<String,String> parameters = new TreeMap<String,String>();
@@ -72,6 +72,10 @@ public class PaymentController extends BaseController{
         }
         PaymentCompleteDTO paymentComplete = paymentBL.paymentDone(checkSumHash, parameters);
         request.setAttribute("payment", paymentComplete);
+        if(paymentComplete.getStatus().equals("SUCCESS")){
+            removeCookie(response, request.getContextPath(),COOKIES_CART_HASH);
+            request.removeAttribute(SESSION_DELIVERY_ADDRESS_ID);
+        }
         return "/payment/paymentComplete";
     }
 
